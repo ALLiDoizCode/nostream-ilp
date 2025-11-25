@@ -3,22 +3,36 @@ import http from 'http'
 import process from 'process'
 import { WebSocketServer } from 'ws'
 
+/* eslint-disable sort-imports */
 import { getMasterDbClient, getReadReplicaDbClient } from '../database/client'
 import { AppWorker } from '../app/worker'
 import { createSettings } from '../factories/settings-factory'
 import { createWebApp } from './web-app-factory'
 import { EventRepository } from '../repositories/event-repository'
 import { UserRepository } from '../repositories/user-repository'
+import { FreeTierRepository } from '../repositories/free-tier-repository'
 import { webSocketAdapterFactory } from './websocket-adapter-factory'
 import { WebSocketServerAdapter } from '../adapters/web-socket-server-adapter'
+import { initializeDassieClient } from './dassie-client-factory'
+import { FreeTierTracker } from '../services/payment/free-tier-tracker'
+/* eslint-enable sort-imports */
 
 export const workerFactory = (): AppWorker => {
   const dbClient = getMasterDbClient()
   const readReplicaDbClient = getReadReplicaDbClient()
   const eventRepository = new EventRepository(dbClient, readReplicaDbClient)
   const userRepository = new UserRepository(dbClient)
+  const freeTierRepository = new FreeTierRepository(dbClient)
+  const freeTierTracker = new FreeTierTracker(freeTierRepository)
 
   const settings = createSettings()
+
+  // Initialize Dassie client connection for payment verification
+  // Connection happens asynchronously in background, but client instance is ready immediately
+  initializeDassieClient().catch((error) => {
+    console.error('Failed to initialize Dassie client:', error)
+    // Continue running - payment verification will fail gracefully when client unavailable
+  })
 
   const app = createWebApp()
 
@@ -58,7 +72,7 @@ export const workerFactory = (): AppWorker => {
   const adapter = new WebSocketServerAdapter(
     server,
     webSocketServer,
-    webSocketAdapterFactory(eventRepository, userRepository),
+    webSocketAdapterFactory(eventRepository, userRepository, freeTierTracker),
     createSettings,
   )
 

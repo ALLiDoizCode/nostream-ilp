@@ -11,6 +11,9 @@ importers:
       '@noble/secp256k1':
         specifier: 1.7.1
         version: 1.7.1
+      '@trpc/client':
+        specifier: ^11.7.2
+        version: 11.7.2(@trpc/server@11.7.2(typescript@5.3.3))(typescript@5.3.3)
       axios:
         specifier: ^1.7.7
         version: 1.7.7(debug@4.3.4)
@@ -815,6 +818,17 @@ packages:
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
+
+  '@trpc/client@11.7.2':
+    resolution: {integrity: sha512-OQxqUMfpDvjcszo9dbnqWQXnW2L5IbrKSz2H7l8s+mVM3EvYw7ztQ/gjFIN3iy0NcamiQfd4eE6qjcb9Lm+63A==}
+    peerDependencies:
+      '@trpc/server': 11.7.2
+      typescript: '>=5.7.2'
+
+  '@trpc/server@11.7.2':
+    resolution: {integrity: sha512-AgB26PXY69sckherIhCacKLY49rxE2XP5h38vr/KMZTbLCL1p8IuIoKPjALTcugC2kbyQ7Lbqo2JDVfRSmPmfQ==}
+    peerDependencies:
+      typescript: '>=5.7.2'
 
   '@tsconfig/node10@1.0.8':
     resolution: {integrity: sha512-6XFfSQmMgq0CFLY1MslA/CPUfhIL919M1rMsa5lP2P097N2Wd1sSX0tx1u4olM16fLNhtHZpRhedZJphNJqmZg==}
@@ -4503,6 +4517,15 @@ snapshots:
   '@teppeis/multimaps@3.0.0': {}
 
   '@tootallnate/once@2.0.0': {}
+
+  '@trpc/client@11.7.2(@trpc/server@11.7.2(typescript@5.3.3))(typescript@5.3.3)':
+    dependencies:
+      '@trpc/server': 11.7.2(typescript@5.3.3)
+      typescript: 5.3.3
+
+  '@trpc/server@11.7.2(typescript@5.3.3)':
+    dependencies:
+      typescript: 5.3.3
 
   '@tsconfig/node10@1.0.8': {}
 

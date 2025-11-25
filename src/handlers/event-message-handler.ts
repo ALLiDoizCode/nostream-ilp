@@ -1,19 +1,24 @@
+/* eslint-disable sort-imports */
+import { ContextMetadataKey, EventExpirationTimeMetadataKey } from '../constants/base'
 import { Event, ExpiringEvent  } from '../@types/event'
 import { EventRateLimit, FeeSchedule, Settings } from '../@types/settings'
 import { getEventExpiration, getEventProofOfWork, getPubkeyProofOfWork, getPublicKey, getRelayPrivateKey, isEventIdValid, isEventKindOrRangeMatch, isEventSignatureValid, isExpiredEvent } from '../utils/event'
 import { IEventStrategy, IMessageHandler } from '../@types/message-handlers'
-import { ContextMetadataKey } from '../constants/base'
-import { createCommandResult } from '../utils/messages'
-import { createLogger } from '../factories/logger-factory'
-import { EventExpirationTimeMetadataKey } from '../constants/base'
 import { Factory } from '../@types/base'
 import { IncomingEventMessage } from '../@types/messages'
 import { IRateLimiter } from '../@types/utils'
 import { IUserRepository } from '../@types/repositories'
 import { IWebSocketAdapter } from '../@types/adapters'
 import { WebSocketAdapterEvent } from '../constants/adapter'
+import { createLogger } from '../factories/logger-factory'
+import { createCommandResult, createNoticeMessage } from '../utils/messages'
+import { extractPaymentClaim, calculateRequiredPayment as calcPrice } from '../services/payment'
+import type { DassieClient } from '../services/payment/dassie-client'
+import type { FreeTierTracker } from '../services/payment/free-tier-tracker'
+/* eslint-enable sort-imports */
 
 const debug = createLogger('event-message-handler')
+const debugPayment = debug.extend('payment')
 
 export class EventMessageHandler implements IMessageHandler {
   public constructor(
@@ -22,6 +27,8 @@ export class EventMessageHandler implements IMessageHandler {
     protected readonly userRepository: IUserRepository,
     private readonly settings: () => Settings,
     private readonly slidingWindowRateLimiter: Factory<IRateLimiter>,
+    private readonly dassieClient: DassieClient,
+    private readonly freeTierTracker: FreeTierTracker,
   ) {}
 
   public async handleMessage(message: IncomingEventMessage): Promise<void> {
@@ -58,6 +65,14 @@ export class EventMessageHandler implements IMessageHandler {
     }
 
     reason = await this.isUserAdmitted(event)
+    if (reason) {
+      debug('event %s rejected: %s', event.id, reason)
+      this.webSocket.emit(WebSocketAdapterEvent.Message, createCommandResult(event.id, false, reason))
+      return
+    }
+
+    // Payment verification (Story 1.4)
+    reason = await this.verifyPaymentClaim(event)
     if (reason) {
       debug('event %s rejected: %s', event.id, reason)
       this.webSocket.emit(WebSocketAdapterEvent.Message, createCommandResult(event.id, false, reason))
@@ -286,6 +301,237 @@ export class EventMessageHandler implements IMessageHandler {
     if (minBalance > 0n && user.balance < minBalance) {
       return 'blocked: insufficient balance'
     }
+  }
+
+  /**
+   * Verify payment claim for paid events
+   *
+   * Checks free tier eligibility first (Story 1.6).
+   * If not eligible, extracts payment claim from event tags, verifies with Dassie RPC,
+   * and checks if payment amount meets required fee schedule.
+   *
+   * @param event - Nostr event to verify payment for
+   * @returns Error string if payment invalid/missing, undefined if valid
+   */
+  protected async verifyPaymentClaim(event: Event): Promise<string | undefined> {
+    const currentSettings = this.settings()
+
+    // Skip if payments not enabled
+    if (!currentSettings.payments?.enabled) {
+      return
+    }
+
+    // Skip for relay's own events
+    if (this.getRelayPublicKey() === event.pubkey) {
+      return
+    }
+
+    // Check free tier eligibility first (Story 1.6)
+    const freeTierStatus = await this.freeTierTracker.checkFreeTierEligibility(event.pubkey)
+
+    if (freeTierStatus.eligible) {
+      debugPayment(
+        'pubkey %s eligible for free tier (%d events remaining)',
+        event.pubkey,
+        freeTierStatus.eventsRemaining
+      )
+
+      // Send NOTICE if approaching limit (10 events or fewer remaining)
+      if (freeTierStatus.eventsRemaining <= 10 && freeTierStatus.eventsRemaining > 0) {
+        this.sendNotice(
+          `Free tier: ${freeTierStatus.eventsRemaining} free events remaining. Payment will be required after.`
+        )
+      }
+
+      // Increment event count for non-whitelisted users (non-blocking)
+      if (!freeTierStatus.whitelisted) {
+        this.freeTierTracker.incrementEventCount(event.pubkey).catch((err) => {
+          // Log error but don't block event storage
+          debug('Failed to increment event count for %s: %o', event.pubkey, err)
+        })
+      }
+
+      return // Allow event without payment
+    }
+
+    // Free tier exhausted or disabled - require payment
+    // Extract payment claim from event tags
+    const claim = extractPaymentClaim(event)
+
+    // Calculate required payment for this event kind
+    const requiredAmount = this.calculateRequiredPayment(event)
+
+    // No payment claim found
+    if (!claim) {
+      // Check if payment is required for this event kind
+      if (requiredAmount > 0n) {
+        debugPayment({
+          event: 'payment_required',
+          event_id: event.id,
+          pubkey: event.pubkey,
+          event_kind: event.kind,
+          required_amount: Number(requiredAmount),
+        }, 'Event requires payment but none provided')
+
+        return `restricted: payment required - ${Number(requiredAmount)} sats`
+      }
+      // Payment not required, allow event
+      return
+    }
+
+    // Check if Dassie is connected
+    if (!this.dassieClient.isConnected()) {
+      debugPayment({
+        event: 'dassie_unavailable',
+        event_id: event.id,
+        pubkey: event.pubkey,
+      }, 'Dassie client not connected')
+
+      return 'error: payment verification temporarily unavailable'
+    }
+
+    // Verify payment claim with timeout
+    try {
+      const result = await Promise.race([
+        this.dassieClient.verifyPaymentClaim(claim),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('Timeout')), 5000)
+        ),
+      ])
+
+      if (result.valid) {
+        // Payment valid - check if amount is sufficient
+        if (claim.amountSats < Number(requiredAmount)) {
+          debugPayment({
+            event: 'insufficient_payment',
+            event_id: event.id,
+            pubkey: event.pubkey,
+            required: Number(requiredAmount),
+            provided: claim.amountSats,
+          }, `Insufficient payment: need ${Number(requiredAmount)} sats, got ${claim.amountSats} sats`)
+
+          return `restricted: insufficient payment - need ${Number(requiredAmount)} sats, got ${claim.amountSats} sats`
+        }
+
+        debugPayment({
+          event: 'payment_verified',
+          event_id: event.id,
+          pubkey: event.pubkey,
+          channel_id: claim.channelId.substring(0, 8),
+          amount_sats: claim.amountSats,
+          currency: claim.currency,
+          nonce: claim.nonce,
+        }, 'Payment claim verified successfully')
+
+        return
+      }
+
+      // Payment verification failed
+      const errorMessage = this.formatPaymentError(result.error, claim.amountSats, requiredAmount)
+
+      debugPayment({
+        event: 'payment_verification_failed',
+        event_id: event.id,
+        pubkey: event.pubkey,
+        reason: result.error,
+        claim: {
+          ...claim,
+          signature: claim.signature.substring(0, 8) + '...',
+        },
+      }, `Payment verification failed: ${result.error}`)
+
+      return errorMessage
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Timeout') {
+        debugPayment({
+          event: 'verification_timeout',
+          event_id: event.id,
+          pubkey: event.pubkey,
+        }, 'Payment verification timeout')
+
+        return 'error: payment verification timeout'
+      }
+
+      debugPayment({
+        event: 'verification_error',
+        event_id: event.id,
+        pubkey: event.pubkey,
+        error: error instanceof Error ? error.message : String(error),
+      }, 'Payment verification error')
+
+      return 'error: payment verification failed'
+    }
+  }
+
+  /**
+   * Calculate required payment amount for event kind
+   *
+   * First checks fee schedules (YAML-based configuration) for matching event kind.
+   * If no schedule matches, falls back to environment variable-based pricing (Story 1.5).
+   *
+   * @param event - Nostr event to calculate payment for
+   * @returns Required payment amount in satoshis (bigint)
+   */
+  private calculateRequiredPayment(event: Event): bigint {
+    const currentSettings = this.settings()
+    const feeSchedules = currentSettings.payments?.feeSchedules?.publication
+
+    // Check YAML-based fee schedules first (backward compatibility)
+    if (Array.isArray(feeSchedules) && feeSchedules.length > 0) {
+      // Find first matching enabled fee schedule
+      for (const schedule of feeSchedules) {
+        if (!schedule.enabled) {
+          continue
+        }
+
+        // Check if event kind matches whitelist
+        if (schedule.whitelists?.event_kinds) {
+          const matches = schedule.whitelists.event_kinds.some(isEventKindOrRangeMatch(event))
+          if (matches) {
+            return schedule.amount
+          }
+        }
+      }
+    }
+
+    // Fall back to environment variable-based pricing (Story 1.5)
+    return calcPrice('store', event)
+  }
+
+  /**
+   * Format error message from Dassie verification result
+   *
+   * Maps Dassie error codes to user-friendly error messages.
+   *
+   * @param error - Error code from Dassie
+   * @param providedAmount - Amount provided in claim
+   * @param requiredAmount - Amount required by fee schedule
+   * @returns Formatted error message
+   */
+  private formatPaymentError(error: string | undefined, providedAmount: number, requiredAmount: bigint): string {
+    switch (error) {
+      case 'insufficient_balance':
+        return `restricted: insufficient payment - need ${Number(requiredAmount)} sats, got ${providedAmount} sats`
+      case 'invalid_signature':
+        return 'restricted: invalid payment signature'
+      case 'invalid_nonce':
+        return 'restricted: invalid payment nonce (replay attack?)'
+      case 'channel_expired':
+        return 'restricted: payment channel expired'
+      case 'channel_not_found':
+        return 'restricted: payment channel not found'
+      default:
+        return 'error: payment verification failed'
+    }
+  }
+
+  /**
+   * Send NOTICE message to client
+   *
+   * @param message - Human-readable notice message
+   */
+  private sendNotice(message: string): void {
+    this.webSocket.emit(WebSocketAdapterEvent.Message, createNoticeMessage(message))
   }
 
   protected addExpirationMetadata(event: Event): Event | ExpiringEvent {

@@ -5,6 +5,7 @@ import { createSettings } from '../../factories/settings-factory'
 import { FeeSchedule } from '../../@types/settings'
 import { fromBech32 } from '../../utils/transform'
 import packageJson from '../../../package.json'
+import { pricingConfig } from '../../services/payment/pricing-config'
 
 export const rootRequestHandler = (request: Request, response: Response, next: NextFunction) => {
   const settings = createSettings()
@@ -49,19 +50,52 @@ export const rootRequestHandler = (request: Request, response: Response, next: N
             payment_required: settings.payments?.enabled,
       },
       payments_url: paymentsUrl.toString(),
-      fees: Object
-        .getOwnPropertyNames(settings.payments.feeSchedules)
-        .reduce((prev, feeName) => {
-          const feeSchedules = settings.payments.feeSchedules[feeName] as FeeSchedule[]
+      fees: (() => {
+        // Start with existing fee schedules from settings
+        const existingFees = Object
+          .getOwnPropertyNames(settings.payments.feeSchedules)
+          .reduce((prev, feeName) => {
+            const feeSchedules = settings.payments.feeSchedules[feeName] as FeeSchedule[]
 
-          return {
-            ...prev,
-            [feeName]: feeSchedules.reduce((fees, fee) => (fee.enabled)
-              ? [...fees, { amount: fee.amount, unit: 'msats' }]
-              : fees, []),
-          }
+            return {
+              ...prev,
+              [feeName]: feeSchedules.reduce((fees, fee) => (fee.enabled)
+                ? [...fees, { amount: fee.amount, unit: 'msats' }]
+                : fees, []),
+            }
 
-        }, {} as Record<string, { amount: number, unit: string }>),
+          }, {} as Record<string, { amount: number, unit: string }[]>)
+
+        // Add pricing configuration from environment variables (Story 1.5)
+        const pricingFees: Record<string, { amount: number, unit: string, kinds?: number[] }[]> = {
+          admission: [
+            { amount: Number(pricingConfig.storeEvent), unit: 'sat' },
+          ],
+          publication: [
+            { amount: Number(pricingConfig.storeEvent), unit: 'sat' },
+          ],
+          subscription: [
+            { amount: Number(pricingConfig.query), unit: 'sat' },
+          ],
+        }
+
+        // Add per-kind overrides to publication fees
+        if (pricingConfig.kindOverrides.size > 0) {
+          pricingFees.publication.push(
+            ...Array.from(pricingConfig.kindOverrides.entries()).map(([kind, amount]) => ({
+              amount: Number(amount),
+              unit: 'sat',
+              kinds: [kind],
+            })),
+          )
+        }
+
+        // Merge existing fees with pricing config (pricing config takes precedence if both exist)
+        return {
+          ...existingFees,
+          ...pricingFees,
+        }
+      })(),
     }
 
     response
