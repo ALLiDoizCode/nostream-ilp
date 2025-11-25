@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { existsSync, readdirSync } from 'fs'
 import { join } from 'path'
 
@@ -37,7 +37,7 @@ describe('Payment Processor Cleanup Verification', () => {
 
     const sourceFiles = await glob('src/**/*.ts', {
       cwd: join(__dirname, '../..'),
-      ignore: ['src/payments-processors/null-payments-processor.ts']
+      ignore: ['src/payments-processors/null-payments-processor.ts'],
     })
 
     const forbiddenImports = [
