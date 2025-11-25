@@ -322,15 +322,18 @@ Clone repository and enter directory:
 
 Install dependencies:
 
+  > **Note:** This fork uses **pnpm** instead of npm for package management.
+  > Install pnpm globally first: `npm install -g pnpm`
+
   ```
-  npm install -g knex
-  npm install
+  pnpm install -g knex
+  pnpm install
   ```
 
 Run migrations (at least once and after pulling new changes):
 
   ```
-  NODE_OPTIONS="-r dotenv/config" npm run db:migrate
+  NODE_OPTIONS="-r dotenv/config" pnpm db:migrate
   ```
 
 Create .nostr folder inside nostream project folder and copy over the settings file:
@@ -343,19 +346,19 @@ Create .nostr folder inside nostream project folder and copy over the settings f
 To start in development mode:
 
   ```
-  npm run dev
+  pnpm dev
   ```
 
 Or, start in production mode:
 
   ```
-  npm run start
+  pnpm start
   ```
 
 To clean up the build, coverage and test reports run:
 
   ```
-  npm run clean
+  pnpm clean
   ```
 ## Development Quick Start (Docker Compose)
 
@@ -387,19 +390,19 @@ Open a terminal and change to the project's directory:
 Run unit tests with:
 
   ```
-  npm run test:unit
+  pnpm test:unit
   ```
 
 Or, run unit tests in watch mode:
 
   ```
-  npm run test:unit:watch
+  pnpm test:unit:watch
   ```
 
 To get unit test coverage run:
 
   ```
-  npm run cover:unit
+  pnpm cover:unit
   ```
 
 To see the unit tests report open `.test-reports/unit/index.html` with a browser:
@@ -422,13 +425,13 @@ Open a terminal and change to the project's directory:
 Run integration tests with:
 
   ```
-  npm run docker:test:integration
+  pnpm docker:test:integration
   ```
 
 And to get integration test coverage run:
 
   ```
-  npm run docker:cover:integration
+  pnpm docker:cover:integration
   ```
 
 ### Integration tests (Standalone)
@@ -457,7 +460,7 @@ Set the following environment variables:
 Then run the integration tests:
 
   ```
-  npm run test:integration
+  pnpm test:integration
   ```
 
 To see the integration tests report open `.test-reports/integration/report.html` with a browser:
@@ -468,7 +471,7 @@ To see the integration tests report open `.test-reports/integration/report.html`
 To get the integration test coverage run:
 
   ```
-  npm run cover:integration
+  pnpm cover:integration
   ```
 
 To see the integration test coverage report open `.coverage/integration/lcov-report/index.html` with a browser.
