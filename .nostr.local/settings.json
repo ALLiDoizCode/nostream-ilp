@@ -12,33 +12,26 @@
     "idleTimeout": 60
   },
   "payments": {
-    "enabled": true,
-    "processor": "zebedee",
+    "enabled": false,
     "feeSchedules": {
       "admission": [{
-        "enabled": true,
-        "descripton": "Admission fee in msats (1000 msats = 1 satoshi)",
-        "amount": 1000000,
+        "enabled": false,
+        "descripton": "Admission fee disabled - payment processors removed",
+        "amount": 0,
         "whitelists": {
-          "pubkeys": ["replace-with-your-pubkey"]
+          "pubkeys": []
         }
       }],
       "publication": [
         {
-          "enabled": true,
-          "description": "Publication fee in msats (1000 msats = 1 satoshi)",
-          "amount": 100,
+          "enabled": false,
+          "description": "Publication fee disabled - payment processors removed",
+          "amount": 0,
           "whitelists": {
-            "pubkeys": ["replace-with-your-pubkey"]
+            "pubkeys": []
           }
         }
       ]
-    }
-  },
-  "paymentProcessors": {
-    "zebedee": {
-      "baseURL": "https://api.zebedee.io/",
-      "callbackBaseURL": "https://nostream.localtest.me/callbacks/zebedee"
     }
   },
   "workers": {

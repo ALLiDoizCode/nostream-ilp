@@ -42,11 +42,7 @@ export enum EventTags {
   Invoice = 'bolt11',
 }
 
-export enum PaymentsProcessors {
-  LNURL = 'lnurl',
-  ZEBEDEE = 'zebedee',
-  LNBITS = 'lnbits',
-}
+// Payment processor enum removed - ILP integration will be added in Story 1.2+
 
 export const EventDeduplicationMetadataKey = Symbol('Deduplication')
 export const ContextMetadataKey = Symbol('Context')

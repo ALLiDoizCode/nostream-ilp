@@ -149,47 +149,11 @@ export interface FeeSchedules {
 
 export interface Payments {
   enabled: boolean
-  processor: keyof PaymentsProcessors
   feeSchedules: FeeSchedules
 }
 
-export interface LnurlPaymentsProcessor {
-  invoiceURL: string
-}
-
-export interface ZebedeePaymentsProcessor {
-  baseURL: string
-  callbackBaseURL: string
-  ipWhitelist: string[]
-}
-
-export interface NodelessPaymentsProcessor {
-  baseURL: string
-  storeId: string
-}
-
-export interface LNbitsPaymentsProcessor {
-  baseURL: string
-  callbackBaseURL: string
-}
-
-export interface OpenNodePaymentsProcessor {
-  baseURL: string
-  callbackBaseURL: string
-}
-
-export interface NodelessPaymentsProcessor {
-  baseURL: string
-  storeId: string
-}
-
-export interface PaymentsProcessors {
-  lnurl?: LnurlPaymentsProcessor,
-  zebedee?: ZebedeePaymentsProcessor
-  lnbits?: LNbitsPaymentsProcessor
-  nodeless?: NodelessPaymentsProcessor
-  opennode?: OpenNodePaymentsProcessor
-}
+// All centralized payment processor types removed
+// ILP payment processor types will be added in Story 1.2+
 
 export interface Local {
   secret: Secret
@@ -216,7 +180,6 @@ export interface Mirroring {
 export interface Settings {
   info: Info
   payments?: Payments
-  paymentsProcessors?: PaymentsProcessors
   network: Network
   workers?: Worker
   limits?: Limits

@@ -22,7 +22,7 @@ export class GetInvoiceController implements IController {
         const feeSchedule = path<FeeSchedule>(['payments', 'feeSchedules', 'admission', '0'], settings)
         pageCache = readFileSync('./resources/index.html', 'utf8')
           .replaceAll('{{name}}', name)
-          .replaceAll('{{processor}}', settings.payments.processor)
+          .replaceAll('{{processor}}', 'none')
           .replaceAll('{{amount}}', (BigInt(feeSchedule.amount) / 1000n).toString())
       }
 

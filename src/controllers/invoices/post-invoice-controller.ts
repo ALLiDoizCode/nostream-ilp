@@ -171,7 +171,7 @@ export class PostInvoiceController implements IController {
       expires_at: invoice.expiresAt?.toISOString() ?? '',
       invoice: invoice.bolt11,
       amount: amount / 1000n,
-      processor: currentSettings.payments.processor,
+      processor: 'none',
     }
 
     const body = Object

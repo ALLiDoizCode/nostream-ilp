@@ -19,7 +19,7 @@ export const createWebApp = () => {
         /**
          * TODO: Remove 'unsafe-inline'
          */
-        'img-src': ["'self'", 'data:', 'https://cdn.zebedee.io/an/nostr/'],
+        'img-src': ["'self'", 'data:'],
         'connect-src': ["'self'", settings.info.relay_url as string, webRelayUrl.toString()],
         'default-src': ["'self'"],
         'script-src-attr': ["'unsafe-inline'"],

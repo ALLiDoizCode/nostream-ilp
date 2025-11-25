@@ -1,45 +1,38 @@
-# [nostream](https://github.com/cameri/nostream)
+# Nostream-ILP: Nostr Relay with Interledger Protocol Integration
 
 <p align="center">
   <img alt="nostream logo" height="256px" width="256px" src="https://user-images.githubusercontent.com/378886/198158439-86e0345a-adc8-4efe-b0ab-04ff3f74c1b2.jpg" />
 </p>
 
-<p align="center">
-  <a href="https://github.com/cameri/nostream/releases">
-    <img alt="GitHub release" src="https://img.shields.io/github/v/release/Cameri/nostream">
-  </a>
-  <a href="https://github.com/cameri/nostream/issues">
-    <img alt="GitHub issues" src="https://img.shields.io/github/issues/Cameri/nostream?style=plastic" />
-  </a>
-  <a href="https://github.com/cameri/nostream/stargazers">
-    <img alt="GitHub stars" src="https://img.shields.io/github/stars/Cameri/nostream" />
-  </a>
-  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Cameri/nostream">
-  <a href="https://github.com/cameri/nostream/network">
-    <img alt="GitHub forks" src="https://img.shields.io/github/forks/Cameri/nostream" />
-  </a>
-  <a href="https://github.com/cameri/nostream/blob/main/LICENSE">
-    <img alt="GitHub license" src="https://img.shields.io/github/license/Cameri/nostream" />
-  </a>
-  <a href='https://coveralls.io/github/Cameri/nostream?branch=main'>
-    <img  alt='Coverage Status' src='https://coveralls.io/repos/github/Cameri/nostream/badge.svg?branch=main' />
-  </a>
-  <a href='https://sonarcloud.io/project/overview?id=Cameri_nostr-ts-relay'>
-    <img alt='Sonarcloud quality gate' src='https://sonarcloud.io/api/project_badges/measure?project=Cameri_nostr&metric=alert_status' />
-  </a>
-  <a href='https://github.com/cameri/nostream/actions'>
-    <img alt='Build status' src='https://github.com/cameri/nostream/actions/workflows/checks.yml/badge.svg?branch=main&event=push' />
-  </a>
-</p>
+> **Fork of [Nostream](https://github.com/cameri/nostream)** - A production-ready [Nostr](https://github.com/fiatjaf/nostr) relay with **Interledger Protocol (ILP)** payment integration.
 
-This is a [nostr](https://github.com/fiatjaf/nostr) relay, written in
-Typescript.
+## About This Fork
 
-This implementation is production-ready. See below for supported features.
+**Nostream-ILP** extends the original Nostream relay by replacing centralized Lightning payment processors with the **Interledger Protocol (ILP)**, enabling:
 
-The project master repository is available on [GitHub](https://github.com/cameri/nostream).
+- ✅ **Multi-blockchain payments**: BTC, XRP, Cosmos/Akash, Ethereum L2 (Base)
+- ✅ **Decentralized payment routing**: No reliance on centralized payment APIs
+- ✅ **Cross-currency settlements**: Pay in any supported asset
+- ✅ **Lower barriers to entry**: No Lightning channel management required
+- ✅ **Arweave integration**: Permanent storage for large content (coming soon)
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/Xfk5F7?referralCode=Kfv2ly)
+### What's Changed
+
+- **Removed**: ZEBEDEE, Nodeless, OpenNode, LNbits, LNURL payment processors
+- **Coming Soon**: ILP payment verification, Dassie node integration, multi-blockchain channels
+- **Preserved**: All core Nostr relay functionality (NIPs 01-42)
+
+See [MIGRATION.md](./MIGRATION.md) for complete removal details.
+
+### Original Project
+
+This fork is based on **[Nostream v2.1.0](https://github.com/cameri/nostream)** by [Cameri](https://github.com/cameri).
+
+Nostream is a production-ready Nostr relay written in TypeScript, supporting most Nostr Implementation Possibilities (NIPs) and designed for scalability.
+
+**Upstream Repository**: https://github.com/cameri/nostream
+**License**: MIT (see LICENSE file)
+**Attribution**: All original Nostream work is credited to the Nostream contributors.
 
 ## Features
 
@@ -87,6 +80,11 @@ Install Docker from their [official guide](https://docs.docker.com/engine/instal
 - [Set up a Nostr relay in under 5 minutes](https://andreneves.xyz/p/set-up-a-nostr-relay-server-in-under) by [André Neves](https://twitter.com/andreneves) (CTO & Co-Founder at [ZEBEDEE](https://zebedee.io/))
 
 ### Accepting Payments
+
+> **⚠️ DEPRECATED IN NOSTREAM-ILP**
+> Lightning payment processors (ZEBEDEE, Nodeless, OpenNode, LNbits, LNURL) have been **removed** from this fork.
+> **ILP payment integration** will be added in upcoming stories (see [MIGRATION.md](./MIGRATION.md)).
+> The instructions below are from the original Nostream and **will not work** in this fork.
 
 1. Before you begin
    - Complete one of the Quick Start guides in this document
