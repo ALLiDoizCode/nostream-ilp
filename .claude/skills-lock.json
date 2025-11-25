@@ -1,0 +1,16 @@
+{
+  "lockfileVersion": 1,
+  "generatedAt": 1763588831641,
+  "skills": [
+    {
+      "name": "skill-creator",
+      "version": "1.0.0",
+      "arweaveTxId": "BTlFUSm32km6D2ODuh2I-Rd2Syomz4UuJBHLFFhWF08",
+      "installedAt": 1763588831640,
+      "installedPath": "/Users/jonathangreen/Documents/bimp/.claude/skills/skill-creator",
+      "dependencies": [],
+      "isDirectDependency": true
+    }
+  ],
+  "installLocation": "/Users/jonathangreen/Documents/bimp/.claude"
+}

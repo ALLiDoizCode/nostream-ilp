@@ -1,0 +1,53 @@
+{
+  "mcpServers": {
+    "dassie Docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/justmoon/dassie"
+      ]
+    },
+    "interledger.org-v4 Docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/interledger/interledger.org-v4"
+      ]
+    },
+    "nostream Docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/cameri/nostream"
+      ]
+    },
+    "nips Docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/nostr-protocol/nips"
+      ]
+    },
+    "akash Docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/akash-network/docs"
+      ]
+    },
+    "cosmwasm Docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/CosmWasm/cosmwasm"
+      ]
+    },
+    "arweave-js Docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/ArweaveTeam/arweave-js"
+      ]
+    }
+  }
+}
