@@ -15,6 +15,7 @@ import { createCommandResult, createNoticeMessage } from '../utils/messages'
 import { extractPaymentClaim, calculateRequiredPayment as calcPrice } from '../services/payment'
 import type { DassieClient } from '../services/payment/dassie-client'
 import type { FreeTierTracker } from '../services/payment/free-tier-tracker'
+import type { DegradedModeManager } from '../services/payment/degraded-mode-manager'
 /* eslint-enable sort-imports */
 
 const debug = createLogger('event-message-handler')
@@ -29,6 +30,7 @@ export class EventMessageHandler implements IMessageHandler {
     private readonly slidingWindowRateLimiter: Factory<IRateLimiter>,
     private readonly dassieClient: DassieClient,
     private readonly freeTierTracker: FreeTierTracker,
+    private readonly degradedModeManager: DegradedModeManager,
   ) {}
 
   public async handleMessage(message: IncomingEventMessage): Promise<void> {
@@ -355,6 +357,30 @@ export class EventMessageHandler implements IMessageHandler {
     }
 
     // Free tier exhausted or disabled - require payment
+
+    // STORY 1.7: Check degraded mode (Dassie RPC unavailable)
+    if (this.degradedModeManager.isDegraded()) {
+      debugPayment('Degraded mode active - queueing payment verification for event %s', event.id)
+
+      const claim = extractPaymentClaim(event)
+      if (claim) {
+        this.degradedModeManager.queuePaymentVerification(event, claim)
+      }
+
+      // Allow event without verification (log for audit)
+      debugPayment({
+        event: 'payment_verification_skipped_degraded_mode',
+        eventId: event.id,
+        pubkey: event.pubkey,
+        queueSize: this.degradedModeManager.getQueueSize(),
+      }, 'Event accepted without payment verification (degraded mode)')
+
+      // Send NOTICE to client
+      this.sendNotice('Payment verification temporarily unavailable - event queued for later verification')
+
+      return undefined  // Allow event
+    }
+
     // Extract payment claim from event tags
     const claim = extractPaymentClaim(event)
 

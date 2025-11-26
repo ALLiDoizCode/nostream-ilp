@@ -6,6 +6,7 @@ import { createSettings } from './settings-factory'
 import { EventMessageHandler } from '../handlers/event-message-handler'
 import { eventStrategyFactory } from './event-strategy-factory'
 import { getDassieClient } from './dassie-client-factory'
+import { getDegradedModeManager } from './degraded-mode-manager-factory'
 import { slidingWindowRateLimiterFactory } from './rate-limiter-factory'
 import { SubscribeMessageHandler } from '../handlers/subscribe-message-handler'
 import { UnsubscribeMessageHandler } from '../handlers/unsubscribe-message-handler'
@@ -21,6 +22,7 @@ export const messageHandlerFactory = (
     case MessageType.EVENT:
       {
         const dassieClient = getDassieClient()
+        const degradedModeManager = getDegradedModeManager()
         return new EventMessageHandler(
           adapter,
           eventStrategyFactory(eventRepository),
@@ -29,6 +31,7 @@ export const messageHandlerFactory = (
           slidingWindowRateLimiterFactory,
           dassieClient,
           freeTierTracker,
+          degradedModeManager,
         )
       }
     case MessageType.REQ:

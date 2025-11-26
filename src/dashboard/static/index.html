@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nostream-ILP Dashboard</title>
+  <link rel="stylesheet" href="/dashboard/styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="dashboard-header">
+      <h1>Nostream-ILP Dashboard</h1>
+      <div class="status-bar">
+        <span id="last-updated" class="last-updated">Last updated: Never</span>
+        <span id="connection-status" class="connection-status">●</span>
+      </div>
+    </header>
+
+    <!-- Error Message -->
+    <div id="error-message" class="error-message hidden"></div>
+
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid">
+      <!-- Relay Status Section -->
+      <section class="card relay-status">
+        <h2>Relay Status</h2>
+        <div class="metrics">
+          <div class="metric">
+            <label>Total Events</label>
+            <div class="metric-value">
+              <span id="total-events" class="value">-</span>
+              <span id="events-24h-change" class="change">-</span>
+            </div>
+          </div>
+          <div class="metric">
+            <label>Events (24h)</label>
+            <span id="events-24h" class="value">-</span>
+          </div>
+          <div class="metric">
+            <label>Active Subscriptions</label>
+            <span id="active-subscriptions" class="value">-</span>
+          </div>
+          <div class="metric">
+            <label>Connected Clients</label>
+            <span id="connected-clients" class="value">-</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Payment Status Section -->
+      <section class="card payment-status">
+        <h2>Payment Status</h2>
+        <div class="metrics">
+          <div class="metric">
+            <label>BTC Balance</label>
+            <span id="balance-btc" class="value balance">-</span>
+          </div>
+          <div class="metric">
+            <label>BASE Balance</label>
+            <span id="balance-base" class="value balance">-</span>
+          </div>
+          <div class="metric">
+            <label>AKT Balance</label>
+            <span id="balance-akt" class="value balance">-</span>
+          </div>
+          <div class="metric">
+            <label>XRP Balance</label>
+            <span id="balance-xrp" class="value balance">-</span>
+          </div>
+        </div>
+        <p class="note">Note: Active channels and routing stats coming in Epic 2</p>
+      </section>
+
+      <!-- Health Status Section -->
+      <section class="card health-status">
+        <h2>System Health</h2>
+        <div class="health-overall">
+          <label>Overall Status</label>
+          <span id="health-overall" class="health-indicator">-</span>
+        </div>
+        <div class="services">
+          <div class="service">
+            <label>Nostream</label>
+            <span id="health-nostream" class="service-status">-</span>
+          </div>
+          <div class="service">
+            <label>Dassie RPC</label>
+            <span id="health-dassie" class="service-status">-</span>
+          </div>
+          <div class="service">
+            <label>PostgreSQL</label>
+            <span id="health-postgresql" class="service-status">-</span>
+          </div>
+          <div class="service">
+            <label>Redis</label>
+            <span id="health-redis" class="service-status">-</span>
+          </div>
+        </div>
+        <div id="health-warnings" class="warnings hidden">
+          <h3>Warnings</h3>
+          <ul id="warnings-list"></ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+      <p>Nostream-ILP v1.8 | Polling every 5 seconds</p>
+    </footer>
+  </div>
+
+  <script src="/dashboard/app.js"></script>
+</body>
+</html>

@@ -4,7 +4,7 @@ import helmet from 'helmet'
 import { createSettings } from './settings-factory'
 import router from '../routes'
 
-export const createWebApp = () => {
+export const createWebApp = (): express.Application => {
   const app = express()
   app
     .disable('x-powered-by')
@@ -32,6 +32,7 @@ export const createWebApp = () => {
     })
     .use('/favicon.ico', express.static('./resources/favicon.ico'))
     .use('/css', express.static('./resources/css'))
+    .use('/dashboard', express.static('./dist/dashboard/static'))
     .use(router)
 
   return app

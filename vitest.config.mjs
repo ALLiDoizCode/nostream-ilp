@@ -6,6 +6,16 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     include: ['test/**/*.spec.ts'],
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        singleFork: false,
+        maxForks: 2,
+        minForks: 1,
+      },
+    },
+    fileParallelism: true,
+    maxConcurrency: 5,
     coverage: {
       provider: 'c8',
       reporter: ['text', 'json', 'html'],
@@ -19,6 +29,8 @@ export default defineConfig({
     },
     setupFiles: [],
     testTimeout: 10000,
+    hookTimeout: 10000,
+    teardownTimeout: 10000,
   },
   resolve: {
     alias: {

@@ -12,6 +12,8 @@
  * @module dassie-client
  */
 
+import { EventEmitter } from 'events'
+
 import type {
   BalanceResponse,
   BalanceUpdate,
@@ -22,8 +24,9 @@ import type {
 } from '@/@types/dassie-router.stub'
 import type { PaymentClaim } from '@/@types/payment-claim'
 
-import { EventEmitter } from 'events'
 import WebSocket from 'ws'
+
+import { connectionStateToValue, dassieConnectionState } from '../metrics'
 
 /**
  * Configuration for Dassie RPC client
@@ -357,6 +360,9 @@ export class DassieClient extends EventEmitter {
     if (previousState !== state) {
       this.logger.debug({ from: previousState, to: state }, 'Connection state changed')
       this.emit('state', state)
+
+      // Update Prometheus metric
+      dassieConnectionState.set(connectionStateToValue(state))
 
       // Emit specific events for convenience
       switch (state) {
