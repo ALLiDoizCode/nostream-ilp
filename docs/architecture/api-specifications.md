@@ -289,8 +289,8 @@ These are the **custom endpoints** that need to be added to Dassie for Nostream 
 
 ### payment.verifyPaymentClaim
 
-**Type:** Query
-**Description:** Verify a payment claim's validity
+**Type:** Mutation
+**Description:** Verify a payment claim's validity and update ledger state
 
 **Input:**
 ```typescript
@@ -307,7 +307,8 @@ These are the **custom endpoints** that need to be added to Dassie for Nostream 
 ```typescript
 {
   valid: boolean;
-  error?: string; // If invalid: "insufficient_balance", "invalid_nonce", "invalid_signature", etc.
+  reason?: string; // If invalid: "invalid-signature", "invalid-nonce", "insufficient-balance", etc.
+  amountSats?: number; // Verified amount if valid
 }
 ```
 
