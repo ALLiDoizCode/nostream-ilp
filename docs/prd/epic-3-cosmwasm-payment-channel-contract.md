@@ -66,6 +66,7 @@
        pub amount: Uint128,
        pub nonce: u64,
        pub signature: Binary,
+       pub pubkey: Binary,  // Recipient's public key (33 bytes compressed secp256k1)
    }
 
    pub enum QueryMsg {
