@@ -397,7 +397,83 @@ packages/app-dassie/src/*/rpc-routers/
 
 - **Story 2.2**: ✅ Token-based RPC authentication (COMPLETE)
 - **Story 2.3**: `payment.verifyPaymentClaim` mutation
-- **Story 2.9**: Economic monitoring endpoints (`convertToAKT`, `claimAllChannels`, `getRoutingStats`)
+- **Story 2.9**: ✅ Routing statistics endpoint (`ledgers.getRoutingStats`) (COMPLETE)
+
+## Routing Statistics API
+
+**Added in Story 2.9** - Query routing fees, active peers, and connector revenue.
+
+### Endpoint: `ledgers.getRoutingStats`
+
+**Method:** `query` (no parameters)
+**Authentication:** Required (`protectedRoute`)
+**Returns:** Routing statistics object
+
+### Response Structure
+
+```typescript
+interface RoutingStatsOutput {
+  paymentsRouted24h: number;                    // ILP packets forwarded (currently 0)
+  routingFeesEarned: Record<string, bigint>;    // Fees per ledger ID
+  connectorRevenue: Record<string, bigint>;     // Total revenue per ledger
+  activePeers: number;                          // Connected Dassie peers
+  timestamp: number;                            // Unix timestamp (seconds)
+}
+```
+
+### Example Response
+
+```json
+{
+  "paymentsRouted24h": 0,
+  "routingFeesEarned": {
+    "xrpl+xrp": "5000000",
+    "btc+lightning-testnet+btc": "12000000",
+    "eth+base-sepolia+eth": "3500000",
+    "akt+cosmos-akash+akt": "8000000"
+  },
+  "connectorRevenue": {
+    "xrpl+xrp": "5000000",
+    "btc+lightning-testnet+btc": "12000000",
+    "eth+base-sepolia+eth": "3500000",
+    "akt+cosmos-akash+akt": "8000000"
+  },
+  "activePeers": 8,
+  "timestamp": 1732636800
+}
+```
+
+### Usage from Nostream
+
+```typescript
+import { createRpcClient } from '@dassie/lib-rpc/client';
+import type { AppRouter } from 'packages/app-dassie/src/rpc-server/app-router';
+
+const dassieClient = createRpcClient<AppRouter>({
+  url: "ws://localhost:5000/rpc"
+});
+
+// Query routing stats
+const stats = await dassieClient.ledgers.getRoutingStats.query();
+
+console.log(`Routing fees (XRP): ${stats.routingFeesEarned["xrpl+xrp"]} drops`);
+console.log(`Active peers: ${stats.activePeers}`);
+```
+
+### Implementation Details
+
+- **Location:** `packages/app-dassie/src/ledgers/rpc-routers/ledgers.ts`
+- **Logic:** `packages/app-dassie/src/ledgers/functions/get-routing-stats.ts`
+- **Revenue accounts:** `{ledgerId}:revenue/fees` (e.g., `xrpl+xrp:revenue/fees`)
+- **Fees calculation:** `creditsPosted - debitsPosted` for each ledger
+- **Peer count:** From `PeersSignal` (returns `Set<NodeId>`)
+
+### Notes
+
+- `paymentsRouted24h` currently returns 0 (packet counting not yet implemented)
+- `connectorRevenue` currently equals `routingFeesEarned`
+- All fees returned as bigint (JavaScript native support for large integers)
+- Requires all settlement modules (Stories 2.4-2.8) for full multi-currency support
 
 ## Peer Discovery Process
 
@@ -1778,6 +1854,293 @@ After setting up Lightning settlement:
 3. **Monitor Economic Viability** (Story 2.9): Track revenue vs. on-chain fees
 4. **Plan Mainnet Migration**: When ready for production, switch to `btc+lightning+btc` module
 
+---
+
+## Cosmos/Akash Settlement Module
+
+### Overview
+
+The Cosmos/Akash settlement module (`akt+cosmos-akash+akt`) enables payment settlement using the Akash Network blockchain via CosmWasm smart contracts. This module provides native AKT payment channels without bridging or wrapping.
+
+**Key Features:**
+- **CosmWasm Integration**: Uses deployed PaymentChannel contract on Akash
+- **Off-Chain Claims**: Verify payment claims off-chain with secp256k1 signatures
+- **On-Chain Settlement**: Final settlement via contract execution
+- **Flexible Strategy**: Configurable settlement triggers (threshold, time, expiration)
+
+### Prerequisites
+
+Before setting up the Cosmos settlement module:
+
+1. **CosmWasm PaymentChannel Contract** deployed on Akash testnet (Epic 3, Stories 3.1-3.6)
+2. **Cosmos Wallet** with test AKT funds
+3. **Akash RPC Access** (public or custom node)
+
+### Configuration
+
+**Environment Variables:**
+
+```bash
+# Cosmos/Akash Settlement Module
+COSMOS_ENABLED=true
+
+# RPC Configuration
+COSMOS_AKASH_RPC_URL=https://rpc.sandbox-01.aksh.pw:443  # Testnet
+# COSMOS_AKASH_RPC_URL=https://akash-rpc.polkachu.com:443  # Mainnet
+
+# Contract Address (from Epic 3 deployment)
+COSMOS_PAYMENT_CHANNEL_ADDRESS=akash1...  # Replace with actual address
+
+# Relay Wallet (NEVER commit to git)
+COSMOS_RELAY_ADDRESS=akash1...  # Generate with: DirectSecp256k1Wallet
+COSMOS_RELAY_PRIVATE_KEY=...    # Hex-encoded private key (64 chars)
+
+# Network Selection
+COSMOS_NETWORK=testnet  # or 'mainnet'
+
+# Settlement Policy
+COSMOS_SETTLEMENT_THRESHOLD=1000000  # 1 AKT in uakt
+COSMOS_SETTLEMENT_INTERVAL=3600      # 1 hour in seconds
+
+# Gas Management
+COSMOS_GAS_PRICE=0.025uakt
+COSMOS_GAS_LIMIT=200000
+```
+
+### Generating a Cosmos Wallet
+
+**Using CosmJS:**
+
+```typescript
+import { DirectSecp256k1Wallet } from "@cosmjs/proto-signing"
+import { stringToPath } from "@cosmjs/crypto"
+
+// Generate new wallet
+const wallet = await DirectSecp256k1Wallet.generate(24, { prefix: "akash" })
+const [account] = await wallet.getAccounts()
+
+console.log("Address:", account.address) // akash1...
+console.log("Mnemonic:", wallet.mnemonic) // Save this securely!
+
+// Get private key (for COSMOS_RELAY_PRIVATE_KEY)
+const privateKey = wallet.privkey.toString('hex')
+console.log("Private Key:", privateKey) // 64 hex characters
+```
+
+**Get Test AKT:**
+Visit Akash Discord and request testnet AKT from the faucet channel:
+https://discord.gg/akash
+
+### Testing the Module
+
+**Run Unit Tests:**
+```bash
+cd ~/Documents/dassie
+pnpm test packages/app-dassie/src/ledgers/modules/cosmos/cosmos-akash.test.ts
+```
+
+**Run Integration Tests** (requires deployed contract and funded wallet):
+```bash
+# Set integration test flag
+export COSMOS_INTEGRATION_TESTS=true
+
+# Run tests with extended timeout
+pnpm test packages/app-dassie/src/ledgers/modules/cosmos/cosmos-integration.test.ts --testTimeout=120000
+```
+
+### Troubleshooting
+
+**Issue: "Failed to connect to Cosmos RPC"**
+
+**Solutions:**
+1. Verify RPC URL is accessible:
+   ```bash
+   curl https://rpc.sandbox-01.aksh.pw:443/status
+   ```
+2. Check for rate limiting (use custom Akash node for higher limits)
+3. Try alternative RPC endpoints from Cosmos Chain Registry
+
+**Issue: "Invalid signature" when verifying claims**
+
+**Solutions:**
+1. Verify signature format matches CosmWasm:
+   ```typescript
+   const messageJson = JSON.stringify({
+     channel_id: channelId,
+     amount: amountUakt,
+     nonce: nonce
+   })
+   const messageHash = sha256(new TextEncoder().encode(messageJson))
+   const signature = secp256k1.sign(messageHash, privateKey)
+   ```
+2. Ensure sender address matches `channel.sender` from contract
+3. Check nonce is greater than `channel.highestNonce`
+
+**Issue: "Nonce mismatch"**
+
+**Solutions:**
+1. Verify nonce increments monotonically (1, 2, 3, ...)
+2. Query contract state to get current `highestNonce`
+3. Clear local state if desynchronized
+
+**Issue: "Contract execution failed"**
+
+**Solutions:**
+1. Check contract address is correct:
+   ```bash
+   curl -X POST https://rpc.sandbox-01.aksh.pw:443 \
+     -H "Content-Type: application/json" \
+     -d '{
+       "jsonrpc": "2.0",
+       "id": 1,
+       "method": "abci_query",
+       "params": {
+         "path": "/cosmwasm.wasm.v1.Query/ContractInfo",
+         "data": "..."
+       }
+     }'
+   ```
+2. Verify gas price and limit are sufficient
+3. Check relay wallet has enough AKT for gas fees
+
+**Issue: "Gas price too low/high"**
+
+**Solutions:**
+1. Monitor current gas prices on Akash
+2. Adjust `COSMOS_GAS_PRICE` (typical range: 0.025-0.05uakt)
+3. Increase `COSMOS_GAS_LIMIT` if transactions failing with "out of gas"
+
+### Contract Interaction
+
+**Query Channel State:**
+```typescript
+import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate"
+
+const client = await CosmWasmClient.connect(rpcUrl)
+
+const channelState = await client.queryContractSmart(
+  contractAddress,
+  { get_channel: { channel_id: "channel_123" } }
+)
+
+console.log("Sender:", channelState.sender)
+console.log("Balance:", channelState.amount)
+console.log("Highest Claim:", channelState.highest_claim)
+console.log("Status:", channelState.status)
+```
+
+**Open Channel (from client):**
+```typescript
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate"
+import { coin } from "@cosmjs/stargate"
+
+const client = await SigningCosmWasmClient.connectWithSigner(rpcUrl, wallet)
+
+const result = await client.execute(
+  senderAddress,
+  contractAddress,
+  {
+    open_channel: {
+      recipient: relayAddress,
+      expiration: Math.floor(Date.now() / 1000) + 86400 // 24 hours
+    }
+  },
+  "auto",
+  "Open payment channel",
+  [coin("1000000", "uakt")] // 1 AKT
+)
+
+console.log("Transaction Hash:", result.transactionHash)
+```
+
+**Close Channel (from relay):**
+```typescript
+const result = await client.execute(
+  relayAddress,
+  contractAddress,
+  {
+    close_channel: {
+      channel_id: "channel_123",
+      final_claim: {
+        amount: "800000",
+        nonce: 10,
+        signature: claimSignature
+      }
+    }
+  },
+  "auto",
+  "Close payment channel"
+)
+
+console.log("Settlement complete:", result.transactionHash)
+```
+
+### Settlement Strategy
+
+The Cosmos module settles channels based on multiple criteria:
+
+1. **Threshold Reached**: `claim >= COSMOS_SETTLEMENT_THRESHOLD`
+2. **Time Interval**: `now - lastClaimTime >= COSMOS_SETTLEMENT_INTERVAL`
+3. **Near Expiration**: `expiration - now < 24 hours`
+4. **High Claim Count**: `totalClaims >= 100`
+
+**Customize Strategy:**
+Edit `/Users/jonathangreen/Documents/dassie/packages/app-dassie/src/ledgers/modules/cosmos/functions/settlement-engine.ts` and modify the `shouldSettleChannel()` function.
+
+### Monitoring
+
+**View Logs:**
+```bash
+# Filter Cosmos settlement logs
+tail -f /path/to/dassie/logs | grep "das:node:settlement-cosmos"
+```
+
+**Key Events to Monitor:**
+- Channel opens/closes
+- Claim verifications (success/failure)
+- Settlement triggers
+- RPC connection errors
+- Gas costs per settlement
+
+### Security Considerations
+
+**Private Key Management:**
+- NEVER commit `COSMOS_RELAY_PRIVATE_KEY` to git
+- Use `.env` file (add to `.gitignore`)
+- Use separate wallet for relay (not personal wallet)
+- Fund only with necessary amount (minimize risk)
+
+**Channel Expiration:**
+- Monitor channels approaching expiration
+- Auto-settle 24 hours before expiration
+- Handle expired channels gracefully
+
+**Signature Verification:**
+- ALWAYS verify signatures off-chain before accepting claims
+- Match CosmWasm signature format exactly
+- Reject non-monotonic nonces (replay attack prevention)
+- Reject claims exceeding balance (overdraft prevention)
+
+### Next Steps
+
+After setting up Cosmos/Akash settlement:
+
+1. **Deploy CosmWasm Contract** (Epic 3): Required for full functionality
+2. **Test Channel Lifecycle**: Open, claim, settle on testnet
+3. **Integrate with Nostream**: Connect relay to use Cosmos settlement
+4. **Monitor Performance**: Track settlement costs vs. revenue
+5. **Plan Mainnet Migration**: When ready, switch network to mainnet
+
+### Related Documentation
+
+- **Story 2.7**: Cosmos/Akash Settlement Module Implementation
+- **Epic 3**: CosmWasm PaymentChannel Contract Deployment
+- **Akash Network**: https://akash.network/
+- **CosmJS Docs**: https://cosmos.github.io/cosmjs/
+- **CosmWasm Docs**: https://docs.cosmwasm.com/
+
+---
+
 ### Related Documentation
 
 - **Story 2.4**: Lightning Settlement Module Implementation
@@ -1785,3 +2148,325 @@ After setting up Lightning settlement:
 - **Core Lightning Docs**: https://docs.corelightning.org/
 - **Lightning Network Spec**: https://github.com/lightning/bolts
 
+---
+
+## XRP Ledger Payment Channels
+
+### Overview
+
+XRP Ledger (XRPL) payment channels are a native protocol feature that enables fast, low-cost off-chain payments with on-chain settlement. Unlike other blockchains that require smart contracts for payment channels, XRPL has payment channels built directly into the protocol.
+
+**Key Advantages:**
+- **Native Protocol Support**: No smart contract deployment needed
+- **Ed25519 Signatures**: Different from secp256k1 (Bitcoin/Ethereum)
+- **Low Fees**: Typically < 0.01 XRP per transaction
+- **Fast Settlement**: 3-5 second ledger confirmations
+- **Optional Expiration**: Automatic channel closure
+
+### How XRPL Payment Channels Work
+
+**1. Channel Creation (On-Chain)**
+- Sender creates PaymentChannelCreate transaction
+- Locks XRP in the channel
+- Specifies recipient, amount, settle delay, and optional expiration
+
+**2. Off-Chain Claims**
+- Sender creates signed claims: `sign(CLM\0 + channelId + amount)`
+- Claims must be monotonically increasing
+- Recipient verifies signature and claim validity
+- No on-chain transaction required
+
+**3. Settlement (On-Chain)**
+- Recipient submits PaymentChannelClaim transaction
+- Includes highest claim amount and sender's signature
+- Settle delay period begins
+
+**4. Channel Closure**
+- After settle delay, channel can close
+- Remaining funds returned to sender
+
+### Dassie XRP Module Architecture
+
+The XRP payment channel implementation is located in:
+```
+packages/app-dassie/src/ledgers/modules/xrpl/
+├── types/
+│   ├── payment-channel-state.ts    # Channel state interface
+│   └── peer-state.ts                # Extended with channel tracking
+├── functions/
+│   ├── create-payment-channel.ts    # PaymentChannelCreate transaction
+│   ├── verify-payment-claim.ts      # Ed25519 signature verification
+│   ├── settlement-strategy.ts       # Settlement decision logic
+│   └── query-payment-channel.ts     # XRPL channel queries
+├── config.ts                         # Environment configuration
+├── xrpl.ts                          # Mainnet module
+├── xrpl-testnet.ts                  # Testnet module
+└── payment-channels.test.ts         # Unit tests
+```
+
+### Configuration
+
+**Environment Variables (.env):**
+```bash
+# XRP Payment Channel Configuration
+XRPL_PAYMENT_CHANNELS_ENABLED=true
+XRPL_NETWORK=testnet  # or 'mainnet'
+
+# Settlement Policy
+XRPL_SETTLEMENT_THRESHOLD=1000000  # 1 XRP in drops
+XRPL_SETTLEMENT_INTERVAL=3600      # 1 hour in seconds
+
+# Channel Parameters
+XRPL_SETTLE_DELAY=3600             # 1 hour settle delay
+XRPL_CHANNEL_EXPIRATION_DAYS=30    # 30 days default expiration
+XRPL_MIN_CHANNEL_BALANCE=100000    # 0.1 XRP minimum balance
+```
+
+**XRP Units:**
+- 1 XRP = 1,000,000 drops
+- All amounts stored/transmitted in drops (smallest unit)
+
+### Settlement Strategy
+
+Channels are settled when any of these conditions are met:
+
+| Trigger | Condition | Default Value |
+|---------|-----------|---------------|
+| **Threshold** | Claim amount >= threshold | 1,000,000 drops (1 XRP) |
+| **Time Interval** | Time since last claim >= interval | 3600 seconds (1 hour) |
+| **Near Expiration** | Expiration approaching (< settle delay + 1 hour) | Calculated |
+| **High Claim Count** | Total claims >= 100 | 100 claims |
+| **Low Balance** | Remaining balance < minimum | 100,000 drops (0.1 XRP) |
+
+### Ed25519 Signature Format
+
+**Critical Implementation Detail:**
+XRPL payment channels use a specific signature format:
+
+```typescript
+// Signature message: CLM\0 + channelId + amount
+const CLM_PREFIX = Buffer.from([0x43, 0x4C, 0x4D, 0x00])
+const channelIdBuffer = Buffer.from(channelId, 'hex') // 32 bytes
+const amountBuffer = Buffer.alloc(8)
+amountBuffer.writeBigUInt64BE(BigInt(amountDrops))
+
+const message = Buffer.concat([CLM_PREFIX, channelIdBuffer, amountBuffer])
+
+// Verification
+import { ed25519 } from '@noble/curves/ed25519'
+const valid = ed25519.verify(signatureBytes, message, publicKeyBytes)
+```
+
+### Payment Channel Lifecycle Example
+
+**Create Channel:**
+```typescript
+import { createPaymentChannel } from './functions/create-payment-channel'
+
+const result = await createPaymentChannel({
+  client,  // XRPL client
+  wallet,  // Sender wallet
+  recipientAddress: 'rLHzPsX6oXkzU9fYnJqYKCWbJh5fJJWB5j',
+  amountDrops: '10000000',  // 10 XRP
+  settleDelay: 3600,         // 1 hour
+})
+
+console.log(`Channel ID: ${result.channelId}`)
+console.log(`Transaction: ${result.txHash}`)
+```
+
+**Verify Claim (Off-Chain):**
+```typescript
+import { verifyPaymentClaim } from './functions/verify-payment-claim'
+
+const claim = {
+  channelId: '5DB01B7...',
+  amountSats: 2000000,  // 2 XRP worth
+  nonce: 1,
+  signature: 'ED5F5AC8...',
+  currency: 'XRP'
+}
+
+const result = verifyPaymentClaim(claim, channelState)
+
+if (result.valid) {
+  console.log(`Claim verified: ${result.amountSats} sats`)
+  channelState = result.updatedChannelState
+}
+```
+
+**Settle Channel:**
+```typescript
+import { settlePaymentChannel } from './functions/settlement-strategy'
+
+const settlement = await settlePaymentChannel({
+  client,
+  wallet,  // Relay wallet (recipient)
+  channelState,
+  claimSignature: 'ED5F5AC8...',  // From sender
+})
+
+console.log(`Settlement TX: ${settlement.txHash}`)
+console.log(`Amount claimed: ${settlement.amountClaimed} drops`)
+```
+
+### Testing
+
+**Unit Tests:**
+```bash
+cd /path/to/dassie
+pnpm test packages/app-dassie/src/ledgers/modules/xrpl/payment-channels.test.ts
+```
+
+**Integration Tests (Requires XRP Testnet):**
+```bash
+pnpm test packages/app-dassie/src/ledgers/modules/xrpl/xrpl-payment-channels-integration.test.ts --testTimeout=60000
+```
+
+### XRP Testnet Setup
+
+**1. Connect to Testnet:**
+```typescript
+import { Client } from 'xrpl'
+
+const client = new Client('wss://s.altnet.rippletest.net:51233')
+await client.connect()
+```
+
+**2. Fund Test Wallet:**
+```typescript
+import { Wallet } from 'xrpl'
+
+const wallet = Wallet.generate()
+await client.fundWallet(wallet)  // Uses testnet faucet
+
+console.log(`Address: ${wallet.address}`)
+console.log(`Public Key: ${wallet.publicKey}`)
+```
+
+**3. Check Balance:**
+```bash
+# Using xrpl-cli (install: npm install -g xrpl-cli)
+xrpl-cli account_info rN7n7otQDd6FczFgLdlqtyMVrn3z956G9U --network testnet
+```
+
+### Troubleshooting
+
+#### Invalid Signature Errors
+
+**Symptom:** `verifyPaymentClaim` returns `invalid-signature`
+
+**Causes:**
+1. **Wrong signature message format**: Ensure CLM\0 prefix, 32-byte channel ID, big-endian amount
+2. **Wrong public key**: Must match sender's public key from channel
+3. **Signature from different key**: Sender must sign with same key used in PaymentChannelCreate
+
+**Debug:**
+```typescript
+// Log signature components
+console.log('Channel ID:', channelId)
+console.log('Amount (drops):', amountDrops)
+console.log('Public Key:', channelState.publicKey)
+console.log('Signature:', claim.signature)
+
+// Verify message construction
+const message = createClaimMessage(channelId, amountDrops)
+console.log('Message hex:', Buffer.from(message).toString('hex'))
+```
+
+#### Insufficient Balance Errors
+
+**Symptom:** `verifyPaymentClaim` returns `insufficient-balance`
+
+**Causes:**
+1. Claim amount > channel amount
+2. Channel already partially settled
+
+**Fix:**
+- Query channel from XRPL to get current balance
+- Ensure claim <= channel.amount
+
+#### Channel Not Found
+
+**Symptom:** `queryPaymentChannel` returns `undefined`
+
+**Causes:**
+1. Channel not yet confirmed on ledger
+2. Wrong channel ID
+3. Channel already closed
+
+**Fix:**
+```typescript
+// Wait for ledger confirmation
+await new Promise(resolve => setTimeout(resolve, 5000))
+
+// Verify channel exists
+const channels = await client.request({
+  command: 'account_channels',
+  account: recipientAddress,
+  ledger_index: 'validated'
+})
+
+console.log('Channels:', channels.result.channels)
+```
+
+#### Settlement Transaction Failures
+
+**Symptom:** PaymentChannelClaim transaction fails with `tecXYZ` error
+
+**Common Errors:**
+- `tecNO_PERMISSION`: Not channel recipient
+- `tecUNFUNDED`: Relay wallet has insufficient XRP for transaction fee
+- `tecNO_TARGET`: Destination account doesn't exist
+
+**Fix:**
+- Ensure relay wallet has minimum XRP balance (>= 10 XRP for testnet)
+- Verify signature is from correct sender
+- Check channel hasn't expired
+
+### Currency Conversion (MVP)
+
+**Story 2.8 (Current):**
+- Uses 1:1 conversion: 1 sat = 1 drop
+- Simplified for MVP implementation
+
+**Story 2.9 (Future):**
+- Exchange rate oracle integration
+- Accurate XRP <-> BTC conversion
+- Dynamic pricing based on market rates
+
+### Security Considerations
+
+1. **Ed25519 Signature Verification**: Always use constant-time comparison to prevent timing attacks
+2. **Monotonicity Check**: Reject claims with amount <= previous claim
+3. **Expiration Monitoring**: Settle channels before expiration to avoid fund loss
+4. **Key Management**: Never commit private keys to git; use environment variables
+
+### Production Checklist
+
+Before deploying XRP payment channels to mainnet:
+
+- [ ] **Test extensively on testnet**: Full lifecycle (create, claim, settle, close)
+- [ ] **Verify all signatures**: Test with multiple test wallets
+- [ ] **Monitor settlement strategy**: Ensure thresholds are appropriate for mainnet fees
+- [ ] **Fund relay wallet**: Minimum 100 XRP recommended for mainnet operations
+- [ ] **Set up monitoring**: Track channel expirations, settlement failures
+- [ ] **Enable alerts**: Low balance, signature failures, settlement delays
+- [ ] **Use hardware wallet**: For mainnet private key storage
+- [ ] **Test failover**: Ensure relay can recover from network interruptions
+
+### Useful Resources
+
+- **XRPL Docs - Payment Channels**: https://xrpl.org/payment-channels.html
+- **xrpl.js Documentation**: https://js.xrpl.org/
+- **XRP Testnet Faucet**: https://xrpl.org/xrp-testnet-faucet.html
+- **XRP Testnet Explorer**: https://testnet.xrpl.org/
+- **XRPL Dev Portal**: https://xrpl.org/
+
+### Related Documentation
+
+- **Story 2.8**: XRP Payment Channel Implementation
+- **Epic 2**: Dassie Multi-Blockchain Settlement Modules
+- **CLAUDE.md**: Domain knowledge for Nostr-ILP integration
+
+---
