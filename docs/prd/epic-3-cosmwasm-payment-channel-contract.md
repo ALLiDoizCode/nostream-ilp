@@ -218,46 +218,6 @@
 
 ---
 
-### Story 3.6: Document User Flow (IBC Bridge + Payment Channel)
-
-**As a** user,
-**I want** clear instructions for bridging AKT and using payment channels,
-**so that** I can participate in the Nostr-ILP ecosystem.
-
-**Acceptance Criteria:**
-1. Create user guide: `docs/user-guides/cronos-akt-payment-channels.md`
-2. Document IBC bridge flow:
-   - Install Keplr (Akash) and MetaMask (Cronos)
-   - Visit https://cronos.org/bridge
-   - Connect both wallets
-   - Bridge AKT from Akash to Cronos (1-60 min, ~$0.01 fee)
-   - Wait for confirmation
-   - Add AKT token to MetaMask: `0x39a65A74Dc5A778Ff93d1765Ea51F57BC49c81B3`
-3. Document payment channel flow:
-   - Approve payment channel contract to spend AKT
-   - Open channel via Nostream relay API
-   - Use channel for micropayments
-   - Close channel to settle
-   - (Optional) Bridge AKT back to Akash
-4. Include screenshots for each step
-5. Document costs:
-   - IBC bridge: ~$0.01
-   - Channel open: ~$0.0004
-   - Channel close: ~$0.0006
-   - Total: ~$0.012 per channel lifecycle
-6. Troubleshooting section:
-   - Bridge stuck? Check validator status
-   - Transaction failed? Check gas/approval
-   - Wrong network? Verify chainId 25 (mainnet) or 338 (testnet)
-7. FAQ section addressing common questions
-8. Links to official resources (Cronos docs, IBC bridge, CronoScan)
-
-**Estimated Effort:** 0.5 hours
-
-**Reference:** `docs/research/cronos-akt-deployment/findings/ibc-bridge-analysis.md`
-
----
-
 ### Story 3.7: Deploy to Cronos Mainnet (Production)
 
 **As a** developer,
@@ -315,12 +275,11 @@
 | 3.3 | Configure Hardhat and deployment scripts | 0.5 hours |
 | 3.4 | Deploy to Cronos testnet | 1.0 hour |
 | 3.5 | Create Dassie Cronos settlement module | 1.5 hours |
-| 3.6 | Document user flow (IBC bridge) | 0.5 hours |
 | 3.7 | Deploy to Cronos mainnet | 0.5 hours |
-| **Total** | | **6.5 hours** |
+| **Total** | | **6.0 hours** |
 
 **Timeline:** 1 week (with testing and review)
-**Cost:** ~$975 @ $150/hour
+**Cost:** ~$900 @ $150/hour
 
 ---
 
