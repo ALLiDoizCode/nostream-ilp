@@ -34,8 +34,21 @@ dist
 # Env files
 *.env
 
+# Wallet security files (DO NOT COMMIT)
+.wallet-seed.txt
+*.seed.txt
+
 # Nostr data folder
 .nostr
 
 # Docker Compose overrides
 docker-compose.overrides.yml
+
+# Hardhat build artifacts
+artifacts/
+cache/
+coverage/
+coverage.json
+
+# Cronos verification
+cronos-verification-input.json

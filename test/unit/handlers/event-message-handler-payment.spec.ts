@@ -32,8 +32,8 @@ vi.mock('../../../src/utils/event', async () => {
   }
 })
 
+import { calculateRequiredPayment, extractPaymentClaim } from '../../../src/services/payment'
 import { EventMessageHandler } from '../../../src/handlers/event-message-handler'
-import { extractPaymentClaim } from '../../../src/services/payment'
 import type { IUserRepository } from '../../../src/@types/repositories'
 import type { IWebSocketAdapter } from '../../../src/@types/adapters'
 
@@ -46,6 +46,9 @@ describe('EventMessageHandler - Payment Verification', () => {
   let mockRateLimiterFactory: any
   let mockDassieClient: DassieClient
   let mockExtractPaymentClaim: any
+  let mockCalculateRequiredPayment: any
+  let mockFreeTierTracker: any
+  let mockDegradedModeManager: any
 
   const createMockEvent = (overrides: Partial<Event> = {}): Event => ({
     id: 'test-event-id',
@@ -72,6 +75,9 @@ describe('EventMessageHandler - Payment Verification', () => {
     vi.clearAllMocks()
 
     mockExtractPaymentClaim = vi.mocked(extractPaymentClaim)
+    mockCalculateRequiredPayment = vi.mocked(calculateRequiredPayment)
+    // Set default return value for pricing calculator
+    mockCalculateRequiredPayment.mockReturnValue(10n)
 
     // Mock WebSocket
     mockWebSocket = {
@@ -114,13 +120,30 @@ describe('EventMessageHandler - Payment Verification', () => {
       disconnect: vi.fn(),
     } as any
 
+    // Mock FreeTierTracker
+    mockFreeTierTracker = {
+      checkFreeTierEligibility: vi.fn(async () => ({ eligible: false, reason: null })),
+      consumeFreeTierAllowance: vi.fn(async () => true),
+      getFreeTierStatus: vi.fn(async () => ({ remaining: 0, total: 0 })),
+    } as any
+
+    // Mock DegradedModeManager
+    mockDegradedModeManager = {
+      isDegraded: vi.fn(() => false),
+      enterDegradedMode: vi.fn(),
+      exitDegradedMode: vi.fn(),
+      getStatus: vi.fn(() => ({ degraded: false, reason: null })),
+    } as any
+
     handler = new EventMessageHandler(
       mockWebSocket,
       mockStrategyFactory,
       mockUserRepository,
       mockSettings,
       mockRateLimiterFactory,
-      mockDassieClient
+      mockDassieClient,
+      mockFreeTierTracker,
+      mockDegradedModeManager
     )
   })
 
@@ -159,7 +182,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent({ pubkey: 'relay-pubkey' })
@@ -194,7 +219,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent({ kind: 1 })
@@ -225,13 +252,18 @@ describe('EventMessageHandler - Payment Verification', () => {
         },
       } as Settings))
 
+      // Mock pricing calculator to return 0 when no fee schedule matches
+      mockCalculateRequiredPayment.mockReturnValue(0n)
+
       handler = new EventMessageHandler(
         mockWebSocket,
         mockStrategyFactory,
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent({ kind: 1 })
@@ -263,7 +295,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent()
@@ -301,7 +335,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent({ kind: 1 })
@@ -340,7 +376,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent({ kind: 1 })
@@ -369,7 +407,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent()
@@ -401,7 +441,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent()
@@ -433,7 +475,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent()
@@ -465,7 +509,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent()
@@ -497,7 +543,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent()
@@ -530,7 +578,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent()
@@ -584,7 +634,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent({ kind: 1 })
@@ -619,7 +671,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent({ kind: 1 })
@@ -661,7 +715,9 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockUserRepository,
         mockSettings,
         mockRateLimiterFactory,
-        mockDassieClient
+        mockDassieClient,
+        mockFreeTierTracker,
+        mockDegradedModeManager
       )
 
       const event = createMockEvent({ kind: 1 })

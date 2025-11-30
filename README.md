@@ -55,6 +55,29 @@ NIPs with a relay-specific implementation are listed here.
 - [x] NIP-33: Parameterized Replaceable Events
 - [x] NIP-40: Expiration Timestamp
 
+## Deployed Contracts
+
+### Cronos Mainnet (Production)
+
+**CronosPaymentChannel** - ERC-20 payment channel contract for AKT settlements
+- **Contract Address:** `0x9Ec2d217b14e67cAbF86F20F4E7462D6d7bc7684`
+- **AKT Token:** `0x39a65A74Dc5A778Ff93d1765Ea51F57BC49c81B3` (Official bridged AKT)
+- **Network:** Cronos Mainnet (ChainID: 25)
+- **Deployed:** November 30, 2025
+- **Explorer:** [View on CronoScan](https://cronoscan.com/address/0x9Ec2d217b14e67cAbF86F20F4E7462D6d7bc7684)
+- **Deployment Cost:** 0.3517 CRO (~$0.042 USD)
+
+### Cronos Testnet
+
+**CronosPaymentChannel** - Test deployment for development
+- **Contract Address:** `0x4b9e32389896C05A4CAfC41bE9dA6bB108a7dA72`
+- **MockAKT Token:** `0xf7e968d6f3bdFC504A434288Ea3f243e033e846F`
+- **Network:** Cronos Testnet (ChainID: 338)
+- **Deployed:** November 28, 2025
+- **Explorer:** [View on Cronos Explorer](https://cronos.org/explorer/testnet3/address/0x4b9e32389896C05A4CAfC41bE9dA6bB108a7dA72)
+
+For complete deployment details, gas costs, and integration guides, see [docs/deployment.md](./docs/deployment.md).
+
 ## Requirements
 
 ### Standalone setup

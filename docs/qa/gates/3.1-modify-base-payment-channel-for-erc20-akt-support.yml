@@ -77,7 +77,7 @@ risk_summary:
   recommendations:
     must_fix: []  # All issues fixed
     monitor:
-      - "Professional security audit before mainnet deployment (Story 3.7)"
+      - "Professional security audit before mainnet deployment (Story 3.6)"
       - "Consider OpenZeppelin SafeERC20 library as alternative to require() checks"
       - "Fuzz testing for signature verification edge cases"
 

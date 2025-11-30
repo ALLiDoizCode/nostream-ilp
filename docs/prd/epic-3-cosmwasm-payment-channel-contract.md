@@ -218,7 +218,7 @@
 
 ---
 
-### Story 3.7: Deploy to Cronos Mainnet (Production)
+### Story 3.6: Deploy to Cronos Mainnet (Production)
 
 **As a** developer,
 **I want** CronosPaymentChannel deployed to Cronos mainnet,
@@ -268,15 +268,15 @@
 
 ### Effort Estimate
 
-| Story | Description | Effort |
-|-------|-------------|--------|
-| 3.1 | Modify BasePaymentChannel for ERC-20 AKT | 1.0 hour |
-| 3.2 | Create MockAKT and update tests | 1.5 hours |
-| 3.3 | Configure Hardhat and deployment scripts | 0.5 hours |
-| 3.4 | Deploy to Cronos testnet | 1.0 hour |
-| 3.5 | Create Dassie Cronos settlement module | 1.5 hours |
-| 3.7 | Deploy to Cronos mainnet | 0.5 hours |
-| **Total** | | **6.0 hours** |
+| Story | Description | Effort | Status |
+|-------|-------------|--------|--------|
+| 3.1 | Modify BasePaymentChannel for ERC-20 AKT | 1.0 hour | ✅ Done |
+| 3.2 | Create MockAKT and update tests | 1.5 hours | ✅ Done |
+| 3.3 | Configure Hardhat and deployment scripts | 0.5 hours | ✅ Done |
+| 3.4 | Deploy to Cronos testnet | 1.0 hour | ✅ Done |
+| 3.5 | Create Dassie Cronos settlement module | 1.5 hours | ✅ Done |
+| 3.6 | Deploy to Cronos mainnet | 0.5 hours | ✅ Done |
+| **Total** | | **6.0 hours** | **COMPLETE** |
 
 **Timeline:** 1 week (with testing and review)
 **Cost:** ~$900 @ $150/hour

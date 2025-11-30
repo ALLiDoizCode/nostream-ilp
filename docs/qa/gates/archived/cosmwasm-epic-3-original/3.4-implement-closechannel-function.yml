@@ -251,4 +251,4 @@ technical_debt: []
 
 follow_up_stories:
   - "Story 3.5: Query functions will check Closed status"
-  - "Story 3.7: TypeScript library will use signature generation example from README"
+  - "Story 3.6: TypeScript library will use signature generation example from README"

@@ -1411,7 +1411,7 @@ akash tx wasm instantiate <code_id> '{}' \
 
 ---
 
-### Story 3.7: Deploy to Cronos Mainnet (Production)
+### Story 3.6: Deploy to Cronos Mainnet (Production)
 
 **As a** developer,
 **I want** CronosPaymentChannel deployed to Cronos mainnet,

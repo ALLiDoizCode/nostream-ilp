@@ -1,0 +1,38 @@
+#!/bin/bash
+# Manual verification instructions for CronosPaymentChannel on Cronos Mainnet
+
+CONTRACT_ADDRESS="0x9Ec2d217b14e67cAbF86F20F4E7462D6d7bc7684"
+AKT_TOKEN="0x39a65A74Dc5A778Ff93d1765Ea51F57BC49c81B3"
+
+echo "==========================================  "
+echo "Contract Verification Instructions"
+echo "=========================================="
+echo ""
+echo "Contract Address: $CONTRACT_ADDRESS"
+echo "Constructor Args: $AKT_TOKEN"
+echo ""
+echo "View Contract: https://cronoscan.com/address/$CONTRACT_ADDRESS"
+echo ""
+echo "Manual Verification URL:"
+echo "https://cronoscan.com/verifyContract?a=$CONTRACT_ADDRESS"
+echo ""
+echo "==========================================  "
+echo "Verification Details:"
+echo "=========================================="
+echo "Contract Name: CronosPaymentChannel"
+echo "Compiler Version: v0.8.20+commit.a1b79de6"
+echo "Optimization: Yes (200 runs)"
+echo "Constructor Arguments (ABI-encoded):"
+echo ""
+
+# Generate ABI-encoded constructor args
+echo "000000000000000000000000${AKT_TOKEN:2}"
+echo ""
+echo "=========================================="
+echo "Alternative: Try automated verification:"
+echo "=========================================="
+echo ""
+echo "npx hardhat verify --network cronos \\"
+echo "  $CONTRACT_ADDRESS \\"
+echo "  $AKT_TOKEN"
+echo ""

@@ -596,12 +596,50 @@ If you encounter issues not covered here:
 
 ### Cronos Mainnet
 
+**Deployment Date:** November 30, 2025
+
+**Deployer Address:** `0x5841085dc161D62147B9142e4709416A66631759`
+
+**Contracts:**
+
+- **AKT Token (Official)**
+  - Address: `0x39a65A74Dc5A778Ff93d1765Ea51F57BC49c81B3`
+  - Note: Pre-existing mainnet AKT token (bridged from Akash via IBC)
+  - Explorer: [View on CronoScan](https://cronoscan.com/token/0x39a65A74Dc5A778Ff93d1765Ea51F57BC49c81B3)
+  - Verified: ✅
+
+- **CronosPaymentChannel**
+  - Address: `0x9Ec2d217b14e67cAbF86F20F4E7462D6d7bc7684`
+  - Transaction: `0x168789c4bcc9f5834735f757b04098f531487c3e635b10630358b823ffdf7eda`
+  - Constructor Args: `0x39a65A74Dc5A778Ff93d1765Ea51F57BC49c81B3` (AKT token address)
+  - Explorer: [View on CronoScan](https://cronoscan.com/address/0x9Ec2d217b14e67cAbF86F20F4E7462D6d7bc7684)
+  - Verified: ⚠️ (Automated verification encountering API connectivity issues; [manual verification available](https://cronoscan.com/verifyContract?a=0x9Ec2d217b14e67cAbF86F20F4E7462D6d7bc7684))
+
+**Gas Costs:**
+
+Measured on: November 30, 2025
+CRO Price: ~$0.12 USD (approximate)
+
+| Operation | Gas Estimate | Gas Price | Actual Cost (CRO) | Actual Cost (USD) |
+|-----------|--------------|-----------|-------------------|-------------------|
+| Deploy CronosPaymentChannel | 53,000 | 378.75 gwei | 0.3517 | $0.042 |
+
+**Network Information:**
 - **Network Name:** Cronos Mainnet
 - **RPC URL:** https://evm.cronos.org
 - **Chain ID:** 25
 - **Currency:** CRO
 - **Block Explorer:** https://cronoscan.com
 - **AKT Token:** 0x39a65A74Dc5A778Ff93d1765Ea51F57BC49c81B3
+
+**Deployment Notes:**
+- Contract deployed using same codebase as testnet (Story 3.4)
+- All 29 Hardhat tests passing before deployment
+- Test coverage: 100% for CronosPaymentChannel
+- Deployment cost higher than estimate due to contract size
+- Initial balance: 42.84 CRO, Remaining: 42.49 CRO
+
+---
 
 ### Adding Networks to MetaMask
 
@@ -666,6 +704,6 @@ After successfully deploying contracts:
 
 ---
 
-**Last Updated:** 2025-11-28
+**Last Updated:** 2025-11-30 (Mainnet deployment completed)
 **Hardhat Version:** 2.27.1
 **Solidity Version:** 0.8.20

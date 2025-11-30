@@ -147,7 +147,7 @@ deployment_readiness:
   notes: |
     All deployment scripts and documentation are production-ready.
     Story 3.4 can proceed with testnet deployment using these scripts.
-    Mainnet deployment (Story 3.7) will use the mainnet script after full testnet validation.
+    Mainnet deployment (Story 3.6) will use the mainnet script after full testnet validation.
 
 # Gate decision rationale
 decision_rationale: |

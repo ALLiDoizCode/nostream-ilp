@@ -28,7 +28,7 @@ Epic 3 was pivoted to focus on Cronos EVM deployment instead of native CosmWasm.
 - Story 3.4: Implement CloseChannel with Claim Verification
 - Story 3.5: Add Query Functions
 - Story 3.6: Deploy Contract to Akash Testnet (removed - not implemented)
-- Story 3.7: Create Contract Interaction Library for Dassie
+- Story 3.6: Create Contract Interaction Library for Dassie
 
 ## New Epic 3 (Cronos)
 
@@ -38,7 +38,7 @@ The NEW Epic 3 stories focus on Cronos deployment:
 - Story 3.3: Configure Hardhat for Cronos and Create Deployment Scripts
 - Story 3.4: Deploy to Cronos Testnet and Verify
 - Story 3.5: Create Dassie Cronos Settlement Module
-- Story 3.7: Deploy to Cronos Mainnet (Production)
+- Story 3.6: Deploy to Cronos Mainnet (Production)
 
 See `docs/prd/epic-3-cosmwasm-payment-channel-contract.md` for current Epic 3 documentation.
 
