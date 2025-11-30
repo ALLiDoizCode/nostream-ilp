@@ -27,7 +27,7 @@ export default defineConfig({
         '**/dist/',
       ],
     },
-    setupFiles: [],
+    setupFiles: ['./test/setup.ts'],
     testTimeout: 10000,
     hookTimeout: 10000,
     teardownTimeout: 10000,
