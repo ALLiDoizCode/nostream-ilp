@@ -1,21 +1,104 @@
 import { ethers } from "ethers";
 import * as fs from "fs";
 import * as path from "path";
+import * as readline from "readline";
 
 /**
  * Derives wallet from seed phrase and creates .env file
  * SECURITY: This script is for deployment setup only
  * The .env file is gitignored to prevent accidental commits
+ *
+ * USAGE:
+ *   Option 1: Environment variable
+ *     WALLET_SEED_PHRASE="your seed phrase here" npx ts-node scripts/setup-wallet-from-seed.ts
+ *
+ *   Option 2: Interactive prompt (most secure - seed never written to bash history)
+ *     npx ts-node scripts/setup-wallet-from-seed.ts
+ *
+ *   Option 3: Read from gitignored file
+ *     echo "your seed phrase" > .wallet-seed.txt
+ *     npx ts-node scripts/setup-wallet-from-seed.ts --from-file
  */
 
-async function setupWallet() {
-  // Seed phrase provided by user
-  const seedPhrase = "broom clown drum fee report menu edit swing scatter art peace conduct";
+/**
+ * Prompt user for seed phrase securely via stdin
+ * This method ensures seed phrase is never saved to bash history
+ */
+async function promptForSeedPhrase(): Promise<string> {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
 
+  return new Promise((resolve) => {
+    rl.question("🔐 Enter your 12-word seed phrase: ", (answer) => {
+      rl.close();
+      resolve(answer.trim());
+    });
+  });
+}
+
+/**
+ * Get seed phrase from various secure sources
+ */
+async function getSeedPhrase(): Promise<string> {
+  // Option 1: From environment variable
+  if (process.env.WALLET_SEED_PHRASE) {
+    console.log("✅ Using seed phrase from WALLET_SEED_PHRASE environment variable\n");
+    return process.env.WALLET_SEED_PHRASE;
+  }
+
+  // Option 2: From gitignored file (if --from-file flag provided)
+  if (process.argv.includes("--from-file")) {
+    const seedPath = path.join(__dirname, "..", ".wallet-seed.txt");
+    if (!fs.existsSync(seedPath)) {
+      throw new Error(
+        `Seed file not found: ${seedPath}\n` +
+        `Create it with: echo "your seed phrase" > .wallet-seed.txt`
+      );
+    }
+    console.log("✅ Reading seed phrase from .wallet-seed.txt\n");
+    const content = fs.readFileSync(seedPath, "utf-8");
+    // Extract seed phrase (handle format: "Seed Phrase: ...\n..." or just the phrase)
+    const match = content.match(/Seed Phrase[:\s]*([^\n]+)/i);
+    if (match) {
+      return match[1].trim();
+    }
+    return content.trim();
+  }
+
+  // Option 3: Interactive prompt (most secure)
+  console.log("🔐 No seed phrase provided via environment or file.\n");
+  console.log("⚠️  SECURITY: Interactive mode is most secure (no bash history).\n");
+  return await promptForSeedPhrase();
+}
+
+async function setupWallet() {
   console.log("🔐 Setting up wallet from seed phrase...\n");
 
+  // Get seed phrase securely
+  const seedPhrase = await getSeedPhrase();
+
+  // Validate seed phrase format (basic check)
+  const wordCount = seedPhrase.trim().split(/\s+/).length;
+  if (wordCount !== 12 && wordCount !== 24) {
+    throw new Error(
+      `Invalid seed phrase: expected 12 or 24 words, got ${wordCount}\n` +
+      `Please check your seed phrase and try again.`
+    );
+  }
+
   // Derive wallet from mnemonic
-  const wallet = ethers.Wallet.fromPhrase(seedPhrase);
+  let wallet: ethers.Wallet;
+  try {
+    wallet = ethers.Wallet.fromPhrase(seedPhrase);
+  } catch (error) {
+    throw new Error(
+      `Failed to derive wallet from seed phrase.\n` +
+      `Error: ${error instanceof Error ? error.message : String(error)}\n` +
+      `Please verify your seed phrase is correct.`
+    );
+  }
 
   console.log("✅ Wallet derived successfully!");
   console.log(`📍 Address: ${wallet.address}`);

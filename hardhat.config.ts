@@ -25,13 +25,29 @@ const config: HardhatUserConfig = {
       url: "https://evm.cronos.org",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       chainId: 25,
+    },
+    base: {
+      url: process.env.BASE_RPC_URL || "https://mainnet.base.org",
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      chainId: 8453,
+      gasPrice: "auto",
     }
   },
   etherscan: {
-    apiKey: {
-      cronosTestnet: process.env.CRONOSCAN_API_KEY || "dummy-key-not-required",
-      cronos: process.env.CRONOSCAN_API_KEY || "",
-    }
+    apiKey: process.env.BASESCAN_API_KEY || process.env.CRONOSCAN_API_KEY || "",
+    customChains: [
+      {
+        network: "base",
+        chainId: 8453,
+        urls: {
+          apiURL: "https://api.basescan.org/api",
+          browserURL: "https://basescan.org"
+        }
+      }
+    ]
+  },
+  sourcify: {
+    enabled: false
   }
 };
 
