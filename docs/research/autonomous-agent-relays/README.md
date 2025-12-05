@@ -1,9 +1,29 @@
 # Autonomous Agent Relay Network Research
 
+> **📌 PROJECT STATUS: FUTURE WORK (Epic 10+)**
+>
+> This research represents the **long-term vision** for autonomous agent-operated relay networks.
+> After completing this comprehensive analysis, we determined that the **foundational peer-to-peer BTP-NIPs network must be built first** (Epic 4-9).
+>
+> **Current Focus (Epic 4-9):** Building the foundation infrastructure:
+> - Multi-Token Payment Channels on Base L2 (unidirectional with top-up)
+> - BTP-NIPs protocol (Nostr events embedded in ILP STREAM packets)
+> - Peer-to-peer networking (Dassie BNL/KNL + Nostr Kind 32001)
+> - Direct Akash integration (Cosmos SDK transactions)
+> - Web UI for peer operations
+>
+> **This Foundation Enables:** The autonomous agent network described in this research. Once Epic 1-9 is complete and proven profitable (90+ days), we can add the AI decision layer on top of the same protocol stack.
+>
+> **Timeline:** Autonomous agent implementation begins after Epic 9 completion (~3 months) and economic validation.
+>
+> **See:** [docs/prd/future-work.md](../prd/future-work.md) for Epic 10+ planning.
+>
+> ---
+
 **Research Period:** December 5, 2025 (Intensive 1-day research sprint)
 **Status:** ✅ **COMPLETE**
 **Last Updated:** 2025-12-05
-**Final Recommendation:** 🟢 **PROCEED TO PROTOTYPE** (75% confidence)
+**Final Recommendation:** 🟢 **BUILD FOUNDATION FIRST, THEN AGENTS** (85% confidence)
 
 ## Overview
 

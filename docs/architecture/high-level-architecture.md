@@ -2,31 +2,33 @@
 
 ## Technical Summary
 
-The Nostr-ILP Relay is a **dual-process microservices architecture** deploying two specialized containers (Nostream relay + Dassie ILP node) on Akash Network. The system bridges decentralized social networking (Nostr) with cross-ledger micropayments (ILP), enabling a **self-sustaining relay** that accepts payments in multiple cryptocurrencies (BTC, BASE, AKT, XRP) and automatically pays for its own Akash hosting. Core architectural patterns include **event-driven messaging** (Nostr WebSocket), **RPC-based inter-process communication** (tRPC WebSocket), **plugin-based settlement modules** (multi-blockchain support), and **reactive state management** (Dassie signals). The system achieves the PRD goal of economic sustainability by earning revenue from both user micropayments and ILP routing fees, while Arweave permanent storage provides cost-efficient long-term data persistence.
+The Nostr-ILP Peer Network is a **pure peer-to-peer architecture** where every participant runs a Dassie ILP node with BTP-NIPs protocol support. The system creates a new decentralized network that embeds Nostr events directly inside ILP STREAM packets, achieving **native payment-content coupling** where every message can include micropayments. Each peer operates identically (no client/server distinction), storing events locally in PostgreSQL, routing via ILP's built-in multi-hop protocol, and settling payments through unidirectional channels on Base L2. Core architectural patterns include **BTP-NIPs protocol** (events in ILP packets), **peer-to-peer discovery** (Dassie BNL/KNL + Nostr Kind 32001), **unidirectional payment channels** (sender-only deposits with top-up), and **reactive state management** (Dassie lib-reactive). The system achieves economic sustainability by earning subscription fees from followers while paying minimal Akash hosting costs ($5/month).
 
 ## High Level Overview
 
-**Architectural Style:** **Microservices with Shared Deployment**
-- Two independent services (Nostream + Dassie) deployed as separate containers in a single Akash SDL
-- Services communicate via localhost WebSocket RPC (tRPC)
-- Each service maintains its own data store (PostgreSQL + Redis for Nostream, SQLite for Dassie)
+**Architectural Style:** **Pure Peer-to-Peer Network**
+- Every participant runs identical peer node (Dassie + BTP-NIPs + Storage + UI)
+- No client/server distinction - everyone is both publisher and relay
+- Peers communicate via ILP STREAM (HTTPS) with encrypted BTP-NIPs protocol
 
-**Repository Structure:** **Dual-Repo (from PRD)**
-- Repo 1: `nostream-ilp` - Fork of Nostream with ILP integration
-- Repo 2: `dassie-relay` - Fork or upstream Dassie with custom settlement modules
-- Repo 3: `cosmos-payment-channels` - New CosmWasm contract
+**Repository Structure:** **Monorepo**
+- Repo 1: `nostream-ilp` - BTP-NIPs implementation, storage layer, UI
+- Repo 2: `dassie` - Upstream Dassie (with custom settlement module for Base)
+- Repo 3: `cosmos-payment-channels` - Base L2 payment channel contracts
 
-**Service Architecture:** **Two-Process Deployment (from PRD)**
-- Container 1: Nostream relay + Economic monitor (combined process)
-- Container 2: Dassie ILP node (standalone)
-- Both deployed via single Akash SDL (~$2.50-5/month)
+**Service Architecture:** **Integrated Peer Node**
+- Container 1: Dassie + BTP-NIPs + PostgreSQL
+- Container 2: Web UI (optional, for peer operators)
+- Deployed via single Akash SDL (~$5/month)
 
-**Primary User Interaction Flow:**
-1. Nostr client connects via WebSocket → Nostream relay
-2. Client publishes EVENT with payment claim in tags
-3. Nostream extracts claim → calls Dassie RPC → verifies payment off-chain
-4. If valid → Nostream stores event in PostgreSQL + broadcasts to subscribers
-5. Economic monitor tracks revenue → converts to AKT → pays Akash provider automatically
+**Primary Peer Interaction Flow:**
+1. Alice follows Bob (Nostr Kind 3 follow list)
+2. Alice's node resolves Bob's ILP address (queries Kind 32001)
+3. Alice's node discovers Bob via Dassie BNL/KNL
+4. Alice opens payment channel with Bob (Base L2, unidirectional)
+5. Alice subscribes to Bob via ILP REQ packet (with payment)
+6. Bob streams events to Alice via ILP EVENT packets
+7. Events propagate multi-hop through network (ILP routing)
 
 **Key Architectural Decisions:**
 
