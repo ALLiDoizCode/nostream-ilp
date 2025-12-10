@@ -220,7 +220,7 @@ describe('ConnectionLifecycleManager', () => {
       expect(conn!.state).toBe(PeerConnectionState.CONNECTING)
 
       // Verify event emitted
-      const _event = await stateChangePromise
+      const event = await stateChangePromise
       expect(event.pubkey).toBe(ALICE_PUBKEY)
       expect(event.oldState).toBe(PeerConnectionState.DISCOVERING)
       expect(event.newState).toBe(PeerConnectionState.CONNECTING)
@@ -446,7 +446,7 @@ describe('ConnectionLifecycleManager', () => {
 
       await manager.handleChannelNeeded(connection)
 
-      const _event = await channelNeededPromise
+      const event = await channelNeededPromise
       expect(event.pubkey).toBe(ALICE_PUBKEY)
       expect(event.baseAddress).toBe('0xAlice')
       expect(event.estimatedCost).toBeDefined()
@@ -507,7 +507,7 @@ describe('ConnectionLifecycleManager', () => {
       expect(vi.mocked(mockConnectionStore.resetReconnectAttempts)).toHaveBeenCalledWith(ALICE_PUBKEY)
 
       // Verify event emitted
-      const _event = await connectedPromise
+      const event = await connectedPromise
       expect(event.pubkey).toBe(ALICE_PUBKEY)
       expect(event.timestamp).toBeDefined()
     })

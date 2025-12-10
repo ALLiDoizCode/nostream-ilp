@@ -1,5 +1,5 @@
 import cluster from 'cluster'
-import { EventEmitter as _EventEmitter } from 'stream'
+import { EventEmitter } from 'stream'
 import { IncomingMessage as IncomingHttpMessage } from 'http'
 import { SocketAddress } from 'net'
 import { WebSocket } from 'ws'

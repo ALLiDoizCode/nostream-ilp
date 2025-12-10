@@ -1,4 +1,4 @@
-import { EventEmitter as _EventEmitter } from 'events'
+import { EventEmitter } from 'events'
 import { createLogger } from '../../factories/logger-factory.js'
 import { v4 as uuidv4 } from 'uuid'
 import {

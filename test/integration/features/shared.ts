@@ -135,7 +135,7 @@ Then(/^(\w+) sends their last draft event (successfully|unsuccessfully)$/, async
 ) {
   const ws = this.parameters.clients[name] as WebSocket
 
-  const _event = this.parameters.events[name].findLast((event: Event) => event[isDraft])
+  const event = this.parameters.events[name].findLast((event: Event) => event[isDraft])
 
   delete event[isDraft]
 

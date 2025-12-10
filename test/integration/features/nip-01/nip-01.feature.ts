@@ -24,7 +24,7 @@ const { expect } = chai
 
 When(/(\w+) subscribes to last event from (\w+)$/, async function(this: World<Record<string, any>>, from: string, to: string) {
   const ws = this.parameters.clients[from] as WebSocket
-  const _event = this.parameters.events[to].pop()
+  const event = this.parameters.events[to].pop()
   const subscription = { name: `test-${Math.random()}`, filters: [{ ids: [event.id] }] }
   this.parameters.subscriptions[from].push(subscription)
 
@@ -157,7 +157,7 @@ When(/(\w+) sends a recommend_server event with content "(.+?)"/, async function
 Then(/(\w+) receives a set_metadata event from (\w+)/, async function(name: string, author: string) {
   const ws = this.parameters.clients[name] as WebSocket
   const subscription = this.parameters.subscriptions[name][this.parameters.subscriptions[name].length - 1]
-  const _event = this.parameters.events[author][this.parameters.events[author].length - 1]
+  const event = this.parameters.events[author][this.parameters.events[author].length - 1]
 
   const receivedEvent = await waitForNextEvent(ws, subscription.name, event.content)
 

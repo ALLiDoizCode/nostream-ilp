@@ -104,7 +104,7 @@ describe('Event Handler', () => {
 
   describe('handleEventPacket', () => {
     it('should store valid event with sufficient payment', async () => {
-      const _event = await createValidEvent()
+      const event = await createValidEvent()
       const packet = createTestPacket(event, '100') // 100 msats (sufficient for kind 1)
       const ilpPacket = createTestILPPacket()
 
@@ -123,7 +123,7 @@ describe('Event Handler', () => {
     })
 
     it('should reject event with insufficient payment', async () => {
-      const _event = await createValidEvent()
+      const event = await createValidEvent()
       const packet = createTestPacket(event, '10') // Only 10 msats (insufficient)
       const ilpPacket = createTestILPPacket()
 
@@ -142,7 +142,7 @@ describe('Event Handler', () => {
     })
 
     it('should fulfill payment for invalid signature but not store event', async () => {
-      const _event = await createValidEvent()
+      const event = await createValidEvent()
 
       // Tamper with signature to make it invalid
       const tamperedEvent = { ...event, sig: 'invalid_signature_' + '0'.repeat(112) }
@@ -164,7 +164,7 @@ describe('Event Handler', () => {
     })
 
     it('should ignore duplicate events (fulfill packet)', async () => {
-      const _event = await createValidEvent()
+      const event = await createValidEvent()
       const packet = createTestPacket(event, '100')
       const ilpPacket = createTestILPPacket()
 
@@ -182,7 +182,7 @@ describe('Event Handler', () => {
     })
 
     it('should handle kind-specific pricing (kind 30023 = 500 msats)', async () => {
-      const _event = await createValidEvent({ kind: 30023 }) // Long-form content
+      const event = await createValidEvent({ kind: 30023 }) // Long-form content
       const packet = createTestPacket(event, '500') // 500 msats (sufficient for kind 30023)
       const ilpPacket = createTestILPPacket()
 
@@ -198,7 +198,7 @@ describe('Event Handler', () => {
     })
 
     it('should reject kind 30023 event with insufficient payment (< 500 msats)', async () => {
-      const _event = await createValidEvent({ kind: 30023 })
+      const event = await createValidEvent({ kind: 30023 })
       const packet = createTestPacket(event, '100') // Only 100 msats (insufficient for kind 30023)
       const ilpPacket = createTestILPPacket()
 
@@ -216,7 +216,7 @@ describe('Event Handler', () => {
     it('should handle database retry on transient failures', async () => {
       // Note: This test would require mocking the repository to simulate failures
       // For now, we test the happy path and document that retry logic exists
-      const _event = await createValidEvent()
+      const event = await createValidEvent()
       const packet = createTestPacket(event, '100')
       const ilpPacket = createTestILPPacket()
 
@@ -230,7 +230,7 @@ describe('Event Handler', () => {
     })
 
     it('should cache event in Redis after successful save', async () => {
-      const _event = await createValidEvent()
+      const event = await createValidEvent()
       const packet = createTestPacket(event, '100')
       const ilpPacket = createTestILPPacket()
 
@@ -247,7 +247,7 @@ describe('Event Handler', () => {
 
   describe('extractPaymentMetadata', () => {
     it('should extract payment metadata from packet', async () => {
-      const _event = await createValidEvent()
+      const event = await createValidEvent()
       const packet = createTestPacket(event, '100')
 
       const payment = extractPaymentMetadata(packet)
@@ -260,14 +260,14 @@ describe('Event Handler', () => {
 
   describe('isEventMessage', () => {
     it('should return true for EVENT message type', async () => {
-      const _event = await createValidEvent()
+      const event = await createValidEvent()
       const packet = createTestPacket(event)
 
       expect(isEventMessage(packet)).toBe(true)
     })
 
     it('should return false for non-EVENT message types', async () => {
-      const _event = await createValidEvent()
+      const event = await createValidEvent()
       const packet = createTestPacket(event)
 
       // Change message type to REQ
@@ -279,7 +279,7 @@ describe('Event Handler', () => {
 
   describe('edge cases', () => {
     it('should handle event with empty content', async () => {
-      const _event = await createValidEvent({ content: '' })
+      const event = await createValidEvent({ content: '' })
       const packet = createTestPacket(event, '100')
       const ilpPacket = createTestILPPacket()
 
@@ -292,7 +292,7 @@ describe('Event Handler', () => {
     })
 
     it('should handle event with empty tags array', async () => {
-      const _event = await createValidEvent({ tags: [] })
+      const event = await createValidEvent({ tags: [] })
       const packet = createTestPacket(event, '100')
       const ilpPacket = createTestILPPacket()
 
@@ -305,7 +305,7 @@ describe('Event Handler', () => {
     })
 
     it('should handle event with special UTF-8 characters', async () => {
-      const _event = await createValidEvent({ content: 'Hello 世界! 🌍🚀' })
+      const event = await createValidEvent({ content: 'Hello 世界! 🌍🚀' })
       const packet = createTestPacket(event, '100')
       const ilpPacket = createTestILPPacket()
 
@@ -318,7 +318,7 @@ describe('Event Handler', () => {
     })
 
     it('should handle payment amount as string (not number)', async () => {
-      const _event = await createValidEvent()
+      const event = await createValidEvent()
       const packet = createTestPacket(event, '100')
       const ilpPacket = createTestILPPacket()
 
@@ -329,7 +329,7 @@ describe('Event Handler', () => {
     })
 
     it('should handle very large payment amounts', async () => {
-      const _event = await createValidEvent()
+      const event = await createValidEvent()
       const packet = createTestPacket(event, '999999999') // 999M msats
       const ilpPacket = createTestILPPacket()
 

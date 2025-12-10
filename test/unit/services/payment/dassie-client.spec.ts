@@ -1,4 +1,7 @@
+import { EventEmitter } from 'events'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import WebSocket from 'ws'
+
 import {
   ConnectionState,
   createDassieClient,
@@ -8,8 +11,6 @@ import {
   DassieConnectionError,
   DassieTimeoutError,
 } from '../../../../src/services/payment/dassie-client'
-import { EventEmitter as _EventEmitter } from 'events'
-import WebSocket from 'ws'
 
 import type { PaymentClaim } from '../../../../src/@types/payment-claim'
 

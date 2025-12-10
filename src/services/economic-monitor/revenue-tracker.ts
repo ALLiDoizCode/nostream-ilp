@@ -1,4 +1,4 @@
-import { EventEmitter as _EventEmitter } from 'events'
+import { EventEmitter } from 'events'
 import { CacheClient } from '../../@types/cache'
 import { DassieClient } from '../payment/dassie-client'
 import { EconomicSnapshotRepository } from '../../repositories/economic-snapshot.repository'

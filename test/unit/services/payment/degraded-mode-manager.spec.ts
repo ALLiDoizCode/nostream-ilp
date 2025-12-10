@@ -111,7 +111,7 @@ describe('DegradedModeManager', () => {
 
       const manager = new DegradedModeManager(mockDassieClient, mockLogger, 10000)
 
-      const _event = createMockEvent('event-1', 'pubkey-1')
+      const event = createMockEvent('event-1', 'pubkey-1')
       const claim = createMockPaymentClaim('1')
 
       manager.queuePaymentVerification(event, claim)

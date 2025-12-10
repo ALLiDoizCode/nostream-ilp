@@ -8,8 +8,6 @@ import {
   ILPNodeAnnouncement,
 } from '../types/ilp-node-announcement.js'
 
-import type { _NostrEvent } from '../types/index.js'
-
 /**
  * ILP Node Announcement Query Module
  * Queries and caches ILP node announcements (Kind 32001)

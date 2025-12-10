@@ -72,7 +72,7 @@ describe('DeletionHandler', () => {
 
   describe('markEventDeleted', () => {
     it('should mark event as deleted when author requests deletion', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
       await repository.saveEvent(event)
 
       // Author deletes their own event
@@ -95,7 +95,7 @@ describe('DeletionHandler', () => {
     })
 
     it('should throw error if deleter is not the event author', async () => {
-      const _event = createTestEvent({ pubkey: 'alice_pubkey' + '0'.repeat(52) })
+      const event = createTestEvent({ pubkey: 'alice_pubkey' + '0'.repeat(52) })
       await repository.saveEvent(event)
 
       const differentPubkey = 'bob_pubkey_' + '0'.repeat(53)
@@ -106,7 +106,7 @@ describe('DeletionHandler', () => {
     })
 
     it('should invalidate event cache after deletion', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
       await repository.saveEvent(event)
 
       // Verify event is cached
@@ -155,7 +155,7 @@ describe('DeletionHandler', () => {
     })
 
     it('should extract event IDs from e tags', async () => {
-      const _event = createTestEvent({ pubkey: 'alice' + '0'.repeat(59) })
+      const event = createTestEvent({ pubkey: 'alice' + '0'.repeat(59) })
       await repository.saveEvent(event)
 
       const deleteEvent = createDeletionEvent(event.pubkey, [event.id])
@@ -280,7 +280,7 @@ describe('DeletionHandler', () => {
 
   describe('cache invalidation', () => {
     it('should invalidate query caches after deletion', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
       await repository.saveEvent(event)
 
       // Query to populate cache

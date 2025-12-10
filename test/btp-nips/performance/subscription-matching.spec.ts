@@ -173,7 +173,7 @@ describe('Subscription Matching Performance', () => {
           testManager.addSubscription(sub)
         }
 
-        const _event = generateTestEvent('alice', 1)
+        const event = generateTestEvent('alice', 1)
 
         // Run multiple iterations to get more stable timing
         const iterations = 100

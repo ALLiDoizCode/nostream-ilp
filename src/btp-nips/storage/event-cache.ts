@@ -141,7 +141,7 @@ export class EventCache {
    *
    * @example
    * ```typescript
-   * const _event = await cache.getCachedEvent('a1b2c3...');
+   * const event = await cache.getCachedEvent('a1b2c3...');
    * if (!event) {
    *   // Cache miss - fetch from database
    *   event = await repository.getEvent(id);
@@ -167,7 +167,7 @@ export class EventCache {
         return null
       }
 
-      const _event = JSON.parse(value) as NostrEvent
+      const event = JSON.parse(value) as NostrEvent
       this.cacheHits++
       debug('Cache hit for event %s', id)
       return event

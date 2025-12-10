@@ -209,7 +209,7 @@ describe('EventCache', () => {
 
   describe('Event Caching - cacheEvent() and getCachedEvent()', () => {
     it('should cache an event successfully', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
 
       await cache.cacheEvent(event)
 
@@ -243,7 +243,7 @@ describe('EventCache', () => {
     })
 
     it('should track cache hits correctly', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
 
       cache.resetStats()
       await cache.cacheEvent(event)
@@ -272,7 +272,7 @@ describe('EventCache', () => {
     it('should respect TTL when caching events', async () => {
       const shortTtlCache = new EventCache(1) // 1 second TTL
 
-      const _event = createTestEvent()
+      const event = createTestEvent()
       await shortTtlCache.cacheEvent(event)
 
       // Should exist immediately
@@ -290,7 +290,7 @@ describe('EventCache', () => {
     })
 
     it('should use default TTL of 24 hours', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
       await cache.cacheEvent(event)
 
       // Event should still be cached after 1 second
@@ -364,7 +364,7 @@ describe('EventCache', () => {
 
   describe('Cache Invalidation', () => {
     it('should invalidate individual events', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
 
       await cache.cacheEvent(event)
       let cached = await cache.getCachedEvent(event.id)
@@ -425,7 +425,7 @@ describe('EventCache', () => {
     })
 
     it('should calculate correct hit rate with mixed hits and misses', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
 
       cache.resetStats()
       await cache.cacheEvent(event)
@@ -440,7 +440,7 @@ describe('EventCache', () => {
     })
 
     it('should reset statistics correctly', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
 
       await cache.cacheEvent(event)
       await cache.getCachedEvent(event.id) // Hit
@@ -472,7 +472,7 @@ describe('EventCache', () => {
       const mockClient = getCacheClient() as any
       mockClient.setOperationFailure(true)
 
-      const _event = createTestEvent()
+      const event = createTestEvent()
 
       // Should not throw error
       await expect(cache.cacheEvent(event)).resolves.not.toThrow()
@@ -527,7 +527,7 @@ describe('EventCache', () => {
 
   describe('Event Existence Check', () => {
     it('should return true when event exists in cache', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
 
       await cache.cacheEvent(event)
 

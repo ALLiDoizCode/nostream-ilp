@@ -1,4 +1,4 @@
-import { EventEmitter as _EventEmitter } from 'events'
+import { EventEmitter } from 'events'
 import { EscrowDepositRepository } from '../repositories/escrow-deposit.repository'
 import { IAkashWallet } from './wallet'
 

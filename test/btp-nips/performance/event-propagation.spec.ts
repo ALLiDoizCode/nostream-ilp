@@ -49,7 +49,7 @@ describe('Event Propagation Performance', () => {
 
   describe('Benchmark: Propagate 1 event to 1000 subscriptions', () => {
     it('should complete in < 100ms', async () => {
-      const _event = createEvent('event123', 'alice_pubkey')
+      const event = createEvent('event123', 'alice_pubkey')
       const metadata: PacketMetadata = {
         timestamp: Date.now(),
         sender: 'g.dassie.alice',
@@ -104,7 +104,7 @@ describe('Event Propagation Performance', () => {
       const startTime = performance.now()
 
       for (let i = 0; i < 1000; i++) {
-        const _event = createEvent(`event${i}`, 'alice_pubkey')
+        const event = createEvent(`event${i}`, 'alice_pubkey')
         const metadata: PacketMetadata = {
           timestamp: Date.now(),
           sender: 'g.dassie.carol', // Different sender to avoid source filtering
@@ -211,7 +211,7 @@ describe('Event Propagation Performance', () => {
         })
       }
 
-      const _event = createEvent('event123', 'alice_pubkey', 1)
+      const event = createEvent('event123', 'alice_pubkey', 1)
 
       // Benchmark matching
       const startTime = performance.now()
@@ -230,13 +230,6 @@ describe('Event Propagation Performance', () => {
 
   describe('Memory usage', () => {
     it('should have reasonable memory footprint', async () => {
-      const _event = createEvent('event123', 'alice_pubkey')
-      const metadata: PacketMetadata = {
-        timestamp: Date.now(),
-        sender: 'g.dassie.alice',
-        ttl: 5,
-      }
-
       // Create 100 subscriptions
       for (let i = 0; i < 100; i++) {
         const stream = createMockStream()

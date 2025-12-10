@@ -133,7 +133,7 @@ export class EventRepository {
    *
    * @example
    * ```typescript
-   * const _event = await repository.getEvent('a1b2c3...');
+   * const event = await repository.getEvent('a1b2c3...');
    * if (event) {
    *   console.log('Event found:', event.content);
    * }
@@ -158,7 +158,7 @@ export class EventRepository {
           return null
         }
 
-        const _event = this.rowToEvent(row)
+        const event = this.rowToEvent(row)
 
         // Cache the event for future requests
         await this.cache.cacheEvent(event)

@@ -88,7 +88,7 @@ describe('MultiTokenPaymentChannelFactory', function () {
       )
       const receipt = await tx.wait()
 
-      const _event = receipt?.logs.find(
+      const event = receipt?.logs.find(
         (log: any) => log.fragment && log.fragment.name === 'ChannelOpened'
       )
       expect(event).to.not.be.undefined
@@ -113,7 +113,7 @@ describe('MultiTokenPaymentChannelFactory', function () {
       )
       const receipt = await tx.wait()
 
-      const _event = receipt?.logs.find(
+      const event = receipt?.logs.find(
         (log: any) => log.fragment && log.fragment.name === 'ChannelOpened'
       )
       const channelId = (event as any).args.channelId
@@ -136,7 +136,7 @@ describe('MultiTokenPaymentChannelFactory', function () {
       )
       const receipt = await tx.wait()
 
-      const _event = receipt?.logs.find(
+      const event = receipt?.logs.find(
         (log: any) => log.fragment && log.fragment.name === 'ChannelOpened'
       )
       const channelId = (event as any).args.channelId
@@ -159,7 +159,7 @@ describe('MultiTokenPaymentChannelFactory', function () {
       )
       const receipt = await tx.wait()
 
-      const _event = receipt?.logs.find(
+      const event = receipt?.logs.find(
         (log: any) => log.fragment && log.fragment.name === 'ChannelOpened'
       )
       const channelId = (event as any).args.channelId

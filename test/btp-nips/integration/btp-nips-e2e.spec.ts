@@ -4,13 +4,11 @@ import {
   NostrClose,
   NostrEOSE,
   NostrEvent,
-  _NostrFilter,
   NostrReq,
 } from '../../../src/btp-nips/types'
 import { calculateEventId } from '../../../src/btp-nips/crypto'
 import { EventCache } from '../../../src/btp-nips/storage/event-cache'
 import { EventRepository } from '../../../src/btp-nips/storage/event-repository'
-import { _handleClosePacket } from '../../../src/btp-nips/handlers/close-handler'
 import { handleEventPacket } from '../../../src/btp-nips/handlers/event-handler'
 import { handleReqPacket } from '../../../src/btp-nips/handlers/req-handler'
 import { NostrMessageType } from '../../../src/btp-nips/types'
@@ -78,7 +76,7 @@ class MockStreamConnection implements StreamConnection {
    * Get all parsed BTP-NIPs packets sent through this connection
    */
   getParsedPackets(): BTPNIPsPacket[] {
-    return this.sentPackets.map((_data) => parseBTPNIPsPacket(data))
+    return this.sentPackets.map((data) => parseBTPNIPsPacket(data))
   }
 
   /**
@@ -197,7 +195,7 @@ function createEventILPPacket(
     },
     payload: {
       payment,
-      nostr: _event,
+      nostr: event,
       metadata: {
         timestamp: Math.floor(Date.now() / 1000),
         sender,
@@ -322,7 +320,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
   describe('AC 2: Publish Event Flow (Alice → Bob via ILP)', () => {
     it('should publish event from Alice to Bob via ILP', async () => {
       // Step 1: Alice creates signed event
-      const _event = await createSignedEvent(alice.privateKey, {
+      const event = await createSignedEvent(alice.privateKey, {
         content: 'Hello Bob from Alice!',
         kind: 1,
       })
@@ -336,7 +334,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
       )
 
       // Step 3: Bob receives packet and parses
-      const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+      const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
       expect(btpPacket.header.messageType).toBe(NostrMessageType.EVENT)
       expect((btpPacket.payload.nostr as NostrEvent).id).toBe(event.id)
 
@@ -371,7 +369,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
       // Setup: Bob stores 5 events in database
       const bobEvents: NostrEvent[] = []
       for (let i = 0; i < 5; i++) {
-        const _event = await createSignedEvent(bob.privateKey, {
+        const event = await createSignedEvent(bob.privateKey, {
           content: `Bob's message ${i}`,
           kind: 1,
         })
@@ -390,7 +388,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
         ],
       }
 
-      const ilpPacket = createReqILPPacket(
+      const _ilpPacket = createReqILPPacket(
         req,
         { amount: '5000', currency: 'msat', purpose: 'subscription' },
         alice.ilpAddress,
@@ -399,7 +397,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
       )
 
       // Step 2: Bob's ReqHandler processes packet
-      const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+      // const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
 
       // Note: handleReqPacket creates its own StreamConnection internally,
       // so we can't directly test it with our mock. Instead, we test the SubscriptionManager directly.
@@ -421,12 +419,12 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
       expect(storedEvents.length).toBe(5)
 
       // Send EVENT packets for each stored event
-      for (const _event of storedEvents) {
+      for (const event of storedEvents) {
         const eventPacket: BTPNIPsPacket = {
           header: { version: 1, messageType: NostrMessageType.EVENT, payloadLength: 0 },
           payload: {
             payment: { amount: '0', currency: 'msat', purpose: 'subscription_event' },
-            nostr: _event,
+            nostr: event,
             metadata: { timestamp: Math.floor(Date.now() / 1000), sender: bob.ilpAddress },
           },
         }
@@ -535,10 +533,10 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
         subscriptionId: 'sub-alice-1',
       }
 
-      const ilpPacket = createCloseILPPacket(close, alice.ilpAddress, bob.ilpAddress)
+      const _ilpPacket = createCloseILPPacket(close, alice.ilpAddress, bob.ilpAddress)
 
       // Step 2: Bob's CloseHandler processes packet (simulated manually)
-      const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+      // const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
 
       // Note: handleClosePacket creates its own StreamConnection internally,
       // so we test the SubscriptionManager directly (simulating CLOSE handler logic)
@@ -648,7 +646,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
 
       // Step 7: Publish event and verify NOT sent to expired subscription
       alice.streamConnection.reset()
-      const _event = await createSignedEvent(bob.privateKey, { kind: 1 })
+      const event = await createSignedEvent(bob.privateKey, { kind: 1 })
       await bob.repository.saveEvent(event)
 
       const matchingSubscriptions = bob.subscriptionManager.findMatchingSubscriptions(
@@ -664,7 +662,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
       const carol = createTestNode('Carol')
 
       // Step 1: Alice creates EVENT destined for Carol
-      const _event = await createSignedEvent(alice.privateKey, {
+      const event = await createSignedEvent(alice.privateKey, {
         content: 'Alice to Carol via Bob',
         kind: 1,
       })
@@ -678,7 +676,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
       )
 
       // Step 3: Bob receives packet and deducts routing fee
-      const _btpPacket = parseBTPNIPsPacket(aliceToBobPacket.data)
+      const btpPacket = parseBTPNIPsPacket(aliceToBobPacket.data)
       const routingFee = 20 // Bob takes 20 msats
       const carolPayment = 50 // Carol gets 50 msats (required for kind 1)
 
@@ -734,7 +732,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
   describe('AC 7: Payment Failures', () => {
     describe('AC 7.1: Insufficient Payment for EVENT', () => {
       it('should reject EVENT with insufficient payment', async () => {
-        const _event = await createSignedEvent(alice.privateKey, {
+        const event = await createSignedEvent(alice.privateKey, {
           content: 'Underpaid event',
           kind: 1,
         })
@@ -747,7 +745,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
           bob.ilpAddress,
         )
 
-        const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+        const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
         const result = await handleEventPacket(btpPacket, ilpPacket)
 
         // Verify ILP packet rejected
@@ -763,7 +761,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
 
     describe('AC 7.2: Invalid Nostr Signature', () => {
       it('should accept payment but reject invalid signature', async () => {
-        const _event = await createSignedEvent(alice.privateKey, {
+        const event = await createSignedEvent(alice.privateKey, {
           content: 'Event with valid payment',
           kind: 1,
         })
@@ -778,7 +776,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
           bob.ilpAddress,
         )
 
-        const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+        const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
         const result = await handleEventPacket(btpPacket, ilpPacket)
 
         // Verify ILP packet fulfilled (payment valid)
@@ -809,7 +807,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
           3600,
         )
 
-        const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+        const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
 
         // Note: handleReqPacket creates its own StreamConnection and doesn't return a result.
         // We test by verifying the subscription was NOT created (payment validation fails).
@@ -824,7 +822,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
 
     describe('AC 7.4: Security Edge Cases', () => {
       it('should deduplicate replay attacks (same event sent twice)', async () => {
-        const _event = await createSignedEvent(alice.privateKey, {
+        const event = await createSignedEvent(alice.privateKey, {
           content: 'Duplicate event test',
           kind: 1,
         })
@@ -868,7 +866,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
       it('should accept events with future timestamps', async () => {
         const futureTimestamp = Math.floor(Date.now() / 1000) + 31536000 // 1 year ahead
 
-        const _event = await createSignedEvent(alice.privateKey, {
+        const event = await createSignedEvent(alice.privateKey, {
           content: 'Scheduled event',
           created_at: futureTimestamp,
         })
@@ -880,7 +878,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
           bob.ilpAddress,
         )
 
-        const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+        const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
         const result = await handleEventPacket(btpPacket, ilpPacket)
 
         // Verify event accepted (Nostr allows future timestamps)
@@ -894,7 +892,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
       it('should accept events with past timestamps', async () => {
         const pastTimestamp = Math.floor(Date.now() / 1000) - 315360000 // 10 years ago
 
-        const _event = await createSignedEvent(alice.privateKey, {
+        const event = await createSignedEvent(alice.privateKey, {
           content: 'Historical event',
           created_at: pastTimestamp,
         })
@@ -906,7 +904,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
           bob.ilpAddress,
         )
 
-        const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+        const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
         const result = await handleEventPacket(btpPacket, ilpPacket)
 
         // Verify event accepted
@@ -937,7 +935,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
         }
 
         // Publish event
-        const _event = await createSignedEvent(bob.privateKey, { kind: 1 })
+        const event = await createSignedEvent(bob.privateKey, { kind: 1 })
         await bob.repository.saveEvent(event)
 
         // Measure matching time

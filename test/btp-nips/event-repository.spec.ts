@@ -46,7 +46,7 @@ describe('EventRepository', () => {
 
   describe('saveEvent', () => {
     it('should save a new event successfully', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
 
       await repository.saveEvent(event)
 
@@ -59,7 +59,7 @@ describe('EventRepository', () => {
     })
 
     it('should save event with empty content', async () => {
-      const _event = createTestEvent({ content: '' })
+      const event = createTestEvent({ content: '' })
 
       await repository.saveEvent(event)
 
@@ -69,7 +69,7 @@ describe('EventRepository', () => {
     })
 
     it('should save event with empty tags array', async () => {
-      const _event = createTestEvent({ tags: [] })
+      const event = createTestEvent({ tags: [] })
 
       await repository.saveEvent(event)
 
@@ -79,7 +79,7 @@ describe('EventRepository', () => {
     })
 
     it('should handle duplicate events gracefully (ON CONFLICT DO NOTHING)', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
 
       // Save event twice
       await repository.saveEvent(event)
@@ -92,7 +92,7 @@ describe('EventRepository', () => {
     })
 
     it('should save event with complex tags (nested arrays)', async () => {
-      const _event = createTestEvent({
+      const event = createTestEvent({
         tags: [
           ['e', 'event_id_123', 'wss://relay.example.com'],
           ['p', 'pubkey_abc'],
@@ -108,7 +108,7 @@ describe('EventRepository', () => {
     })
 
     it('should save event with special UTF-8 characters in content', async () => {
-      const _event = createTestEvent({
+      const event = createTestEvent({
         content: 'Hello 世界! 🌍🚀 Emoji test',
       })
 
@@ -122,7 +122,7 @@ describe('EventRepository', () => {
 
   describe('getEvent', () => {
     it('should retrieve event by ID', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
       await repository.saveEvent(event)
 
       const retrieved = await repository.getEvent(event.id)
@@ -146,7 +146,7 @@ describe('EventRepository', () => {
 
   describe('eventExists', () => {
     it('should return true for existing event', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
       await repository.saveEvent(event)
 
       const exists = await repository.eventExists(event.id)
@@ -161,7 +161,7 @@ describe('EventRepository', () => {
     })
 
     it('should be faster than getEvent (only checks existence)', async () => {
-      const _event = createTestEvent()
+      const event = createTestEvent()
       await repository.saveEvent(event)
 
       // Both should work, but eventExists is optimized
@@ -305,7 +305,7 @@ describe('EventRepository', () => {
   describe('edge cases', () => {
     it('should handle very long content (10MB)', async () => {
       const longContent = 'a'.repeat(10 * 1024 * 1024) // 10MB
-      const _event = createTestEvent({ content: longContent })
+      const event = createTestEvent({ content: longContent })
 
       await repository.saveEvent(event)
 
@@ -320,7 +320,7 @@ describe('EventRepository', () => {
         tags.push(['t', `tag${i}`])
       }
 
-      const _event = createTestEvent({ tags })
+      const event = createTestEvent({ tags })
 
       await repository.saveEvent(event)
 
@@ -496,7 +496,7 @@ describe('EventRepository', () => {
   describe('Soft Delete and Expiration Filtering (Story 5.4 - AC3)', () => {
     it('should exclude soft-deleted events from query results', async () => {
       // Create a normal event
-      const _event = createTestEvent({
+      const event = createTestEvent({
         id: 'deleted_event' + '0'.repeat(51),
       })
       await repository.saveEvent(event)
@@ -543,7 +543,7 @@ describe('EventRepository', () => {
       const now = Math.floor(Date.now() / 1000)
       const pastTimestamp = now - 3600 // 1 hour ago
 
-      const _event = createTestEvent({
+      const event = createTestEvent({
         id: 'expired_event' + '0'.repeat(51),
         tags: [['expiration', pastTimestamp.toString()]],
       })
@@ -566,7 +566,7 @@ describe('EventRepository', () => {
       const now = Math.floor(Date.now() / 1000)
       const futureTimestamp = now + 3600 // 1 hour from now
 
-      const _event = createTestEvent({
+      const event = createTestEvent({
         id: 'future_expire' + '0'.repeat(51),
         tags: [['expiration', futureTimestamp.toString()]],
       })
@@ -587,7 +587,7 @@ describe('EventRepository', () => {
     })
 
     it('should include events with expires_at = null (no expiration)', async () => {
-      const _event = createTestEvent({
+      const event = createTestEvent({
         id: 'no_expiration' + '0'.repeat(51),
       })
       await repository.saveEvent(event)
@@ -611,7 +611,7 @@ describe('EventRepository', () => {
     it('should handle boundary condition: expires_at = now', async () => {
       const now = Math.floor(Date.now() / 1000)
 
-      const _event = createTestEvent({
+      const event = createTestEvent({
         id: 'boundary_expire' + '0'.repeat(49),
       })
       await repository.saveEvent(event)

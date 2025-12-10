@@ -1,6 +1,7 @@
-import { connectionStateToValue, dassieConnectionState } from '../metrics'
-import { EventEmitter as _EventEmitter } from 'events'
+import { EventEmitter } from 'events'
 import WebSocket from 'ws'
+
+import { connectionStateToValue, dassieConnectionState } from '../metrics'
 import {
   BalanceResponse,
   BalanceUpdate,

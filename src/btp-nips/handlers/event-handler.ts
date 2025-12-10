@@ -15,7 +15,6 @@ import { getEventRepository } from '../storage/event-repository'
 import { SubscriptionManager } from '../subscription-manager.js'
 import { NostrMessageType } from '../types'
 import { retryWithBackoff } from '../utils/retry'
-import { _sendEventPacket } from '../utils/packet-sender.js'
 
 import type { BTPNIPsPacket, NostrEvent, PaymentMetadata } from '../types'
 
@@ -139,7 +138,7 @@ export async function handleEventPacket(
   _ilpPacket: ILPPacket,
 ): Promise<EventHandlerResult> {
   // Extract event and payment from packet
-  const _event = packet.payload.nostr as NostrEvent
+  const event = packet.payload.nostr as NostrEvent
   const payment = packet.payload.payment
 
   debug(

@@ -55,7 +55,7 @@ describe('Event Propagation Integration', () => {
 
   describe('Alice publishes event → Subscribed peers receive event', () => {
     it('should propagate event to all matching subscribers', async () => {
-      const _event = createEvent('event123', 'alice_pubkey')
+      const event = createEvent('event123', 'alice_pubkey')
       const metadata: PacketMetadata = {
         timestamp: Date.now(),
         sender: 'g.dassie.alice',
@@ -109,7 +109,7 @@ describe('Event Propagation Integration', () => {
     })
 
     it('should not send to source peer (Alice)', async () => {
-      const _event = createEvent('event123', 'alice_pubkey')
+      const event = createEvent('event123', 'alice_pubkey')
       const metadata: PacketMetadata = {
         timestamp: Date.now(),
         sender: 'g.dassie.alice',
@@ -151,7 +151,7 @@ describe('Event Propagation Integration', () => {
 
   describe('Deduplication prevents duplicate delivery', () => {
     it('should not propagate duplicate event', async () => {
-      const _event = createEvent('event123', 'alice_pubkey')
+      const event = createEvent('event123', 'alice_pubkey')
       const metadata: PacketMetadata = {
         timestamp: Date.now(),
         sender: 'g.dassie.alice',
@@ -183,7 +183,7 @@ describe('Event Propagation Integration', () => {
 
   describe('TTL enforcement prevents infinite loops', () => {
     it('should drop event when TTL reaches 0', async () => {
-      const _event = createEvent('event123', 'alice_pubkey')
+      const event = createEvent('event123', 'alice_pubkey')
       const metadata: PacketMetadata = {
         timestamp: Date.now(),
         sender: 'g.dassie.alice',
@@ -209,7 +209,7 @@ describe('Event Propagation Integration', () => {
     })
 
     it('should propagate with TTL > 0', async () => {
-      const _event = createEvent('event123', 'alice_pubkey')
+      const event = createEvent('event123', 'alice_pubkey')
       const metadata: PacketMetadata = {
         timestamp: Date.now(),
         sender: 'g.dassie.alice',
@@ -237,7 +237,7 @@ describe('Event Propagation Integration', () => {
 
   describe('Multi-hop propagation', () => {
     it('should propagate Alice → Bob → Carol', async () => {
-      const _event = createEvent('event123', 'alice_pubkey')
+      const event = createEvent('event123', 'alice_pubkey')
 
       // Hop 1: Alice publishes (TTL=5)
       const aliceMetadata: PacketMetadata = {
@@ -311,7 +311,7 @@ describe('Event Propagation Integration', () => {
 
       // Send 100 events (default rate limit)
       for (let i = 0; i < 100; i++) {
-        const _event = createEvent(`event${i}`, 'alice_pubkey')
+        const event = createEvent(`event${i}`, 'alice_pubkey')
         const metadata: PacketMetadata = {
           timestamp: Date.now(),
           sender: 'g.dassie.carol', // Different sender to avoid source filtering
@@ -341,7 +341,7 @@ describe('Event Propagation Integration', () => {
 
   describe('No matching subscriptions', () => {
     it('should handle event with no matching subscriptions', async () => {
-      const _event = createEvent('event123', 'alice_pubkey')
+      const event = createEvent('event123', 'alice_pubkey')
       const metadata: PacketMetadata = {
         timestamp: Date.now(),
         sender: 'g.dassie.alice',
@@ -360,7 +360,7 @@ describe('Event Propagation Integration', () => {
 
   describe('Stream errors', () => {
     it('should continue propagation despite individual stream errors', async () => {
-      const _event = createEvent('event123', 'alice_pubkey')
+      const event = createEvent('event123', 'alice_pubkey')
       const metadata: PacketMetadata = {
         timestamp: Date.now(),
         sender: 'g.dassie.alice',
@@ -402,7 +402,7 @@ describe('Event Propagation Integration', () => {
 
   describe('Statistics', () => {
     it('should provide propagation statistics', async () => {
-      const _event = createEvent('event123', 'alice_pubkey')
+      const event = createEvent('event123', 'alice_pubkey')
       const metadata: PacketMetadata = {
         timestamp: Date.now(),
         sender: 'g.dassie.alice',

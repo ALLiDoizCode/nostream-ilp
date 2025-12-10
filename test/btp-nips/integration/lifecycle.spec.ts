@@ -105,7 +105,7 @@ describe('Event Lifecycle Integration Tests', () => {
   describe('End-to-End Deletion Workflow (NIP-09)', () => {
     it('should handle complete deletion workflow with e tags', async () => {
       // Step 1: Create and save an event
-      const _event = await createSignedEvent({
+      const event = await createSignedEvent({
         content: 'This event will be deleted',
       })
 
@@ -197,7 +197,7 @@ describe('Event Lifecycle Integration Tests', () => {
       const privateKey = randomBytes(32)
       const publicKey = Buffer.from(schnorr.getPublicKey(privateKey)).toString('hex')
 
-      const _event = await createSignedEvent({
+      const event = await createSignedEvent({
         pubkey: publicKey,
         content: 'Cached event',
       })
@@ -228,7 +228,7 @@ describe('Event Lifecycle Integration Tests', () => {
       // Step 1: Save event with expiration tag (expires in 2 seconds)
       const expiresAt = Math.floor(now / 1000) + 2
 
-      const _event = await createSignedEvent({
+      const event = await createSignedEvent({
         tags: [['expiration', expiresAt.toString()]],
         content: 'This event will expire',
       })
@@ -271,7 +271,7 @@ describe('Event Lifecycle Integration Tests', () => {
       // Create event with expiration in the past
       const pastExpiration = Math.floor(now / 1000) - 3600
 
-      const _event = await createSignedEvent({
+      const event = await createSignedEvent({
         tags: [['expiration', pastExpiration.toString()]],
         content: 'Already expired',
       })
@@ -300,7 +300,7 @@ describe('Event Lifecycle Integration Tests', () => {
       const expiredEvents: NostrEvent[] = []
 
       for (let i = 0; i < 5; i++) {
-        const _event = await createSignedEvent({
+        const event = await createSignedEvent({
           content: `Expired event ${i}`,
         })
 
@@ -323,7 +323,7 @@ describe('Event Lifecycle Integration Tests', () => {
       const futureExpiration = Math.floor(now / 1000) + 3600
 
       for (let i = 0; i < 2; i++) {
-        const _event = await createSignedEvent({
+        const event = await createSignedEvent({
           tags: [['expiration', futureExpiration.toString()]],
           content: `Future event ${i}`,
         })
@@ -354,7 +354,7 @@ describe('Event Lifecycle Integration Tests', () => {
 
       const expiresAt = Math.floor(now / 1000) + 3600
 
-      const _event = await createSignedEvent({
+      const event = await createSignedEvent({
         pubkey: publicKey,
         tags: [['expiration', expiresAt.toString()]],
         content: 'Event with expiration',

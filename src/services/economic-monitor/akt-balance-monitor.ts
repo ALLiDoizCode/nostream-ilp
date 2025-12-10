@@ -1,4 +1,4 @@
-import { EventEmitter as _EventEmitter } from 'events'
+import { EventEmitter } from 'events'
 
 import type { AkashWallet } from '../../akash/wallet'
 import type { AktPurchaseRepository } from '../../repositories/akt-purchase.repository'

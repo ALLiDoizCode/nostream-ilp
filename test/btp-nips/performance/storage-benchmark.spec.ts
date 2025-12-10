@@ -277,7 +277,7 @@ describe('Storage Performance Benchmarks', () => {
       // Perform 1000 reads
       for (let i = 0; i < 1000; i++) {
         const isHotRead = Math.random() < 0.8
-        const _event = isHotRead
+        const event = isHotRead
           ? hotEvents[Math.floor(Math.random() * hotEvents.length)]
           : events[Math.floor(Math.random() * events.length)]
 

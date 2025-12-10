@@ -3,7 +3,7 @@ import {
   EconomicSnapshot,
   EconomicSnapshotRepository,
 } from '../../repositories/economic-snapshot.repository'
-import { EventEmitter as _EventEmitter } from 'events'
+import { EventEmitter } from 'events'
 import { ExchangeRateService } from './exchange-rate'
 import { RevenueChangedEvent, RevenueTracker } from './revenue-tracker'
 
@@ -183,7 +183,7 @@ export class EconomicMonitor extends EventEmitter {
   async createSnapshot(): Promise<EconomicSnapshot> {
     try {
       // Get current data
-      const [_revenue, balances, _exchangeRates] = await Promise.all([
+      const [, balances] = await Promise.all([
         this.revenueTracker.getCurrentRevenue(),
         this.revenueTracker.getCurrentBalances(),
         this.exchangeRateService.getCurrentRates(),

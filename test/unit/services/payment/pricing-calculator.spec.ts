@@ -40,7 +40,7 @@ describe('pricing-calculator', () => {
   describe('calculateRequiredPayment - store operation', () => {
     it('should return default storeEvent price for event without override', async () => {
       const { calculateRequiredPayment } = await import('../../../../src/services/payment/pricing-calculator')
-      const _event = createMockEvent(1)
+      const event = createMockEvent(1)
 
       const amount = calculateRequiredPayment('store', event)
 
@@ -51,7 +51,7 @@ describe('pricing-calculator', () => {
       process.env.PRICING_KIND_OVERRIDES = '30023:100'
 
       const { calculateRequiredPayment } = await import('../../../../src/services/payment/pricing-calculator')
-      const _event = createMockEvent(30023)
+      const event = createMockEvent(30023)
 
       const amount = calculateRequiredPayment('store', event)
 
@@ -84,7 +84,7 @@ describe('pricing-calculator', () => {
       process.env.PRICING_KIND_OVERRIDES = '30023:100'
 
       const { calculateRequiredPayment } = await import('../../../../src/services/payment/pricing-calculator')
-      const _event = createMockEvent(1) // Kind 1 not in overrides
+      const event = createMockEvent(1) // Kind 1 not in overrides
 
       const amount = calculateRequiredPayment('store', event)
 
@@ -95,7 +95,7 @@ describe('pricing-calculator', () => {
       process.env.PRICING_STORE_EVENT = '0'
 
       const { calculateRequiredPayment } = await import('../../../../src/services/payment/pricing-calculator')
-      const _event = createMockEvent(1)
+      const event = createMockEvent(1)
 
       const amount = calculateRequiredPayment('store', event)
 
@@ -106,7 +106,7 @@ describe('pricing-calculator', () => {
       process.env.PRICING_STORE_EVENT = '1000000000'
 
       const { calculateRequiredPayment } = await import('../../../../src/services/payment/pricing-calculator')
-      const _event = createMockEvent(1)
+      const event = createMockEvent(1)
 
       const amount = calculateRequiredPayment('store', event)
 
@@ -127,7 +127,7 @@ describe('pricing-calculator', () => {
       process.env.PRICING_KIND_OVERRIDES = '30023:100'
 
       const { calculateRequiredPayment } = await import('../../../../src/services/payment/pricing-calculator')
-      const _event = createMockEvent(30023)
+      const event = createMockEvent(30023)
 
       const amount = calculateRequiredPayment('deliver', event)
 
@@ -168,7 +168,7 @@ describe('pricing-calculator', () => {
       process.env.PRICING_KIND_OVERRIDES = '30023:100'
 
       const { calculateRequiredPayment } = await import('../../../../src/services/payment/pricing-calculator')
-      const _event = createMockEvent(30023)
+      const event = createMockEvent(30023)
 
       const amount = calculateRequiredPayment('query', event)
 
@@ -225,7 +225,7 @@ describe('pricing-calculator', () => {
   describe('calculateRequiredPayment - edge cases', () => {
     it('should handle all three operations with same configuration', async () => {
       const { calculateRequiredPayment } = await import('../../../../src/services/payment/pricing-calculator')
-      const _event = createMockEvent(1)
+      const event = createMockEvent(1)
 
       const storeAmount = calculateRequiredPayment('store', event)
       const deliverAmount = calculateRequiredPayment('deliver', event)
@@ -257,7 +257,7 @@ describe('pricing-calculator', () => {
 
     it('should handle event with undefined kind gracefully', async () => {
       const { calculateRequiredPayment } = await import('../../../../src/services/payment/pricing-calculator')
-      const _event = {
+      const event = {
         id: 'test',
         pubkey: 'test',
         created_at: 0,
@@ -278,7 +278,7 @@ describe('pricing-calculator', () => {
       process.env.PRICING_KIND_OVERRIDES = '1:10,30023:100,1063:500,71:1000'
 
       const { calculateRequiredPayment } = await import('../../../../src/services/payment/pricing-calculator')
-      const _event = createMockEvent(71)
+      const event = createMockEvent(71)
 
       const startTime = performance.now()
       for (let i = 0; i < 10000; i++) {
@@ -292,7 +292,7 @@ describe('pricing-calculator', () => {
 
     it('should not allocate memory on repeated calls', async () => {
       const { calculateRequiredPayment } = await import('../../../../src/services/payment/pricing-calculator')
-      const _event = createMockEvent(1)
+      const event = createMockEvent(1)
 
       // Warm up
       for (let i = 0; i < 100; i++) {

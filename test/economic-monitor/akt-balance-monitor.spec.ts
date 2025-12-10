@@ -1,5 +1,5 @@
-import { EventEmitter as _EventEmitter } from 'events'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 import { AktBalanceMonitor, BalanceChange } from '../../src/services/economic-monitor/akt-balance-monitor'
 
 import type { AkashWallet } from '../../src/akash/wallet'

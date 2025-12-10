@@ -148,7 +148,7 @@ describe('Dashboard Storage Metrics Integration Tests', () => {
     })
 
     it('should calculate storage size correctly', async () => {
-      const _event = await createSignedEvent({
+      const event = await createSignedEvent({
         content: 'A'.repeat(1000), // 1000 character content
         tags: [['e', 'event_id'], ['p', 'pubkey']],
       })
@@ -165,7 +165,7 @@ describe('Dashboard Storage Metrics Integration Tests', () => {
     })
 
     it('should report cache hit rate', async () => {
-      const _event = await createSignedEvent()
+      const event = await createSignedEvent()
       await repository.saveEvent(event)
 
       // Perform queries to generate cache hits
@@ -185,7 +185,7 @@ describe('Dashboard Storage Metrics Integration Tests', () => {
     it('should report query performance percentiles', async () => {
       // Insert events and perform queries
       for (let i = 0; i < 10; i++) {
-        const _event = await createSignedEvent({ content: `Event ${i}` })
+        const event = await createSignedEvent({ content: `Event ${i}` })
         await repository.saveEvent(event)
       }
 

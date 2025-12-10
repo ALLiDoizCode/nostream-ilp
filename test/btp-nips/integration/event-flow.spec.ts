@@ -57,7 +57,7 @@ async function createEventILPPacket(
   event: NostrEvent,
   paymentAmount: string = '100',
 ): Promise<ILPPacket> {
-  const _btpPacket = {
+  const btpPacket = {
     header: {
       version: 1,
       messageType: NostrMessageType.EVENT,
@@ -101,7 +101,7 @@ describe('EVENT Flow Integration Tests', () => {
   describe('End-to-End EVENT Processing', () => {
     it('should process valid EVENT from ILP packet to database', async () => {
       // 1. Create a valid signed event
-      const _event = await createSignedEvent({
+      const event = await createSignedEvent({
         content: 'Hello from ILP integration test!',
       })
 
@@ -109,7 +109,7 @@ describe('EVENT Flow Integration Tests', () => {
       const ilpPacket = await createEventILPPacket(event, '100')
 
       // 3. Process ILP packet through BTP-NIPs integration
-      const _btpPacket = await processBTPNIPsPacket(ilpPacket)
+      const btpPacket = await processBTPNIPsPacket(ilpPacket)
 
       expect(btpPacket).toBeDefined()
       expect(btpPacket?.header.messageType).toBe(NostrMessageType.EVENT)
@@ -131,10 +131,10 @@ describe('EVENT Flow Integration Tests', () => {
     })
 
     it('should reject EVENT with insufficient payment', async () => {
-      const _event = await createSignedEvent()
+      const event = await createSignedEvent()
       const ilpPacket = await createEventILPPacket(event, '10') // Insufficient
 
-      const _btpPacket = await processBTPNIPsPacket(ilpPacket)
+      const btpPacket = await processBTPNIPsPacket(ilpPacket)
 
       if (btpPacket) {
         const result = await handleEventPacket(btpPacket, ilpPacket)
@@ -150,7 +150,7 @@ describe('EVENT Flow Integration Tests', () => {
     })
 
     it('should handle duplicate EVENT submissions (idempotent)', async () => {
-      const _event = await createSignedEvent()
+      const event = await createSignedEvent()
       const ilpPacket1 = await createEventILPPacket(event, '100')
       const ilpPacket2 = await createEventILPPacket(event, '100')
 
@@ -185,7 +185,7 @@ describe('EVENT Flow Integration Tests', () => {
 
       const promises = events.map(async (_event) => {
         const ilpPacket = await createEventILPPacket(event, '100')
-        const _btpPacket = await processBTPNIPsPacket(ilpPacket)
+        const btpPacket = await processBTPNIPsPacket(ilpPacket)
 
         if (btpPacket) {
           return await handleEventPacket(btpPacket, ilpPacket)
@@ -208,10 +208,10 @@ describe('EVENT Flow Integration Tests', () => {
     })
 
     it('should handle kind-specific pricing (kind 30023)', async () => {
-      const _event = await createSignedEvent({ kind: 30023 })
+      const event = await createSignedEvent({ kind: 30023 })
       const ilpPacket = await createEventILPPacket(event, '500') // 500 msats for kind 30023
 
-      const _btpPacket = await processBTPNIPsPacket(ilpPacket)
+      const btpPacket = await processBTPNIPsPacket(ilpPacket)
 
       if (btpPacket) {
         const result = await handleEventPacket(btpPacket, ilpPacket)
@@ -230,7 +230,7 @@ describe('EVENT Flow Integration Tests', () => {
         amount: '100',
       }
 
-      const _btpPacket = await processBTPNIPsPacket(invalidPacket)
+      const btpPacket = await processBTPNIPsPacket(invalidPacket)
 
       expect(btpPacket).toBeNull()
     })
@@ -242,7 +242,7 @@ describe('EVENT Flow Integration Tests', () => {
         amount: '100',
       }
 
-      const _btpPacket = await processBTPNIPsPacket(malformedPacket)
+      const btpPacket = await processBTPNIPsPacket(malformedPacket)
 
       // Should return null and log error (not throw)
       expect(btpPacket).toBeNull()
@@ -251,7 +251,7 @@ describe('EVENT Flow Integration Tests', () => {
 
   describe('ILP Packet Fulfillment/Rejection', () => {
     it('should fulfill ILP packet for successful EVENT', async () => {
-      const _event = await createSignedEvent()
+      const event = await createSignedEvent()
       const ilpPacket = await createEventILPPacket(event, '100')
 
       // Note: fulfillILPPacket is a stub in current implementation
@@ -260,7 +260,7 @@ describe('EVENT Flow Integration Tests', () => {
     })
 
     it('should reject ILP packet for insufficient payment', async () => {
-      const _event = await createSignedEvent()
+      const event = await createSignedEvent()
       const ilpPacket = await createEventILPPacket(event, '10')
 
       // Note: rejectILPPacket is a stub in current implementation
@@ -282,7 +282,7 @@ describe('EVENT Flow Integration Tests', () => {
 
       const promises = events.map(async (_event) => {
         const ilpPacket = await createEventILPPacket(event, '100')
-        const _btpPacket = await processBTPNIPsPacket(ilpPacket)
+        const btpPacket = await processBTPNIPsPacket(ilpPacket)
 
         if (btpPacket) {
           return await handleEventPacket(btpPacket, ilpPacket)

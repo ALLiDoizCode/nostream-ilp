@@ -48,7 +48,7 @@ describe('Event Expiration (NIP-40)', () => {
   describe('EventRepository - Expiration Tag Extraction', () => {
     it('should extract expiration tag from event and store in database', async () => {
       const futureTimestamp = Math.floor(Date.now() / 1000) + 3600 // 1 hour from now
-      const _event = createTestEvent({
+      const event = createTestEvent({
         tags: [['expiration', futureTimestamp.toString()]],
       })
 
@@ -64,7 +64,7 @@ describe('Event Expiration (NIP-40)', () => {
 
     it('should accept events with future expiration timestamp', async () => {
       const futureTimestamp = Math.floor(Date.now() / 1000) + 86400 // 24 hours from now
-      const _event = createTestEvent({
+      const event = createTestEvent({
         tags: [['expiration', futureTimestamp.toString()]],
       })
 
@@ -74,7 +74,7 @@ describe('Event Expiration (NIP-40)', () => {
 
     it('should reject events with pre-expired timestamp', async () => {
       const pastTimestamp = Math.floor(Date.now() / 1000) - 3600 // 1 hour ago
-      const _event = createTestEvent({
+      const event = createTestEvent({
         tags: [['expiration', pastTimestamp.toString()]],
       })
 
@@ -84,7 +84,7 @@ describe('Event Expiration (NIP-40)', () => {
     })
 
     it('should store expires_at as null for events without expiration tag', async () => {
-      const _event = createTestEvent({
+      const event = createTestEvent({
         tags: [], // No expiration tag
       })
 
@@ -98,7 +98,7 @@ describe('Event Expiration (NIP-40)', () => {
     })
 
     it('should reject events with invalid expiration timestamp', async () => {
-      const _event = createTestEvent({
+      const event = createTestEvent({
         tags: [['expiration', 'not_a_number']],
       })
 
@@ -108,7 +108,7 @@ describe('Event Expiration (NIP-40)', () => {
     })
 
     it('should handle expiration tag with empty value', async () => {
-      const _event = createTestEvent({
+      const event = createTestEvent({
         tags: [['expiration', '']], // Empty value
       })
 
@@ -171,7 +171,7 @@ describe('Event Expiration (NIP-40)', () => {
 
     it('should not delete events with future expiration', async () => {
       const futureTimestamp = Math.floor(Date.now() / 1000) + 3600 // 1 hour from now
-      const _event = createTestEvent({
+      const event = createTestEvent({
         tags: [['expiration', futureTimestamp.toString()]],
       })
 
@@ -188,7 +188,7 @@ describe('Event Expiration (NIP-40)', () => {
     })
 
     it('should not delete events without expiration (expires_at = null)', async () => {
-      const _event = createTestEvent({
+      const event = createTestEvent({
         tags: [], // No expiration
       })
 
@@ -216,7 +216,7 @@ describe('Event Expiration (NIP-40)', () => {
       const db = getMasterDbClient()
 
       for (let i = 0; i < 3; i++) {
-        const _event = createTestEvent()
+        const event = createTestEvent()
         await db('btp_nips_events').insert({
           id: event.id,
           pubkey: event.pubkey,
@@ -279,7 +279,7 @@ describe('Event Expiration (NIP-40)', () => {
       const currentTimestamp = Math.floor(now / 1000)
 
       // Create event that will expire in 1 second
-      const _event = createTestEvent({
+      const event = createTestEvent({
         tags: [['expiration', (currentTimestamp + 1).toString()]],
       })
 
@@ -298,7 +298,7 @@ describe('Event Expiration (NIP-40)', () => {
     })
 
     it('should include events with null expires_at in query results', async () => {
-      const _event = createTestEvent({
+      const event = createTestEvent({
         tags: [], // No expiration
       })
 
@@ -310,7 +310,7 @@ describe('Event Expiration (NIP-40)', () => {
 
     it('should include events with future expires_at in query results', async () => {
       const futureTimestamp = Math.floor(Date.now() / 1000) + 86400
-      const _event = createTestEvent({
+      const event = createTestEvent({
         tags: [['expiration', futureTimestamp.toString()]],
       })
 

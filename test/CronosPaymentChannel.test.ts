@@ -52,7 +52,7 @@ describe('CronosPaymentChannel', function () {
       const receipt = await tx.wait()
 
       // Verify ChannelOpened event
-      const _event = receipt?.logs.find(
+      const event = receipt?.logs.find(
         (log: any) => log.fragment && log.fragment.name === 'ChannelOpened'
       )
       expect(event).to.not.be.undefined
@@ -463,7 +463,7 @@ describe('CronosPaymentChannel', function () {
       // Should now succeed
       const tx = await paymentChannel.connect(alice).openChannel(recipient, expiration, amount)
       const receipt = await tx.wait()
-      const _event = receipt?.logs.find((log: any) => log.fragment && log.fragment.name === 'ChannelOpened')
+      const event = receipt?.logs.find((log: any) => log.fragment && log.fragment.name === 'ChannelOpened')
       expect(event).to.not.be.undefined
     })
 

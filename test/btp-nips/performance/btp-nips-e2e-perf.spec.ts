@@ -85,7 +85,7 @@ function createEventILPPacket(event: NostrEvent): ILPPacket {
   // Use appropriate payment based on kind (kind 1 = 50 msats)
   const amount = event.kind === 1 ? '50' : '100'
 
-  const _btpPacket = {
+  const btpPacket = {
     header: {
       version: 1,
       messageType: NostrMessageType.EVENT,
@@ -173,7 +173,7 @@ describe('BTP-NIPs Performance Benchmarks', () => {
         await Promise.all(
           events.map(async (_event) => {
             const ilpPacket = createEventILPPacket(event)
-            const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+            const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
             await handleEventPacket(btpPacket, ilpPacket)
           }),
         )
@@ -207,9 +207,9 @@ describe('BTP-NIPs Performance Benchmarks', () => {
 
       // Send events one-by-one, measuring latency
       for (let i = 0; i < eventCount; i++) {
-        const _event = await createSignedEvent({ content: `Latency test ${i}` })
+        const event = await createSignedEvent({ content: `Latency test ${i}` })
         const ilpPacket = createEventILPPacket(event)
-        const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+        const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
 
         const start = performance.now()
         await handleEventPacket(btpPacket, ilpPacket)
@@ -252,7 +252,7 @@ describe('BTP-NIPs Performance Benchmarks', () => {
 
       // Create event first so we can match subscriptions to it
       const testPubkey = pubkeys[0]
-      const _event = await createSignedEvent({
+      const event = await createSignedEvent({
         kind: 1,
         pubkey: testPubkey,
         content: 'Matching test event',
@@ -335,7 +335,7 @@ describe('BTP-NIPs Performance Benchmarks', () => {
         }
 
         // Create matching event
-        const _event = await createSignedEvent({
+        const event = await createSignedEvent({
           kind: 1,
           pubkey,
           content: 'Scale test event',
@@ -412,9 +412,9 @@ describe('BTP-NIPs Performance Benchmarks', () => {
           // 70% writes
           operations.push(
             (async () => {
-              const _event = await createSignedEvent({ content: `Mixed workload ${i}` })
+              const event = await createSignedEvent({ content: `Mixed workload ${i}` })
               const ilpPacket = createEventILPPacket(event)
-              const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+              const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
               await handleEventPacket(btpPacket, ilpPacket)
             })(),
           )

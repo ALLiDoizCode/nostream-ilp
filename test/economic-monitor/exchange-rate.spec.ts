@@ -215,7 +215,6 @@ describe('ExchangeRateService', () => {
       await service.getCurrentRates()
 
       // Manually expire cache by waiting
-      const _longTtlService = new ExchangeRateService(mockRedis, 1) // 1ms TTL
       await new Promise((resolve) => setTimeout(resolve, 10))
 
       // Recreate service but with same Redis (has cached data)

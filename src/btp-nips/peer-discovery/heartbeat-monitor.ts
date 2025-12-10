@@ -239,7 +239,8 @@ export class HeartbeatMonitor {
       }
 
       // Create PING packet
-      const _pingPacket: BTPNIPsPacket = {
+      /* Placeholder code - uncomment when Epic 2 is complete
+      const pingPacket: BTPNIPsPacket = {
         header: {
           version: 1,
           messageType: NostrMessageType.PING,
@@ -260,7 +261,8 @@ export class HeartbeatMonitor {
       }
 
       // Send PING via ILP STREAM (Epic 2 dependency - mock for now)
-      // await this.dassieClient.sendPacket(connection.ilpAddress, pingPacket)
+      await this.dassieClient.sendPacket(connection.ilpAddress, pingPacket)
+      */
 
       debug('Sent PING to %s', pubkey.substring(0, 8))
 

@@ -56,7 +56,7 @@ export class DeletionHandler {
   async markEventDeleted(eventId: string, deleterPubkey: string): Promise<void> {
     try {
       // Fetch the event to verify ownership
-      const _event = await this.repository.getEvent(eventId)
+      const event = await this.repository.getEvent(eventId)
 
       if (!event) {
         debug('Event not found for deletion: %s', eventId)

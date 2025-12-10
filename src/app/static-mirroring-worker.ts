@@ -307,7 +307,7 @@ export class StaticMirroringWorker implements IRunnable {
       return
     }
 
-    const _event = message.event as RelayedEvent
+    const event = message.event as RelayedEvent
 
     const eventToRelay = createRelayedEventMessage(event, this.config.secret)
     const outboundMessage = JSON.stringify(eventToRelay)

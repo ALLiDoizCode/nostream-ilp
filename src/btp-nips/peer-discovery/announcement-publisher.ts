@@ -11,8 +11,6 @@ import {
   ILPNodeMetadata,
 } from '../types/ilp-node-announcement.js'
 
-import type { _NostrEvent } from '../types/index.js'
-
 /**
  * ILP Node Announcement Publisher
  * Publishes and updates ILP node announcements (Kind 32001)

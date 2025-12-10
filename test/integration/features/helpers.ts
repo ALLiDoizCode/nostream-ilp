@@ -138,7 +138,7 @@ export async function waitForNextEvent(ws: WebSocket, subscription: string, cont
 
     observable.subscribe((message: OutgoingMessage) => {
       if (message[0] === MessageType.EVENT && message[1] === subscription) {
-        const _event = message[2] as Event
+        const event = message[2] as Event
         if (typeof content !== 'string' || event.content === content) {
           resolve(message[2])
         }

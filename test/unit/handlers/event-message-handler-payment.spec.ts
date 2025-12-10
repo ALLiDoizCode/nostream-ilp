@@ -149,7 +149,7 @@ describe('EventMessageHandler - Payment Verification', () => {
 
   describe('verifyPaymentClaim()', () => {
     it('should allow event when payments disabled', async () => {
-      const _event = createMockEvent()
+      const event = createMockEvent()
 
       // @ts-expect-error - accessing protected method for testing
       const result = await handler.verifyPaymentClaim(event)
@@ -187,7 +187,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent({ pubkey: 'relay-pubkey' })
+      const event = createMockEvent({ pubkey: 'relay-pubkey' })
 
       // @ts-expect-error - accessing protected method for testing
       const result = await handler.verifyPaymentClaim(event)
@@ -224,7 +224,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent({ kind: 1 })
+      const event = createMockEvent({ kind: 1 })
       mockExtractPaymentClaim.mockReturnValue(null)
 
       // @ts-expect-error - accessing protected method for testing
@@ -266,7 +266,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent({ kind: 1 })
+      const event = createMockEvent({ kind: 1 })
       mockExtractPaymentClaim.mockReturnValue(null)
 
       // @ts-expect-error - accessing protected method for testing
@@ -300,7 +300,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent()
+      const event = createMockEvent()
       const claim = createMockClaim()
       mockExtractPaymentClaim.mockReturnValue(claim)
 
@@ -340,7 +340,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent({ kind: 1 })
+      const event = createMockEvent({ kind: 1 })
       const claim = createMockClaim({ amountSats: 50 })
       mockExtractPaymentClaim.mockReturnValue(claim)
       mockDassieClient.verifyPaymentClaim = vi.fn(async () => ({ valid: true }))
@@ -381,7 +381,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent({ kind: 1 })
+      const event = createMockEvent({ kind: 1 })
       const claim = createMockClaim({ amountSats: 50 })
       mockExtractPaymentClaim.mockReturnValue(claim)
       mockDassieClient.verifyPaymentClaim = vi.fn(async () => ({ valid: true }))
@@ -412,7 +412,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent()
+      const event = createMockEvent()
       const claim = createMockClaim()
       mockExtractPaymentClaim.mockReturnValue(claim)
       mockDassieClient.verifyPaymentClaim = vi.fn(async () => ({
@@ -446,7 +446,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent()
+      const event = createMockEvent()
       const claim = createMockClaim()
       mockExtractPaymentClaim.mockReturnValue(claim)
       mockDassieClient.verifyPaymentClaim = vi.fn(async () => ({
@@ -480,7 +480,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent()
+      const event = createMockEvent()
       const claim = createMockClaim()
       mockExtractPaymentClaim.mockReturnValue(claim)
       mockDassieClient.verifyPaymentClaim = vi.fn(async () => ({
@@ -514,7 +514,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent()
+      const event = createMockEvent()
       const claim = createMockClaim()
       mockExtractPaymentClaim.mockReturnValue(claim)
       mockDassieClient.verifyPaymentClaim = vi.fn(async () => ({
@@ -548,7 +548,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent()
+      const event = createMockEvent()
       const claim = createMockClaim()
       mockExtractPaymentClaim.mockReturnValue(claim)
 
@@ -583,7 +583,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent()
+      const event = createMockEvent()
       const claim = createMockClaim()
       mockExtractPaymentClaim.mockReturnValue(claim)
       mockDassieClient.verifyPaymentClaim = vi.fn(async () => {
@@ -599,7 +599,7 @@ describe('EventMessageHandler - Payment Verification', () => {
 
   describe('calculateRequiredPayment()', () => {
     it('should fall back to pricing calculator when no fee schedules configured', () => {
-      const _event = createMockEvent({ kind: 1 })
+      const event = createMockEvent({ kind: 1 })
 
       // @ts-expect-error - accessing private method for testing
       const amount = handler.calculateRequiredPayment(event)
@@ -639,7 +639,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent({ kind: 1 })
+      const event = createMockEvent({ kind: 1 })
 
       // @ts-expect-error - accessing private method for testing
       const amount = handler.calculateRequiredPayment(event)
@@ -676,7 +676,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent({ kind: 1 })
+      const event = createMockEvent({ kind: 1 })
 
       // @ts-expect-error - accessing private method for testing
       const amount = handler.calculateRequiredPayment(event)
@@ -720,7 +720,7 @@ describe('EventMessageHandler - Payment Verification', () => {
         mockDegradedModeManager
       )
 
-      const _event = createMockEvent({ kind: 1 })
+      const event = createMockEvent({ kind: 1 })
 
       // @ts-expect-error - accessing private method for testing
       const amount = handler.calculateRequiredPayment(event)
