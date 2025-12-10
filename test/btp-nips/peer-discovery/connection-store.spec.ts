@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, _vi } from 'vitest'
 import { ConnectionStore } from '../../../src/btp-nips/peer-discovery/connection-store.js'
 import { type PeerConnection, PeerConnectionState } from '../../../src/btp-nips/types/peer-connection.js'
 

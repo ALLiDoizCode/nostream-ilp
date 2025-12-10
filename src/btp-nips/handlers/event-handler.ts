@@ -15,7 +15,7 @@ import { getEventRepository } from '../storage/event-repository'
 import { SubscriptionManager } from '../subscription-manager.js'
 import { NostrMessageType } from '../types'
 import { retryWithBackoff } from '../utils/retry'
-import { sendEventPacket } from '../utils/packet-sender.js'
+import { _sendEventPacket } from '../utils/packet-sender.js'
 
 import type { BTPNIPsPacket, NostrEvent, PaymentMetadata } from '../types'
 

@@ -71,7 +71,7 @@ export class EventPropagationService {
   async propagateEvent(
     event: NostrEvent,
     metadata: PacketMetadata,
-    currentNodeAddress?: string
+    _currentNodeAddress?: string
   ): Promise<void> {
     // Step 1: Check deduplication
     if (this.deduplicationCache.hasSeenEvent(event.id)) {

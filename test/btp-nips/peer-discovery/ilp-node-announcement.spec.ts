@@ -125,7 +125,7 @@ describe('Story 6.1: ILP Node Announcement', () => {
 
     describe('Test 9.2: should publish announcement on startup', () => {
       let mockRepository: any
-      let mockCache: any
+      let _mockCache: any
       let publisher: NodeAnnouncementPublisher
 
       beforeEach(() => {

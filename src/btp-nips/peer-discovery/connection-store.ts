@@ -426,7 +426,7 @@ export class ConnectionStore {
   async updateConnection(pubkey: string, updates: Partial<PeerConnection>): Promise<void> {
     try {
       // Remove fields that shouldn't be updated
-      const { id, nostrPubkey, createdAt, ...allowedUpdates } = updates
+      const { _id, _nostrPubkey, _createdAt, ...allowedUpdates } = updates
 
       const row: Partial<PeerConnectionRow> = {}
 

@@ -4,13 +4,13 @@ import {
   NostrClose,
   NostrEOSE,
   NostrEvent,
-  NostrFilter,
+  _NostrFilter,
   NostrReq,
 } from '../../../src/btp-nips/types'
 import { calculateEventId } from '../../../src/btp-nips/crypto'
 import { EventCache } from '../../../src/btp-nips/storage/event-cache'
 import { EventRepository } from '../../../src/btp-nips/storage/event-repository'
-import { handleClosePacket } from '../../../src/btp-nips/handlers/close-handler'
+import { _handleClosePacket } from '../../../src/btp-nips/handlers/close-handler'
 import { handleEventPacket } from '../../../src/btp-nips/handlers/event-handler'
 import { handleReqPacket } from '../../../src/btp-nips/handlers/req-handler'
 import { NostrMessageType } from '../../../src/btp-nips/types'
@@ -421,7 +421,7 @@ describe('BTP-NIPs End-to-End Integration Tests', () => {
       expect(storedEvents.length).toBe(5)
 
       // Send EVENT packets for each stored event
-      for (const event of storedEvents) {
+      for (const _event of storedEvents) {
         const eventPacket: BTPNIPsPacket = {
           header: { version: 1, messageType: NostrMessageType.EVENT, payloadLength: 0 },
           payload: {

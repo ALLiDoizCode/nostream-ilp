@@ -1,6 +1,6 @@
 import { EventEmitter as _EventEmitter } from 'events'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { DepositResult, EscrowDepositConfig, EscrowDepositor, EscrowStatus } from '../../src/akash/escrow-depositor'
+import { _DepositResult, EscrowDepositConfig, EscrowDepositor, _EscrowStatus } from '../../src/akash/escrow-depositor'
 import { EscrowDepositRepository } from '../../src/repositories/escrow-deposit.repository'
 import { IAkashWallet } from '../../src/akash/wallet'
 

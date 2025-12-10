@@ -183,7 +183,7 @@ export class EconomicMonitor extends EventEmitter {
   async createSnapshot(): Promise<EconomicSnapshot> {
     try {
       // Get current data
-      const [revenue, balances, exchangeRates] = await Promise.all([
+      const [_revenue, balances, _exchangeRates] = await Promise.all([
         this.revenueTracker.getCurrentRevenue(),
         this.revenueTracker.getCurrentBalances(),
         this.exchangeRateService.getCurrentRates(),

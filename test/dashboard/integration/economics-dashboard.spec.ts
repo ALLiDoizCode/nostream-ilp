@@ -14,7 +14,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
  */
 
 describe.skip('Economics Dashboard Integration', () => {
-  let pool: Pool
+  let _pool: Pool
 
   beforeAll(async () => {
     // Set up PostgreSQL pool

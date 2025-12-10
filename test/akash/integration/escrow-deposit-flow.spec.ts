@@ -57,7 +57,7 @@ describe('Escrow Deposit Flow Integration', () => {
     mockWallet = {
       getAddress: vi.fn().mockResolvedValue('akash1test123'),
       getBalance: vi.fn().mockResolvedValue([{ amount: '45000000', denom: 'uakt' }]), // 45 AKT
-      sendTokens: vi.fn().mockImplementation(async (recipient, amount, password, memo) => {
+      sendTokens: vi.fn().mockImplementation(async (_recipient, _amount, _password, _memo) => {
         // Simulate transaction hash generation
         return `TEST_TX_${Date.now()}_${Math.random().toString(36).substring(7)}`
       }),

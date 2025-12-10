@@ -149,7 +149,7 @@ export class RevenueTracker extends EventEmitter {
    * Unsubscribe from all balance change subscriptions
    */
   unsubscribeAll(): void {
-    for (const [accountPath, unsubscribe] of this.subscriptions.entries()) {
+    for (const [_accountPath, unsubscribe] of this.subscriptions.entries()) {
       unsubscribe()
     }
     this.subscriptions.clear()
