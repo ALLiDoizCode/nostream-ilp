@@ -2,8 +2,27 @@ import { addOnion, closeTorClient, createTorConfig, getTorClient } from '../../.
 import { hiddenService, Tor } from 'tor-control-ts'
 import { expect } from 'chai'
 import { hostname } from 'os'
-import fs from 'fs/promises'
 import Sinon from 'sinon'
+import { vi } from 'vitest'
+
+// Mock fs/promises module
+let mockReadFileShouldFail = false
+let mockWriteFileShouldFail = false
+
+vi.mock('fs/promises', () => ({
+  readFile: vi.fn(async (_path: string, _encoding?: string) => {
+    if (mockReadFileShouldFail) {
+      throw new Error('Read failed')
+    }
+    return 'privKey'
+  }),
+  writeFile: vi.fn(async (_path: string, _data: string, _encoding?: string) => {
+    if (mockWriteFileShouldFail) {
+      throw new Error('Write failed')
+    }
+    return Promise.resolve()
+  }),
+}))
 
 export function mockModule<T extends { [K: string]: any }>
         (
@@ -55,30 +74,20 @@ describe('onion',()=>{
         }
     }
     let sandbox: Sinon.SinonSandbox
-    const mock = function(sandbox:Sinon.SinonSandbox,readFail?:boolean,writeFail?:boolean){
-        sandbox.stub(fs,'readFile').callsFake(async (path,options) => {
-            path
-            options
-            if(readFail){
-                throw new Error()
-            }
-            return 'privKey'
-        })
-        sandbox.stub(fs,'writeFile').callsFake(async (path,options) =>{
-            path
-            options
-            if(writeFail){
-                throw new Error()
-            }
-            return
-        })
+    const mock = function(readFail?:boolean,writeFail?:boolean){
+        mockReadFileShouldFail = readFail || false
+        mockWriteFileShouldFail = writeFail || false
     }
 
     beforeEach(() => {
         sandbox = Sinon.createSandbox()
+        mockReadFileShouldFail = false
+        mockWriteFileShouldFail = false
     })
     afterEach(()=>{
         sandbox.restore()
+        mockReadFileShouldFail = false
+        mockWriteFileShouldFail = false
     })
 
     it('config empty',()=>{
@@ -124,7 +133,7 @@ describe('onion',()=>{
     })
     it('add onion connect fail',async ()=>{
         //mockTor(sandbox)
-        mock(sandbox)
+        mock()
         process.env.TOR_HOST = 'localhost'
         process.env.TOR_CONTROL_PORT = '9051'
         process.env.TOR_PASSWORD = 'nostr_ts_relay'
@@ -141,7 +150,7 @@ describe('onion',()=>{
     })
     it('add onion fail',async ()=>{
         //mockTor(sandbox)
-        mock(sandbox)
+        mock()
         process.env.TOR_HOST = hostname()
         process.env.TOR_CONTROL_PORT = '9051'
         process.env.TOR_PASSWORD = 'nostr_ts_relay'
@@ -158,7 +167,7 @@ describe('onion',()=>{
     })
     it('add onion write fail',async ()=>{
         //mockTor(sandbox)
-        mock(sandbox,false,true)
+        mock(false,true)
         process.env.TOR_HOST = hostname()
         process.env.TOR_CONTROL_PORT = '9051'
         process.env.TOR_PASSWORD = 'nostr_ts_relay'
@@ -175,19 +184,22 @@ describe('onion',()=>{
         expect(domain).be.undefined
     })
     it('add onion success read fail',async ()=>{
-        mock(sandbox,true)
+        mock(true)
         process.env.TOR_HOST = hostname()
         process.env.TOR_CONTROL_PORT = '9051'
         process.env.TOR_PASSWORD = 'nostr_ts_relay'
 
         let domain = undefined
+        let error = null
         try {
             domain = await addOnion(80)
-            closeTorClient()
-        } catch (error) {
-            domain
+            await closeTorClient()
+        } catch (e) {
+            error = e
+            console.error('addOnion failed:', e)
         }
         console.log('domain: '+domain)
+        expect(error).to.be.null
         expect(domain).be.not.undefined
     })
     it('add onion success',async ()=>{
@@ -197,13 +209,16 @@ describe('onion',()=>{
         process.env.TOR_PASSWORD = 'nostr_ts_relay'
 
         let domain = undefined
+        let error = null
         try {
             domain = await addOnion(80)
-            closeTorClient()
-        } catch (error) {
-            domain
+            await closeTorClient()
+        } catch (e) {
+            error = e
+            console.error('addOnion failed:', e)
         }
         console.log('domain: '+domain)
+        expect(error).to.be.null
         expect(domain).be.not.undefined
     })
 })

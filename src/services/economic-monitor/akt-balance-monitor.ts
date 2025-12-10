@@ -61,7 +61,7 @@ const DEFAULT_CONFIG: BalanceMonitorConfig = {
  */
 export class AktBalanceMonitor extends EventEmitter {
   private lastBalance: bigint = 0n
-  private pollInterval: NodeJS.Timer | null = null
+  private pollInterval: NodeJS.Timeout | null = null
   private readonly config: BalanceMonitorConfig
   private logger: any // Pino logger
 

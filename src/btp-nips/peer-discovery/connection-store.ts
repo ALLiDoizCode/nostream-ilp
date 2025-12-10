@@ -73,7 +73,7 @@ export class ConnectionStore {
   private writeDb: Knex
   private readDb: Knex
   private cache: CacheClient
-  private readonly CACHE_TTL = 300 // 5 minutes in seconds
+  private readonly CACHE_TTL_SECONDS = 300 // 5 minutes in seconds
 
   /**
    * Create a ConnectionStore instance
@@ -121,7 +121,7 @@ export class ConnectionStore {
 
       // Cache the new connection
       const cacheKey = this.getCacheKey(connection.nostrPubkey)
-      await this.cache.set(cacheKey, JSON.stringify(connection), this.CACHE_TTL)
+      await this.cache.set(cacheKey, JSON.stringify(connection), { EX: this.CACHE_TTL_SECONDS })
 
       debug('Created connection for peer: %s (state: %s)', connection.nostrPubkey.substring(0, 8), connection.state)
     } catch (error) {
@@ -177,7 +177,7 @@ export class ConnectionStore {
       const connection = this.fromRow(row)
 
       // Cache the result
-      await this.cache.set(cacheKey, JSON.stringify(connection), this.CACHE_TTL)
+      await this.cache.set(cacheKey, JSON.stringify(connection), { EX: this.CACHE_TTL_SECONDS })
 
       return connection
     } catch (error) {

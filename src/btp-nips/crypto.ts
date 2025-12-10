@@ -1,7 +1,7 @@
 import { createHash } from 'crypto'
 import { schnorr } from '@noble/secp256k1'
 
-import type { NostrEvent } from './types/nostr'
+import type { NostrEvent } from './types/index'
 
 /**
  * Nostr Cryptographic Utilities

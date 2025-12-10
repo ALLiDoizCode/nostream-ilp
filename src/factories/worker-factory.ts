@@ -36,9 +36,9 @@ export const workerFactory = (): AppWorker => {
     .then(() => {
       // Initialize Economic Monitor after Dassie client is connected
       const dassieClient = getDassieClient()
-      return initializeEconomicMonitor(dassieClient, dbClient, cacheClient)
+      return initializeEconomicMonitor(dassieClient, dbClient as any, cacheClient)
     })
-    .catch((_error) => {
+    .catch((error) => {
       console.error('Failed to initialize Dassie client or Economic Monitor:', error)
       // Continue running - payment verification and economic monitoring will fail gracefully
     })

@@ -16,7 +16,8 @@ import {
 } from 'ramda'
 
 import type { DatabaseClient } from '../@types/base'
-import type { DBInvoice, Invoice, InvoiceStatus } from '../@types/invoice'
+import type { DBInvoice, Invoice } from '../@types/invoice'
+import { InvoiceStatus } from '../@types/invoice'
 import type { IInvoiceRepository } from '../@types/repositories'
 
 const debug = createLogger('invoice-repository')

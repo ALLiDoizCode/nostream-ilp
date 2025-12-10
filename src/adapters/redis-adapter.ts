@@ -11,12 +11,12 @@ export class RedisAdapter implements ICacheAdapter {
   public constructor(private readonly client: CacheClient) {
     this.connection = client.connect()
 
-    this.connection.catch((_error) => this.onClientError(error))
+    this.connection.catch((error) => this.onClientError(error))
 
     this.client
       .on('connect', () => debug('connecting'))
       .on('ready', () => debug('connected'))
-      .on('error', (_error) => this.onClientError(error))
+      .on('error', (error) => this.onClientError(error))
       .on('reconnecting', () => {
         debug('reconnecting')
         this.connection = new Promise((resolve, reject) => {

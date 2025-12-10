@@ -153,6 +153,46 @@ export class PaymentChannelManager {
   }
 
   /**
+   * Get channel state for a peer's ILP address
+   *
+   * Retrieves the channel state by peer ILP address.
+   *
+   * @param peerIlpAddress - The peer's ILP address
+   * @returns Channel state or null if not found
+   */
+  async getChannelByPeer(peerIlpAddress: string): Promise<ChannelState | null> {
+    try {
+      // Check cache first
+      const cached = Array.from(this.channelCache.values()).find(
+        (state) => state.recipient === peerIlpAddress && state.status === 'open'
+      )
+
+      if (cached) {
+        return cached
+      }
+
+      // Query Dassie for all channels
+      const channels = await this.queryAllChannels()
+
+      // Find channel for this peer
+      const peerChannel = channels.find(
+        (ch) => ch.recipient === peerIlpAddress && ch.status === 'open'
+      )
+
+      if (peerChannel) {
+        this.channelCache.set(peerChannel.channelId, peerChannel)
+        return peerChannel
+      }
+
+      return null
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      debug('Failed to get channel for peer %s: %s', peerIlpAddress, errorMessage)
+      return null
+    }
+  }
+
+  /**
    * Open a new payment channel for a peer
    *
    * Calls Dassie's settlement.openChannel RPC endpoint to create a payment channel

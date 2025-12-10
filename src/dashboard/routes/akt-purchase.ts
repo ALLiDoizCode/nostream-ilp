@@ -74,7 +74,7 @@ export async function registerAktPurchaseRoutes(
       const rec = await recommendation.getRecommendation()
       return reply.send(rec)
     } catch (error) {
-      request.log.error('Failed to get purchase recommendation', { error })
+      request.log.error({ error }, 'Failed to get purchase recommendation')
       return reply.status(500).send({
         error: 'Failed to get recommendation',
         message: error instanceof Error ? error.message : 'Unknown error',
@@ -105,7 +105,7 @@ export async function registerAktPurchaseRoutes(
         timestamp: Date.now(),
       })
     } catch (error) {
-      request.log.error('Failed to get AKT balance', { error })
+      request.log.error({ error }, 'Failed to get AKT balance')
       return reply.status(500).send({
         error: 'Failed to get balance',
         message: error instanceof Error ? error.message : 'Unknown error',
@@ -148,11 +148,11 @@ export async function registerAktPurchaseRoutes(
         if (error instanceof z.ZodError) {
           return reply.status(400).send({
             error: 'Invalid query parameters',
-            details: error.errors,
+            details: error.issues,
           })
         }
 
-        request.log.error('Failed to get purchases', { error })
+        request.log.error({ error }, 'Failed to get purchases')
         return reply.status(500).send({
           error: 'Failed to get purchases',
           message: error instanceof Error ? error.message : 'Unknown error',
@@ -197,22 +197,22 @@ export async function registerAktPurchaseRoutes(
           notes: validated.notes,
         })
 
-        request.log.info('Purchase recorded', {
+        request.log.info({
           purchaseId: purchase.id,
           usdAmount: purchase.usdAmount,
           aktAmount: purchase.aktAmount,
-        })
+        }, 'Purchase recorded')
 
         return reply.status(201).send(purchase)
       } catch (error) {
         if (error instanceof z.ZodError) {
           return reply.status(400).send({
             error: 'Invalid request body',
-            details: error.errors,
+            details: error.issues,
           })
         }
 
-        request.log.error('Failed to record purchase', { error })
+        request.log.error({ error }, 'Failed to record purchase')
         return reply.status(500).send({
           error: 'Failed to record purchase',
           message: error instanceof Error ? error.message : 'Unknown error',

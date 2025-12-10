@@ -408,7 +408,7 @@ export class EconomicMonitor extends EventEmitter {
     })
 
     // Trigger immediate snapshot to capture new balance
-    this.createSnapshot().catch((_error) => {
+    this.createSnapshot().catch((error) => {
       console.error('Failed to create snapshot after AKT balance change:', error)
     })
   }

@@ -58,7 +58,7 @@ export async function sendEventPacket(
           currency: 'msat',
           purpose: 'event_delivery',
         },
-        nostr: _event,
+        nostr: event,
         metadata: {
           timestamp: Date.now(),
           sender: 'relay', // Relay is the sender

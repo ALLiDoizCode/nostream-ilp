@@ -79,14 +79,21 @@ export async function initializeEconomicMonitor(
           akashConfig.wallet.password
         )
 
+        const walletConfig = {
+          rpcEndpoint: akashConfig.rpc?.endpoint || 'https://rpc.akash.forbole.com:443',
+          chainId: akashConfig.chain?.chainId || 'akashnet-2',
+          prefix: 'akash',
+          gasPrice: akashConfig.chain?.gasPrice || '0.025uakt',
+        }
+
         const akashWallet = await AkashWallet.fromMnemonic(
           decryptedMnemonic,
-          akashConfig,
+          walletConfig,
           akashConfig.wallet.password
         )
 
-        // Initialize repositories
-        const aktPurchaseRepository = new AktPurchaseRepository(dbPool)
+        // Initialize repositories (convert Pool to Knex-compatible)
+        const aktPurchaseRepository = new AktPurchaseRepository(dbPool as any)
 
         // Create balance monitor
         aktBalanceMonitor = new AktBalanceMonitor(

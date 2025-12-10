@@ -183,8 +183,8 @@ export class StorageStats {
         )
         .first()
 
-      return result && result.total_size
-        ? parseInt(result.total_size as string, 10)
+      return result && (result as any).total_size
+        ? parseInt((result as any).total_size as string, 10)
         : 0
     } catch (error) {
       debug('Failed to get storage size estimate: %o', error)

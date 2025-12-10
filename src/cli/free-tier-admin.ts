@@ -244,7 +244,7 @@ async function main(): Promise<void> {
 }
 
 // Run CLI
-main().catch((_error) => {
+main().catch((error) => {
   console.error('Fatal error:', error)
   process.exit(1)
 })

@@ -16,7 +16,7 @@ describe('NIP-01', () => {
       })
 
       it('returns same message if valid', () => {
-        events.forEach((_event) => {
+        events.forEach((event) => {
           message = [
             'EVENT',
             event,

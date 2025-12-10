@@ -209,7 +209,7 @@ export async function handleEventPacket(
 
         // Cache in Redis (best effort - don't fail if Redis is down)
         const cache = getEventCache()
-        await cache.cacheEvent(event).catch((_error) => {
+        await cache.cacheEvent(event).catch((error) => {
           debug('Failed to cache event %s (non-fatal): %o', event.id, error)
         })
       },

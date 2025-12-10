@@ -9,7 +9,8 @@
 export * from './ilp-address-generator.js'
 export * from './announcement-publisher.js'
 export * from './announcement-query.js'
-export * from './announcement-validator.js'
+export { validateNodeAnnouncement, validateNodeAnnouncementDetailed, ValidationErrorCode } from './announcement-validator.js'
+export type { ValidationResult as AnnouncementValidationResult } from './announcement-validator.js'
 export * from './address-resolver.js'
 
 // Story 6.3: Follow List Integration exports

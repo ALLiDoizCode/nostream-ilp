@@ -1,25 +1,37 @@
-import * as databaseClientModule from '../../../src/database/client'
 import { AppWorker } from '../../../src/app/worker'
 import { workerFactory } from '../../../src/factories/worker-factory'
 import { SettingsStatic } from '../../../src/utils/settings'
 import { expect } from 'chai'
 import Sinon from 'sinon'
+import { vi } from 'vitest'
+
+vi.mock('../../../src/database/client', () => ({
+  getMasterDbClient: vi.fn(() => ({})),
+  getReadReplicaDbClient: vi.fn(() => ({})),
+}))
+
+vi.mock('../../../src/cache/client', () => ({
+  getCacheClient: vi.fn(() => ({
+    on: vi.fn(),
+    connect: vi.fn(),
+  })),
+}))
+
+vi.mock('../../../src/factories/dassie-client-factory', () => ({
+  initializeDassieClient: vi.fn(() => Promise.resolve()),
+  getDassieClient: vi.fn(() => ({})),
+}))
 
 describe('workerFactory', () => {
   let createSettingsStub: Sinon.SinonStub
-  let getMasterDbClientStub: Sinon.SinonStub
-  let getReadReplicaDbClientStub: Sinon.SinonStub
 
   beforeEach(() => {
     createSettingsStub = Sinon.stub(SettingsStatic, 'createSettings')
-    getMasterDbClientStub = Sinon.stub(databaseClientModule, 'getMasterDbClient')
-    getReadReplicaDbClientStub = Sinon.stub(databaseClientModule, 'getReadReplicaDbClient')
   })
 
   afterEach(() => {
-    getReadReplicaDbClientStub.restore()
-    getMasterDbClientStub.restore()
     createSettingsStub.restore()
+    vi.clearAllMocks()
   })
 
   it('returns an AppWorker', () => {

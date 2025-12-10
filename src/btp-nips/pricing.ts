@@ -3,7 +3,7 @@ import { readFileSync } from 'fs'
 import { join } from 'path'
 import { parse as parseYaml } from 'yaml'
 
-import type { NostrEvent } from './types/nostr'
+import type { NostrEvent } from './types/index'
 
 /**
  * BTP-NIPs Pricing Module
