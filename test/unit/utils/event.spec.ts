@@ -1,8 +1,6 @@
-import {
-import { CanonicalEvent, Event } from '../../../src/@types/event'
 import { EventKinds } from '../../../src/constants/base'
 import { expect } from 'chai'
-
+import {
   getEventExpiration,
   isDeleteEvent,
   isEphemeralEvent,
@@ -14,6 +12,8 @@ import { expect } from 'chai'
   isReplaceableEvent,
   serializeEvent,
 } from '../../../src/utils/event'
+
+import type { CanonicalEvent, Event } from '../../../src/@types/event'
 describe('NIP-01', () => {
   describe('serializeEvent', () => {
     it('returns serialized event given a Nostr event', () => {

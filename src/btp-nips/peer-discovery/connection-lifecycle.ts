@@ -1,11 +1,17 @@
-import {
 import { EventEmitter as _EventEmitter } from 'events'
-import { v4 as uuidv4 } from 'uuid'
 import { createLogger } from '../../factories/logger-factory.js'
+import { v4 as uuidv4 } from 'uuid'
+import {
+  ChannelNeededEvent,
+  ConnectionStateChangeEvent,
+  PeerConnection,
+  PeerConnectionState,
+  VALID_STATE_TRANSITIONS,
+} from '../types/peer-connection.js'
 
-import type { DassieClient } from '../../services/payment/dassie-client.js'
 import type { AddressResolver } from './address-resolver.js'
 import type { ConnectionStore } from './connection-store.js'
+import type { DassieClient } from '../../services/payment/dassie-client.js'
 import type { PaymentChannelManager } from './payment-channel-manager.js'
 
 /**
@@ -17,15 +23,6 @@ import type { PaymentChannelManager } from './payment-channel-manager.js'
  *
  * @module btp-nips/peer-discovery/connection-lifecycle
  */
-
-
-
-  ChannelNeededEvent,
-  ConnectionStateChangeEvent,
-  PeerConnection,
-  PeerConnectionState,
-  VALID_STATE_TRANSITIONS,
-} from '../types/peer-connection.js'
 
 const debug = createLogger('btp-nips:connection-lifecycle')
 

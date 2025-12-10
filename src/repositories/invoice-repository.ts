@@ -1,11 +1,7 @@
-import {
-import { randomUUID } from 'crypto'
-import { DBInvoice, Invoice, InvoiceStatus } from '../@types/invoice'
-import { DatabaseClient } from '../@types/base'
-import { IInvoiceRepository } from '../@types/repositories'
 import { createLogger } from '../factories/logger-factory'
 import { fromDBInvoice, toBuffer } from '../utils/transform'
-
+import { randomUUID } from 'crypto'
+import {
   always,
   applySpec,
   head,
@@ -18,6 +14,10 @@ import { fromDBInvoice, toBuffer } from '../utils/transform'
   propSatisfies,
   toString,
 } from 'ramda'
+
+import type { DatabaseClient } from '../@types/base'
+import type { DBInvoice, Invoice, InvoiceStatus } from '../@types/invoice'
+import type { IInvoiceRepository } from '../@types/repositories'
 
 const debug = createLogger('invoice-repository')
 

@@ -1,7 +1,15 @@
-import WebSocket from 'ws'
-import {
-import { EventEmitter as _EventEmitter } from 'events'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+  ConnectionState,
+  createDassieClient,
+  createDassieClientFromEnv,
+  DassieClient,
+  type DassieClientConfig,
+  DassieConnectionError,
+  DassieTimeoutError,
+} from '../../../../src/services/payment/dassie-client'
+import { EventEmitter as _EventEmitter } from 'events'
+import WebSocket from 'ws'
 
 import type { PaymentClaim } from '../../../../src/@types/payment-claim'
 
@@ -11,15 +19,6 @@ import type { PaymentClaim } from '../../../../src/@types/payment-claim'
  * Tests all wrapper methods with mocked WebSocket responses.
  * Validates error handling, reconnection logic, and subscription management.
  */
-
-  ConnectionState,
-  createDassieClient,
-  createDassieClientFromEnv,
-  DassieClient,
-  type DassieClientConfig,
-  DassieConnectionError,
-  DassieTimeoutError,
-} from '../../../../src/services/payment/dassie-client'
 // Mock WebSocket
 class MockWebSocket extends EventEmitter {
   public readyState = WebSocket.OPEN

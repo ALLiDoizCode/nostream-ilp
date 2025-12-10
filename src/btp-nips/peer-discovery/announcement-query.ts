@@ -1,8 +1,13 @@
-import {
 import { EventCache } from '../storage/event-cache.js'
 import { EventRepository } from '../storage/event-repository.js'
+import {
+  ILP_NODE_D_TAG,
+  ILP_NODE_KIND,
+} from '../types/ilp-node-announcement.js'
+import {
+  ILPNodeAnnouncement,
+} from '../types/ilp-node-announcement.js'
 
-import type {
 import type { NostrEvent } from '../types/index.js'
 
 /**
@@ -14,12 +19,6 @@ import type { NostrEvent } from '../types/index.js'
  *
  * Reference: docs/stories/6.1.story.md
  */
-
-  ILPNodeAnnouncement,
-} from '../types/ilp-node-announcement.js'
-  ILP_NODE_D_TAG,
-  ILP_NODE_KIND,
-} from '../types/ilp-node-announcement.js'
 
 /**
  * Cache configuration for announcements

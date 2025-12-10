@@ -1,6 +1,11 @@
-import {
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { AddressResolver } from '../../../src/btp-nips/peer-discovery/address-resolver.js'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+  ILP_NODE_D_TAG,
+  ILP_NODE_KIND,
+  type ILPNodeAnnouncement,
+  type ILPNodeMetadata,
+} from '../../../src/btp-nips/types/ilp-node-announcement.js'
 
 import type { AnnouncementQuery } from '../../../src/btp-nips/peer-discovery/announcement-query.js'
 
@@ -21,13 +26,6 @@ import type { AnnouncementQuery } from '../../../src/btp-nips/peer-discovery/ann
  *
  * Reference: docs/stories/6.2.story.md#task-8
  */
-
-
-  ILP_NODE_D_TAG,
-  ILP_NODE_KIND,
-  type ILPNodeAnnouncement,
-  type ILPNodeMetadata,
-} from '../../../src/btp-nips/types/ilp-node-announcement.js'
 
 // Test fixtures
 const ALICE_PUBKEY = 'abc123def456789012345678901234567890123456789012345678901234abcd'

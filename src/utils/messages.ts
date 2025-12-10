@@ -1,8 +1,4 @@
 import {
-import { Event, RelayedEvent } from '../@types/event'
-import { EventId } from '../@types/base'
-import { SubscriptionFilter, SubscriptionId } from '../@types/subscription'
-
   EndOfStoredEventsNotice,
   IncomingEventMessage,
   IncomingRelayedEventMessage,
@@ -11,6 +7,10 @@ import { SubscriptionFilter, SubscriptionId } from '../@types/subscription'
   OutgoingMessage,
   SubscribeMessage,
 } from '../@types/messages'
+
+import type { Event, RelayedEvent } from '../@types/event'
+import type { EventId } from '../@types/base'
+import type { SubscriptionFilter, SubscriptionId } from '../@types/subscription'
 export const createNoticeMessage = (notice: string): NoticeMessage => {
   return [MessageType.NOTICE, notice]
 }

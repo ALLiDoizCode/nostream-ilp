@@ -1,6 +1,19 @@
 import {
+  BTPNIPsHeader,
+  BTPNIPsPacket,
+  BTPNIPsPayload,
+  NostrMessageType,
+} from './types'
 import {
+  MalformedPayloadError,
+  TruncatedPacketError,
+} from './errors'
 import {
+  validateMessageType,
+  validatePayloadLength,
+  validatePayloadStructure,
+  validateVersion,
+} from './validation'
 
 /**
  * BTP-NIPs Packet Parser
@@ -15,20 +28,6 @@ import {
  * @module btp-nips/parser
  * @version 1.0.0
  */
-
-  BTPNIPsHeader,
-  BTPNIPsPacket,
-  BTPNIPsPayload,
-  NostrMessageType,
-} from './types'
-  MalformedPayloadError,
-  TruncatedPacketError,
-} from './errors'
-  validateMessageType,
-  validatePayloadLength,
-  validatePayloadStructure,
-  validateVersion,
-} from './validation'
 
 /**
  * Parses the 4-byte BTP-NIPs header from a buffer

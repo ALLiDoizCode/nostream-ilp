@@ -1,11 +1,15 @@
-import {
 import { afterEach, beforeAll, describe, expect, it } from 'vitest'
+import { calculateEventId } from '../../../src/btp-nips/crypto'
+import { EventRepository } from '../../../src/btp-nips/storage/event-repository'
+import {
+  fulfillILPPacket,
+  processBTPNIPsPacket,
+  rejectILPPacket,
+} from '../../../src/btp-nips/ilp-integration'
+import { handleEventPacket } from '../../../src/btp-nips/handlers/event-handler'
+import { NostrMessageType } from '../../../src/btp-nips/types'
 import { randomBytes } from 'crypto'
 import { schnorr } from '@noble/secp256k1'
-import { EventRepository } from '../../../src/btp-nips/storage/event-repository'
-import { NostrMessageType } from '../../../src/btp-nips/types'
-import { calculateEventId } from '../../../src/btp-nips/crypto'
-import { handleEventPacket } from '../../../src/btp-nips/handlers/event-handler'
 import { serializeBTPNIPsPacket } from '../../../src/btp-nips/parser'
 
 import type { ILPPacket } from '../../../src/btp-nips/handlers/event-handler'
@@ -20,12 +24,6 @@ import type { NostrEvent } from '../../../src/btp-nips/types'
  * @see src/btp-nips/ilp-integration.ts
  * @see Story 5.2 - Task 13
  */
-
-/* eslint-disable sort-imports */
-  fulfillILPPacket,
-  processBTPNIPsPacket,
-  rejectILPPacket,
-} from '../../../src/btp-nips/ilp-integration'
 /**
  * Generate a valid signed Nostr event
  */

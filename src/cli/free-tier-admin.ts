@@ -1,8 +1,8 @@
+#!/usr/bin/env tsx
+
 import knex, { Knex } from 'knex'
 import { FreeTierRepository } from '../repositories/free-tier-repository'
 import { FreeTierTracker } from '../services/payment/free-tier-tracker'
-
-#!/usr/bin/env tsx
 
 /**
  * Free Tier Admin CLI

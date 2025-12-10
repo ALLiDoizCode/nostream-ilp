@@ -1,6 +1,11 @@
-import {
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ConnectionLifecycleManager } from '../../../src/btp-nips/peer-discovery/connection-lifecycle.js'
+import {
+  type ChannelNeededEvent,
+  type ConnectionStateChangeEvent,
+  type PeerConnection,
+  PeerConnectionState,
+} from '../../../src/btp-nips/types/peer-connection.js'
 
 import type { AddressResolver } from '../../../src/btp-nips/peer-discovery/address-resolver.js'
 import type { ConnectionStore } from '../../../src/btp-nips/peer-discovery/connection-store.js'
@@ -12,13 +17,6 @@ import type { PaymentChannelManager } from '../../../src/btp-nips/peer-discovery
  * Unit Tests for ConnectionLifecycleManager
  * Story 6.5: Peer Connection Lifecycle (Task 9)
  */
-
-
-  type ChannelNeededEvent,
-  type ConnectionStateChangeEvent,
-  type PeerConnection,
-  PeerConnectionState,
-} from '../../../src/btp-nips/types/peer-connection.js'
 
 // Test pubkeys (64 characters each)
 const ALICE_PUBKEY = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'

@@ -1,4 +1,7 @@
 import {
+  parseAnnouncementMetadata,
+  parseAnnouncementTags,
+} from './ilp-node-announcement.js'
 
 import type { ILPNodeAnnouncement, ILPNodeMetadata } from './ilp-node-announcement.js'
 
@@ -12,10 +15,6 @@ import type { ILPNodeAnnouncement, ILPNodeMetadata } from './ilp-node-announceme
  * Reference: docs/stories/6.2.story.md
  * Reference: docs/prd/epic-6-peer-networking.md
  */
-
-  parseAnnouncementMetadata,
-  parseAnnouncementTags,
-} from './ilp-node-announcement.js'
 
 /**
  * ILP Peer Information

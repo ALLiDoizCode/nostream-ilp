@@ -1,15 +1,6 @@
-import {
-import {
-import { describe, expect, it } from 'vitest'
 import { BTPNIPsPacket, NostrEvent, NostrMessageType } from '../../src/btp-nips/types'
-
-/**
- * BTP-NIPs Parser Unit Tests
- *
- * Comprehensive test suite for BTP-NIPs packet parsing and serialization.
- * Tests cover all message types, error cases, and round-trip scenarios.
- */
-
+import { describe, expect, it } from 'vitest'
+import {
   InvalidMessageTypeError,
   InvalidPayloadStructureError,
   InvalidVersionError,
@@ -17,6 +8,7 @@ import { BTPNIPsPacket, NostrEvent, NostrMessageType } from '../../src/btp-nips/
   PayloadLengthMismatchError,
   TruncatedPacketError,
 } from '../../src/btp-nips/errors'
+import {
   parseBTPNIPsPacket,
   parseHeader,
   parsePayload,
@@ -24,7 +16,13 @@ import { BTPNIPsPacket, NostrEvent, NostrMessageType } from '../../src/btp-nips/
   serializeHeader,
   serializePayload,
 } from '../../src/btp-nips/parser'
-// eslint-disable-next-line sort-imports
+
+/**
+ * BTP-NIPs Parser Unit Tests
+ *
+ * Comprehensive test suite for BTP-NIPs packet parsing and serialization.
+ * Tests cover all message types, error cases, and round-trip scenarios.
+ */
 describe('BTPNIPsParser', () => {
   describe('parseHeader', () => {
     it('should parse valid header with EVENT message type', () => {

@@ -1,6 +1,5 @@
-import {
 import { describe, expect, it } from 'vitest'
-
+import {
   canForward,
   decrementTTL,
   DEFAULT_TTL_CONFIG,

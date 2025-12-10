@@ -1,5 +1,10 @@
-import {
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+  type StreamConnection,
+  type Subscription,
+  SubscriptionExpiryActor,
+  SubscriptionManager,
+} from '../../src/btp-nips/subscription-manager'
 
 import type { NostrEvent } from '../../src/btp-nips/types/index'
 
@@ -16,12 +21,6 @@ import type { NostrEvent } from '../../src/btp-nips/types/index'
  * - Subscription expiry handling
  * - Multiple subscriptions from same peer
  */
-
-  type StreamConnection,
-  type Subscription,
-  SubscriptionExpiryActor,
-  SubscriptionManager,
-} from '../../src/btp-nips/subscription-manager'
 
 // Mock StreamConnection for testing
 function createMockStreamConnection(): StreamConnection {

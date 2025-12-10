@@ -1,17 +1,21 @@
+import { createLogger } from '../../factories/logger-factory'
+import { verifyNostrSignature } from '../crypto'
 import {
+  DuplicateEventError,
+  InsufficientPaymentError,
+  InvalidSignatureError,
+} from '../errors'
 import { EventDeduplicationCache } from '../event-deduplication.js'
 import { EventPropagationService } from '../event-propagation.js'
-import { NostrMessageType } from '../types'
 import { PeerEventTracker } from '../peer-event-tracker.js'
-import { RateLimiter } from '../rate-limiter.js'
-import { SubscriptionManager } from '../subscription-manager.js'
-import { createLogger } from '../../factories/logger-factory'
-import { getEventCache } from '../storage/event-cache'
 import { getEventCost, validatePaymentAmount } from '../pricing'
+import { RateLimiter } from '../rate-limiter.js'
+import { getEventCache } from '../storage/event-cache'
 import { getEventRepository } from '../storage/event-repository'
+import { SubscriptionManager } from '../subscription-manager.js'
+import { NostrMessageType } from '../types'
 import { retryWithBackoff } from '../utils/retry'
 import { sendEventPacket } from '../utils/packet-sender.js'
-import { verifyNostrSignature } from '../crypto'
 
 import type { BTPNIPsPacket, NostrEvent, PaymentMetadata } from '../types'
 
@@ -24,13 +28,6 @@ import type { BTPNIPsPacket, NostrEvent, PaymentMetadata } from '../types'
  * @module btp-nips/handlers/event-handler
  * @see Story 5.2 - BTP-NIPs EVENT Message Handler
  */
-
-/* eslint-disable sort-imports */
-
-  DuplicateEventError,
-  InsufficientPaymentError,
-  InvalidSignatureError,
-} from '../errors'
 
 const debug = createLogger('btp-nips:event-handler')
 

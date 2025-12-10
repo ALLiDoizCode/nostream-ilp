@@ -1,15 +1,5 @@
 import chai from 'chai'
-import sinonChai from 'sinon-chai'
 import {
-import {
-import { WebSocket } from 'ws'
-import { Event } from '../../../../src/@types/event'
-import { isDraft } from '../shared'
-
-  Then,
-  When,
-  World,
-} from '@cucumber/cucumber'
   createEvent,
   createSubscription,
   sendEvent,
@@ -19,6 +9,16 @@ import { isDraft } from '../shared'
   waitForNextEvent,
   waitForNotice,
 } from '../helpers'
+import { isDraft } from '../shared'
+import sinonChai from 'sinon-chai'
+import {
+  Then,
+  When,
+  World,
+} from '@cucumber/cucumber'
+import { WebSocket } from 'ws'
+
+import type { Event } from '../../../../src/@types/event'
 chai.use(sinonChai)
 const { expect } = chai
 

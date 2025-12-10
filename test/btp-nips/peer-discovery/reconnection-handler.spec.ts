@@ -1,6 +1,11 @@
-import {
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ReconnectionHandler } from '../../../src/btp-nips/peer-discovery/reconnection-handler.js'
+import {
+  type ConnectionConfig,
+  DEFAULT_CONNECTION_CONFIG,
+  type PeerConnection,
+  PeerConnectionState,
+} from '../../../src/btp-nips/types/peer-connection.js'
 
 import type { ConnectionLifecycleManager } from '../../../src/btp-nips/peer-discovery/connection-lifecycle.js'
 import type { ConnectionStore } from '../../../src/btp-nips/peer-discovery/connection-store.js'
@@ -9,13 +14,6 @@ import type { ConnectionStore } from '../../../src/btp-nips/peer-discovery/conne
  * Unit Tests for ReconnectionHandler
  * Story 6.5: Peer Connection Lifecycle (Task 11)
  */
-
-
-  type ConnectionConfig,
-  DEFAULT_CONNECTION_CONFIG,
-  type PeerConnection,
-  PeerConnectionState,
-} from '../../../src/btp-nips/types/peer-connection.js'
 
 // Test pubkeys (64 characters each)
 const ALICE_PUBKEY = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'

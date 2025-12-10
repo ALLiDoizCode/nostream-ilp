@@ -1,5 +1,10 @@
-import {
 import { BTPNIPsPayload, NostrMessageType } from './types'
+import {
+  InvalidMessageTypeError,
+  InvalidPayloadStructureError,
+  InvalidVersionError,
+  PayloadLengthMismatchError,
+} from './errors'
 
 /**
  * BTP-NIPs Validation Utilities
@@ -7,12 +12,6 @@ import { BTPNIPsPayload, NostrMessageType } from './types'
  * Runtime validation functions for BTP-NIPs protocol compliance.
  * Uses TypeScript type guards and assertion functions for type safety.
  */
-
-  InvalidMessageTypeError,
-  InvalidPayloadStructureError,
-  InvalidVersionError,
-  PayloadLengthMismatchError,
-} from './errors'
 
 /**
  * Validates protocol version is supported

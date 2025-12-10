@@ -1,10 +1,14 @@
-import {
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { calculateEventId } from '../../src/btp-nips/crypto'
+import { EventRepository } from '../../src/btp-nips/storage/event-repository'
+import {
+  extractPaymentMetadata,
+  handleEventPacket,
+  isEventMessage,
+} from '../../src/btp-nips/handlers/event-handler'
+import { NostrMessageType } from '../../src/btp-nips/types'
 import { randomBytes } from 'crypto'
 import { schnorr } from '@noble/secp256k1'
-import { EventRepository } from '../../src/btp-nips/storage/event-repository'
-import { NostrMessageType } from '../../src/btp-nips/types'
-import { calculateEventId } from '../../src/btp-nips/crypto'
 
 import type { BTPNIPsPacket, NostrEvent } from '../../src/btp-nips/types'
 import type { ILPPacket } from '../../src/btp-nips/handlers/event-handler'
@@ -17,12 +21,6 @@ import type { ILPPacket } from '../../src/btp-nips/handlers/event-handler'
  * @see src/btp-nips/handlers/event-handler.ts
  * @see Story 5.2 - Task 12
  */
-
-/* eslint-disable sort-imports */
-  extractPaymentMetadata,
-  handleEventPacket,
-  isEventMessage,
-} from '../../src/btp-nips/handlers/event-handler'
 /**
  * Generate a valid Nostr event with signature
  */

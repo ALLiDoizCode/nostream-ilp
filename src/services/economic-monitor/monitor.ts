@@ -1,12 +1,11 @@
-import {
-import { EventEmitter as _EventEmitter } from 'events'
 import { AktBalanceMonitor, BalanceChange } from './akt-balance-monitor'
-import { ExchangeRateService } from './exchange-rate'
-import { RevenueChangedEvent, RevenueTracker } from './revenue-tracker'
-
+import {
   EconomicSnapshot,
   EconomicSnapshotRepository,
 } from '../../repositories/economic-snapshot.repository'
+import { EventEmitter as _EventEmitter } from 'events'
+import { ExchangeRateService } from './exchange-rate'
+import { RevenueChangedEvent, RevenueTracker } from './revenue-tracker'
 
 /**
  * Real-time economic metrics for the relay

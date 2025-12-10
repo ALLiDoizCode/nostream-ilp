@@ -1,16 +1,19 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { calculateEventId } from '../../../src/btp-nips/crypto'
+import { EventCache } from '../../../src/btp-nips/storage/event-cache'
+import { EventRepository } from '../../../src/btp-nips/storage/event-repository'
+import { handleEventPacket } from '../../../src/btp-nips/handlers/event-handler'
+import { NostrMessageType } from '../../../src/btp-nips/types'
 import { performance } from 'perf_hooks'
 import { randomBytes } from 'crypto'
 import { schnorr } from '@noble/secp256k1'
-import { EventCache } from '../../../src/btp-nips/storage/event-cache'
-import { EventRepository } from '../../../src/btp-nips/storage/event-repository'
-import { NostrMessageType } from '../../../src/btp-nips/types'
+import { parseBTPNIPsPacket, serializeBTPNIPsPacket } from '../../../src/btp-nips/parser'
+import {
+  StreamConnection,
+  Subscription,
+} from '../../../src/btp-nips/subscription-manager'
 import { SubscriptionManager } from '../../../src/btp-nips/subscription-manager'
-import { calculateEventId } from '../../../src/btp-nips/crypto'
-import { handleEventPacket } from '../../../src/btp-nips/handlers/event-handler'
-import { serializeBTPNIPsPacket, parseBTPNIPsPacket } from '../../../src/btp-nips/parser'
 
-import type {
 import type { ILPPacket } from '../../../src/btp-nips/handlers/event-handler'
 import type { NostrEvent } from '../../../src/btp-nips/types'
 
@@ -25,11 +28,6 @@ import type { NostrEvent } from '../../../src/btp-nips/types'
  * @see Story 5.8 - BTP-NIPs Integration Tests - AC 8
  * @see test/btp-nips/performance/storage-benchmark.spec.ts (reference patterns)
  */
-
-/* eslint-disable sort-imports */
-  Subscription,
-  StreamConnection,
-} from '../../../src/btp-nips/subscription-manager'
 
 /**
  * Mock ILP STREAM Connection (minimal for performance testing)

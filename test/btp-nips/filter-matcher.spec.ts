@@ -1,5 +1,8 @@
-import {
 import { describe, expect, it } from 'vitest'
+import {
+  eventMatchesAnyFilter,
+  eventMatchesFilter,
+} from '../../src/btp-nips/utils/filter-matcher'
 
 import type { NostrEvent, NostrFilter } from '../../src/btp-nips/types/index'
 
@@ -15,10 +18,6 @@ import type { NostrEvent, NostrFilter } from '../../src/btp-nips/types/index'
  * - Empty filter edge cases
  * - Multiple filters with OR logic
  */
-
-  eventMatchesAnyFilter,
-  eventMatchesFilter,
-} from '../../src/btp-nips/utils/filter-matcher'
 describe('Filter Matcher', () => {
   // Test event fixture
   const testEvent: NostrEvent = {

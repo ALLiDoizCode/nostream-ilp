@@ -2,7 +2,7 @@ import { createLogger } from '../../factories/logger-factory.js'
 import { getMasterDbClient, getReadReplicaDbClient } from '../../database/client.js'
 
 import type { Knex } from 'knex'
-import type { NostrFilter: _NostrFilter,} from '../types/index.js'
+import type { NostrFilter } from '../types/index.js'
 
 /**
  * Subscription Preferences Manager

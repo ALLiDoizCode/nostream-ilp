@@ -1,7 +1,5 @@
-import {
-import { PaymentClaim } from '@/@types/payment-claim'
 import { describe, expect, it } from 'vitest'
-
+import {
   extractPaymentClaim,
   isValidAmount,
   isValidChannelId,
@@ -11,6 +9,8 @@ import { describe, expect, it } from 'vitest'
   NostrEvent,
   validateClaimFormat,
 } from '@/services/payment/payment-claim-parser'
+
+import type { PaymentClaim } from '@/@types/payment-claim'
 describe('extractPaymentClaim', () => {
   describe('valid payment claims', () => {
     it('should extract BTC payment claim with Lightning channel ID', () => {

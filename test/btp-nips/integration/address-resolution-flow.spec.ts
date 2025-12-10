@@ -1,11 +1,14 @@
-import {
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { randomBytes } from 'crypto'
-import { schnorr } from '@noble/secp256k1'
 import { AddressResolver } from '../../../src/btp-nips/peer-discovery/address-resolver.js'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { AnnouncementQuery } from '../../../src/btp-nips/peer-discovery/announcement-query.js'
 import { EventCache } from '../../../src/btp-nips/storage/event-cache.js'
 import { EventRepository } from '../../../src/btp-nips/storage/event-repository.js'
+import {
+  type NodeAnnouncementConfig,
+  NodeAnnouncementPublisher,
+} from '../../../src/btp-nips/peer-discovery/announcement-publisher.js'
+import { randomBytes } from 'crypto'
+import { schnorr } from '@noble/secp256k1'
 
 /**
  * Integration Tests: Address Resolution Flow
@@ -20,12 +23,6 @@ import { EventRepository } from '../../../src/btp-nips/storage/event-repository.
  *
  * Reference: docs/stories/6.2.story.md#task-9
  */
-
-
-
-  type NodeAnnouncementConfig,
-  NodeAnnouncementPublisher,
-} from '../../../src/btp-nips/peer-discovery/announcement-publisher.js'
 
 /**
  * Generate test private/public key pair

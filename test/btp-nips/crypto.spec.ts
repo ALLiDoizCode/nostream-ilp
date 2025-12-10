@@ -1,7 +1,14 @@
-import {
 import { describe, expect, it } from 'vitest'
 import { randomBytes } from 'crypto'
 import { schnorr } from '@noble/secp256k1'
+import {
+  calculateEventId,
+  serializeEventForId,
+  sha256,
+  validateEventStructure,
+  verifyEventId,
+  verifyNostrSignature,
+} from '../../src/btp-nips/crypto'
 
 import type { NostrEvent } from '../../src/btp-nips/types'
 
@@ -13,15 +20,6 @@ import type { NostrEvent } from '../../src/btp-nips/types'
  * @see src/btp-nips/crypto.ts
  * @see Story 5.2 - Task 10
  */
-
-/* eslint-disable sort-imports */
-  calculateEventId,
-  serializeEventForId,
-  sha256,
-  validateEventStructure,
-  verifyEventId,
-  verifyNostrSignature,
-} from '../../src/btp-nips/crypto'
 describe('BTP-NIPs Crypto Utilities', () => {
   describe('serializeEventForId', () => {
     it('should serialize event in NIP-01 format', () => {

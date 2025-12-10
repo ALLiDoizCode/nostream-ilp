@@ -2,7 +2,7 @@ import * as crypto from 'crypto'
 
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing'
 import { EnglishMnemonic } from '@cosmjs/crypto'
-import { GasPrice, SigningStargateClient, StdFee, calculateFee } from '@cosmjs/stargate'
+import { calculateFee, GasPrice, SigningStargateClient, StdFee } from '@cosmjs/stargate'
 /**
  * Configuration options for Akash wallet.
  */

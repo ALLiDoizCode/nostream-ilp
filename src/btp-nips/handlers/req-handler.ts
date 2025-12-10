@@ -1,10 +1,21 @@
-import {
-import {
 import { SubscriptionManager } from '../subscription-manager.js'
+import {
+  StreamConnection,
+  Subscription,
+} from '../subscription-manager.js'
+import {
+  calculateSubscriptionCost,
+  getSubscriptionPricingConfig,
+  validateSubscriptionTTL,
+} from '../subscription-pricing.js'
 import { createLogger } from '../../factories/logger-factory'
 import { getEventRepository } from '../storage/event-repository.js'
+import {
+  sendEosePacket,
+  sendEventPacket,
+  sendNoticePacket,
+} from '../utils/packet-sender.js'
 
-import type {
 import type { BTPNIPsPacket, NostrReq } from '../types/index.js'
 
 /**
@@ -22,19 +33,6 @@ import type { BTPNIPsPacket, NostrReq } from '../types/index.js'
  *
  * Reference: docs/architecture/btp-nips-subscription-flow.md#REQ Handler
  */
-
-  StreamConnection,
-  Subscription,
-} from '../subscription-manager.js'
-
-  calculateSubscriptionCost,
-  getSubscriptionPricingConfig,
-  validateSubscriptionTTL,
-} from '../subscription-pricing.js'
-  sendEosePacket,
-  sendEventPacket,
-  sendNoticePacket,
-} from '../utils/packet-sender.js'
 const debug = createLogger('btp-nips:req-handler')
 
 /**

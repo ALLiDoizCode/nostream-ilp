@@ -1,8 +1,15 @@
-import WebSocket from 'ws'
-import { EventEmitter as _EventEmitter } from 'events'
 import { connectionStateToValue, dassieConnectionState } from '../metrics'
+import { EventEmitter as _EventEmitter } from 'events'
+import WebSocket from 'ws'
+import {
+  BalanceResponse,
+  BalanceUpdate,
+  ClaimResult,
+  ConversionResult,
+  PaymentClaimVerification,
+  RoutingStats,
+} from '@/@types/dassie-router.stub'
 
-import type {
 import type { PaymentClaim } from '@/@types/payment-claim'
 
 /**
@@ -18,14 +25,6 @@ import type { PaymentClaim } from '@/@types/payment-claim'
  *
  * @module dassie-client
  */
-
-  BalanceResponse,
-  BalanceUpdate,
-  ClaimResult,
-  ConversionResult,
-  PaymentClaimVerification,
-  RoutingStats,
-} from '@/@types/dassie-router.stub'
 /**
  * Configuration for Dassie RPC client
  */

@@ -1,18 +1,28 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { randomBytes } from 'crypto'
-import { schnorr } from '@noble/secp256k1'
+import {
+  BTPNIPsPacket,
+  NostrClose,
+  NostrEOSE,
+  NostrEvent,
+  NostrFilter,
+  NostrReq,
+} from '../../../src/btp-nips/types'
+import { calculateEventId } from '../../../src/btp-nips/crypto'
 import { EventCache } from '../../../src/btp-nips/storage/event-cache'
 import { EventRepository } from '../../../src/btp-nips/storage/event-repository'
-import { NostrMessageType } from '../../../src/btp-nips/types'
-import { SubscriptionManager } from '../../../src/btp-nips/subscription-manager'
-import { calculateEventId } from '../../../src/btp-nips/crypto'
 import { handleClosePacket } from '../../../src/btp-nips/handlers/close-handler'
 import { handleEventPacket } from '../../../src/btp-nips/handlers/event-handler'
 import { handleReqPacket } from '../../../src/btp-nips/handlers/req-handler'
-import { serializeBTPNIPsPacket, parseBTPNIPsPacket } from '../../../src/btp-nips/parser'
+import { NostrMessageType } from '../../../src/btp-nips/types'
+import { randomBytes } from 'crypto'
+import { schnorr } from '@noble/secp256k1'
+import { parseBTPNIPsPacket, serializeBTPNIPsPacket } from '../../../src/btp-nips/parser'
+import {
+  StreamConnection,
+  Subscription,
+} from '../../../src/btp-nips/subscription-manager'
+import { SubscriptionManager } from '../../../src/btp-nips/subscription-manager'
 
-import type {
-import type {
 import type { ILPPacket } from '../../../src/btp-nips/handlers/event-handler'
 
 /**
@@ -27,20 +37,6 @@ import type { ILPPacket } from '../../../src/btp-nips/handlers/event-handler'
  * @see src/btp-nips/handlers/close-handler.ts
  * @see src/btp-nips/subscription-manager.ts
  */
-
-/* eslint-disable sort-imports */
-
-
-  BTPNIPsPacket,
-  NostrEvent,
-  NostrFilter,
-  NostrReq,
-  NostrClose,
-  NostrEOSE,
-} from '../../../src/btp-nips/types'
-  StreamConnection,
-  Subscription,
-} from '../../../src/btp-nips/subscription-manager'
 
 
 /**

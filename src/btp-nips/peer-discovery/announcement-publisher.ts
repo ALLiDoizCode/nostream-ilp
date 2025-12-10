@@ -1,9 +1,16 @@
-import {
 import { EventRepository } from '../storage/event-repository.js'
-import { getPublicKey, signEvent } from '../crypto.js'
 import { generateIlpAddress } from './ilp-address-generator.js'
+import { getPublicKey, signEvent } from '../crypto.js'
+import {
+  ILP_NODE_D_TAG,
+  ILP_NODE_KIND,
+  ILPNodeTag,
+} from '../types/ilp-node-announcement.js'
+import {
+  ILPNodeAnnouncement,
+  ILPNodeMetadata,
+} from '../types/ilp-node-announcement.js'
 
-import type {
 import type { NostrEvent } from '../types/index.js'
 
 /**
@@ -15,14 +22,6 @@ import type { NostrEvent } from '../types/index.js'
  *
  * Reference: docs/stories/6.1.story.md
  */
-
-  ILPNodeAnnouncement,
-  ILPNodeMetadata,
-} from '../types/ilp-node-announcement.js'
-  ILP_NODE_D_TAG,
-  ILP_NODE_KIND,
-  ILPNodeTag,
-} from '../types/ilp-node-announcement.js'
 
 
 /**
