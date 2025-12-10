@@ -1,9 +1,9 @@
+import { type PeerConnection, PeerConnectionState } from '../../../src/btp-nips/types/peer-connection.js'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { ConnectionStore } from '../../../src/btp-nips/peer-discovery/connection-store.js'
-import { type PeerConnection, PeerConnectionState } from '../../../src/btp-nips/types/peer-connection.js'
 
-import type { Knex } from 'knex'
 import type { CacheClient } from '../../../src/@types/cache.js'
+import type { Knex } from 'knex'
 
 /**
  * Unit Tests for ConnectionStore

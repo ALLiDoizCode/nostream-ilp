@@ -1,8 +1,8 @@
-import { Pool } from 'pg'
-import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { EscrowDepositConfig, EscrowDepositor } from '../../../src/akash/escrow-depositor'
-import { EscrowDepositRepository } from '../../../src/repositories/escrow-deposit.repository'
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { IAkashWallet } from '../../../src/akash/wallet'
+import { EscrowDepositRepository } from '../../../src/repositories/escrow-deposit.repository'
+import { Pool } from 'pg'
 
 /**
  * Integration tests for Escrow Deposit Flow (Story 7.4)

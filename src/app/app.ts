@@ -1,14 +1,14 @@
 import { Cluster, Worker } from 'cluster'
-import { FSWatcher } from 'fs'
-import { Serializable } from 'child_process'
 import { cpus, hostname } from 'os'
 import { path, pathEq } from 'ramda'
-import packageJson from '../../package.json'
 import { IRunnable } from '../@types/base'
 import { Settings } from '../@types/settings'
-import { SettingsStatic } from '../utils/settings'
-import { addOnion } from '../tor/client'
 import { createLogger } from '../factories/logger-factory'
+import { addOnion } from '../tor/client'
+import { SettingsStatic } from '../utils/settings'
+import { Serializable } from 'child_process'
+import { FSWatcher } from 'fs'
+import packageJson from '../../package.json'
 
 const debug = createLogger('app-primary')
 

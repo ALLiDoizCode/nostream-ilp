@@ -1,13 +1,13 @@
-import { EventMessageHandler } from '../../../src/handlers/event-message-handler'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { calculateRequiredPayment, extractPaymentClaim } from '../../../src/services/payment'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { EventMessageHandler } from '../../../src/handlers/event-message-handler'
 
-import type { DassieClient } from '../../../src/services/payment/dassie-client'
-import type { Event } from '../../../src/@types/event'
-import type { IUserRepository } from '../../../src/@types/repositories'
 import type { IWebSocketAdapter } from '../../../src/@types/adapters'
+import type { Event } from '../../../src/@types/event'
 import type { PaymentClaim } from '../../../src/@types/payment-claim'
+import type { IUserRepository } from '../../../src/@types/repositories'
 import type { Settings } from '../../../src/@types/settings'
+import type { DassieClient } from '../../../src/services/payment/dassie-client'
 
 /**
  * Unit tests for EventMessageHandler payment verification

@@ -1,7 +1,7 @@
-import { EventEmitter } from 'events'
 import { CacheClient } from '../../@types/cache'
-import { DassieClient } from '../payment/dassie-client'
 import { EconomicSnapshotRepository } from '../../repositories/economic-snapshot.repository'
+import { DassieClient } from '../payment/dassie-client'
+import { EventEmitter } from 'events'
 
 /**
  * Revenue sources tracked by the economic monitor

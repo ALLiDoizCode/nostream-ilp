@@ -1,10 +1,10 @@
 import { EventCache, getEventCache } from '../storage/event-cache.js'
 import { EventRepository, getEventRepository } from '../storage/event-repository.js'
-import { createLogger } from '../../factories/logger-factory'
 import { getMasterDbClient } from '../../database/client'
+import { createLogger } from '../../factories/logger-factory'
 
-import type { Knex } from 'knex'
 import type { NostrEvent, NostrFilter } from '../types/index.js'
+import type { Knex } from 'knex'
 
 /**
  * BTP-NIPs Deletion Handler (NIP-09)

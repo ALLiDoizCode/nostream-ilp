@@ -1,10 +1,10 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { getMasterDbClient } from '../../src/database/client'
+import { getEscrowDepositor } from '../../src/factories/economic-monitor-factory'
+import { EconomicSnapshotRepository } from '../../src/repositories/economic-snapshot.repository'
+import economicsRouter from '../../src/dashboard/routes/economics'
 import express from 'express'
 import request from 'supertest'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import economicsRouter from '../../src/dashboard/routes/economics'
-import { EconomicSnapshotRepository } from '../../src/repositories/economic-snapshot.repository'
-import { getEscrowDepositor } from '../../src/factories/economic-monitor-factory'
-import { getMasterDbClient } from '../../src/database/client'
 
 /**
  * Unit tests for Economics Dashboard API (Story 7.5)

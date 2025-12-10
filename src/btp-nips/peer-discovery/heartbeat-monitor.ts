@@ -1,4 +1,3 @@
-import { BTPNIPsPacket, NostrMessageType } from '../types/index.js'
 import { ConnectionConfig, PeerConnectionState } from '../types/peer-connection.js'
 import { createLogger } from '../../factories/logger-factory.js'
 

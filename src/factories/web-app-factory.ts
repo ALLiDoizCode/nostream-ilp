@@ -1,7 +1,7 @@
+import { createSettings } from './settings-factory'
+import router from '../routes'
 import express from 'express'
 import helmet from 'helmet'
-import router from '../routes'
-import { createSettings } from './settings-factory'
 
 export const createWebApp = (): express.Application => {
   const app = express()

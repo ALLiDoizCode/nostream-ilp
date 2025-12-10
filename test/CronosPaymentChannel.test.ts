@@ -1,8 +1,8 @@
-import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers'
-import { ethers } from 'hardhat'
-import { expect } from 'chai'
-import { time } from '@nomicfoundation/hardhat-network-helpers'
 import { CronosPaymentChannel, MockAKT } from '../typechain-types'
+import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers'
+import { time } from '@nomicfoundation/hardhat-network-helpers'
+import { expect } from 'chai'
+import { ethers } from 'hardhat'
 
 // Test constants
 const ALICE_INITIAL_BALANCE = ethers.parseUnits('10000', 6) // 10k AKT

@@ -4,8 +4,8 @@ import { AutoSubscriber } from '../../../src/btp-nips/peer-discovery/auto-subscr
 import { PaymentChannelManager } from '../../../src/btp-nips/peer-discovery/payment-channel-manager.js'
 import { SubscriptionManager } from '../../../src/btp-nips/subscription-manager.js'
 
-import type { ILPPeerInfo } from '../../../src/btp-nips/types/ilp-peer-info.js'
 import type { StreamConnection, Subscription } from '../../../src/btp-nips/subscription-manager.js'
+import type { ILPPeerInfo } from '../../../src/btp-nips/types/ilp-peer-info.js'
 
 /**
  * @file test/btp-nips/peer-discovery/auto-subscriber.spec.ts

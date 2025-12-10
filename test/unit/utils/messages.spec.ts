@@ -1,6 +1,6 @@
+import { createEndOfStoredEventsNoticeMessage, createNoticeMessage, createOutgoingEventMessage } from '../../../src/utils/messages'
 import { Event } from '../../../src/@types/event'
 import { MessageType } from '../../../src/@types/messages'
-import { createEndOfStoredEventsNoticeMessage, createNoticeMessage, createOutgoingEventMessage } from '../../../src/utils/messages'
 import { expect } from 'chai'
 
 describe('createNotice', () => {

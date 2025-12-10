@@ -1,5 +1,5 @@
-import { Pool } from 'pg'
 import { beforeAll, describe, expect, it } from 'vitest'
+import { Pool } from 'pg'
 
 /**
  * Integration tests for Economics Dashboard (Story 7.5)
@@ -18,7 +18,7 @@ describe.skip('Economics Dashboard Integration', () => {
 
   beforeAll(async () => {
     // Set up PostgreSQL pool
-    pool = new Pool({
+    _pool = new Pool({
       host: process.env.DB_HOST || 'localhost',
       port: parseInt(process.env.DB_PORT || '5432', 10),
       database: process.env.DB_NAME || 'nostream_test',

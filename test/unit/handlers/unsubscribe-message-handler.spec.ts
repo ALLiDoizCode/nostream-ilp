@@ -1,10 +1,10 @@
-import Sinon from 'sinon'
-import { IMessageHandler } from '../../../src/@types/message-handlers'
-import { IWebSocketAdapter } from '../../../src/@types/adapters'
 import { MessageType, UnsubscribeMessage } from '../../../src/@types/messages'
-import { UnsubscribeMessageHandler } from '../../../src/handlers/unsubscribe-message-handler'
+import { IWebSocketAdapter } from '../../../src/@types/adapters'
+import { IMessageHandler } from '../../../src/@types/message-handlers'
 import { WebSocketAdapterEvent } from '../../../src/constants/adapter'
+import { UnsubscribeMessageHandler } from '../../../src/handlers/unsubscribe-message-handler'
 import { expect } from 'chai'
+import Sinon from 'sinon'
 
 describe('UnsubscribeMessageHandler', () => {
   let handler: IMessageHandler

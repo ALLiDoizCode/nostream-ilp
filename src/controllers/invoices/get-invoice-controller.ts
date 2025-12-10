@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import { path, pathEq } from 'ramda'
-import { readFileSync } from 'fs'
-import { FeeSchedule } from '../../@types/settings'
 import { IController } from '../../@types/controllers'
+import { FeeSchedule } from '../../@types/settings'
 import { createSettings } from '../../factories/settings-factory'
+import { readFileSync } from 'fs'
 
 let pageCache: string
 

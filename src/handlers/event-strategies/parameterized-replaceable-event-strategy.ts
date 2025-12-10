@@ -1,11 +1,11 @@
 import { Event, ParameterizedReplaceableEvent } from '../../@types/event'
 import { EventDeduplicationMetadataKey, EventTags } from '../../constants/base'
-import { IEventRepository } from '../../@types/repositories'
-import { IEventStrategy } from '../../@types/message-handlers'
 import { IWebSocketAdapter } from '../../@types/adapters'
+import { IEventStrategy } from '../../@types/message-handlers'
+import { IEventRepository } from '../../@types/repositories'
 import { WebSocketAdapterEvent } from '../../constants/adapter'
-import { createCommandResult } from '../../utils/messages'
 import { createLogger } from '../../factories/logger-factory'
+import { createCommandResult } from '../../utils/messages'
 
 const debug = createLogger('parameterized-replaceable-event-strategy')
 

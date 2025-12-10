@@ -1,12 +1,12 @@
-import Sinon from 'sinon'
-import WebSocket from 'ws'
 import { IEventRepository, IUserRepository } from '../../../src/@types/repositories'
 import { IWebSocketServerAdapter } from '../../../src/@types/adapters'
-import { IncomingMessage } from 'http'
-import { SettingsStatic } from '../../../src/utils/settings'
 import { WebSocketAdapter } from '../../../src/adapters/web-socket-adapter'
-import { expect } from 'chai'
 import { webSocketAdapterFactory } from '../../../src/factories/websocket-adapter-factory'
+import { SettingsStatic } from '../../../src/utils/settings'
+import { expect } from 'chai'
+import { IncomingMessage } from 'http'
+import Sinon from 'sinon'
+import WebSocket from 'ws'
 
 describe('webSocketAdapterFactory', () => {
   let onStub: Sinon.SinonStub

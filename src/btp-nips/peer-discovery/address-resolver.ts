@@ -1,5 +1,5 @@
-import pino from 'pino'
 import { parseNodeAnnouncement } from '../types/ilp-peer-info.js'
+import pino from 'pino'
 
 import type { ILPPeerInfo } from '../types/ilp-peer-info.js'
 import type { AnnouncementQuery } from './announcement-query.js'

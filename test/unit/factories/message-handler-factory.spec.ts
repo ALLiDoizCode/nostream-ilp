@@ -1,13 +1,13 @@
-import { Event } from '../../../src/@types/event'
-import { EventMessageHandler } from '../../../src/handlers/event-message-handler'
-import { IEventRepository, IUserRepository } from '../../../src/@types/repositories'
-import { IWebSocketAdapter } from '../../../src/@types/adapters'
 import { IncomingMessage, MessageType } from '../../../src/@types/messages'
+import { IEventRepository, IUserRepository } from '../../../src/@types/repositories'
+import { beforeEach, describe, it, vi } from 'vitest'
+import { IWebSocketAdapter } from '../../../src/@types/adapters'
+import { Event } from '../../../src/@types/event'
+import { messageHandlerFactory } from '../../../src/factories/message-handler-factory'
+import { EventMessageHandler } from '../../../src/handlers/event-message-handler'
 import { SubscribeMessageHandler } from '../../../src/handlers/subscribe-message-handler'
 import { UnsubscribeMessageHandler } from '../../../src/handlers/unsubscribe-message-handler'
-import { beforeEach, describe, it, vi } from 'vitest'
 import { expect } from 'chai'
-import { messageHandlerFactory } from '../../../src/factories/message-handler-factory'
 
 // Mock the DassieClient and DegradedModeManager factories
 vi.mock('../../../src/factories/dassie-client-factory', () => ({

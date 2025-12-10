@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { NostrMessageType } from '../../src/btp-nips/types/index'
-import { SubscriptionManager } from '../../src/btp-nips/subscription-manager'
 import { handleClosePacket } from '../../src/btp-nips/handlers/close-handler'
 import { handleReqPacket } from '../../src/btp-nips/handlers/req-handler'
+import { SubscriptionManager } from '../../src/btp-nips/subscription-manager'
+import { NostrMessageType } from '../../src/btp-nips/types/index'
 
-import type { BTPNIPsPacket, NostrClose, NostrReq } from '../../src/btp-nips/types/index'
 import type { ILPPacket } from '../../src/btp-nips/handlers/req-handler'
+import type { BTPNIPsPacket, NostrClose, NostrReq } from '../../src/btp-nips/types/index'
 
 /**
  * REQ and CLOSE Handler Unit Tests

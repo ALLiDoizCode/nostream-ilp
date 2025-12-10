@@ -1,10 +1,10 @@
-import { PeerConnection, PeerConnectionState } from '../types/peer-connection.js'
-import { createLogger } from '../../factories/logger-factory.js'
-import { getCacheClient } from '../../cache/client.js'
 import { getMasterDbClient, getReadReplicaDbClient } from '../../database/client.js'
+import { PeerConnection, PeerConnectionState } from '../types/peer-connection.js'
+import { getCacheClient } from '../../cache/client.js'
+import { createLogger } from '../../factories/logger-factory.js'
 
-import type { Knex } from 'knex'
 import type { CacheClient } from '../../@types/cache.js'
+import type { Knex } from 'knex'
 
 /**
  * Connection Store Module

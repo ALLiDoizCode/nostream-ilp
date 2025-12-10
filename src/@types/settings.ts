@@ -1,7 +1,8 @@
-import { EventKinds } from '../constants/base'
-import { MessageType } from './messages'
 import { Pubkey, Secret } from './base'
+import { MessageType } from './messages'
 import { SubscriptionFilter } from './subscription'
+
+import { EventKinds } from '../constants/base'
 
 export interface Info {
   relay_url: string

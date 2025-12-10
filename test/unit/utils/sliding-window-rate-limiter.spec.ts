@@ -1,8 +1,8 @@
-import Sinon from 'sinon'
 import { ICacheAdapter } from '../../../src/@types/adapters'
 import { IRateLimiter } from '../../../src/@types/utils'
 import { SlidingWindowRateLimiter } from '../../../src/utils/sliding-window-rate-limiter'
 import { expect } from 'chai'
+import Sinon from 'sinon'
 
 describe('SlidingWindowRateLimiter', () => {
   let clock: Sinon.SinonFakeTimers

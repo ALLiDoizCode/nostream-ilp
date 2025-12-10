@@ -1,9 +1,9 @@
+import { assocPath, omit } from 'ramda'
 import { Event } from '../../../src/@types/event'
 import { EventTags } from '../../../src/constants/base'
-import { assocPath, omit } from 'ramda'
 import { eventSchema } from '../../../src/schemas/event-schema'
-import { expect } from 'chai'
 import { validateSchema } from '../../../src/utils/validation'
+import { expect } from 'chai'
 
 describe('NIP-01', () => {
   let event: Event

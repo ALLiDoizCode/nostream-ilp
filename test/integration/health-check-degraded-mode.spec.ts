@@ -1,8 +1,8 @@
+import { ConnectionState, DassieClient } from '../../src/services/payment/dassie-client'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ConnectionMonitor } from '../../src/services/health/connection-monitor'
-import { ConnectionState, DassieClient } from '../../src/services/payment/dassie-client'
-import { DegradedModeManager } from '../../src/services/payment/degraded-mode-manager'
 import { HealthCheckService } from '../../src/services/health/health-check-service'
+import { DegradedModeManager } from '../../src/services/payment/degraded-mode-manager'
 
 import type { PaymentClaim } from '../../src/@types/payment-claim'
 

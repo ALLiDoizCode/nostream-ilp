@@ -1,5 +1,5 @@
-import Schema from 'joi'
 import { pubkeySchema } from './base-schema'
+import Schema from 'joi'
 
 export const generateInvoiceSchema = Schema.object({
   pubkey: pubkeySchema.required(),

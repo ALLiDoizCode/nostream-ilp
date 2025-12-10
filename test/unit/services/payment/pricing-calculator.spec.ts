@@ -1,5 +1,5 @@
-import { Event } from '../../../../src/@types/event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { Event } from '../../../../src/@types/event'
 
 describe('pricing-calculator', () => {
   // Store original environment

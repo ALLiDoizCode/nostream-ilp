@@ -1,15 +1,15 @@
-import Sinon from 'sinon'
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
+import { IWebSocketAdapter } from '../../../../src/@types/adapters'
 import { DatabaseClient } from '../../../../src/@types/base'
 import { Event } from '../../../../src/@types/event'
-import { EventRepository } from '../../../../src/repositories/event-repository'
-import { IEventRepository } from '../../../../src/@types/repositories'
 import { IEventStrategy } from '../../../../src/@types/message-handlers'
-import { IWebSocketAdapter } from '../../../../src/@types/adapters'
 import { MessageType } from '../../../../src/@types/messages'
-import { ReplaceableEventStrategy } from '../../../../src/handlers/event-strategies/replaceable-event-strategy'
+import { IEventRepository } from '../../../../src/@types/repositories'
 import { WebSocketAdapterEvent } from '../../../../src/constants/adapter'
+import { ReplaceableEventStrategy } from '../../../../src/handlers/event-strategies/replaceable-event-strategy'
+import { EventRepository } from '../../../../src/repositories/event-repository'
+import chai from 'chai'
+import chaiAsPromised from 'chai-as-promised'
+import Sinon from 'sinon'
 
 chai.use(chaiAsPromised)
 

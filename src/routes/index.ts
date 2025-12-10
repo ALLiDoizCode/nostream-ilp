@@ -1,15 +1,15 @@
-import express from 'express'
-import dashboardEconomicsRouter from '../dashboard/routes/economics'
-import dashboardEscrowRouter from '../dashboard/routes/escrow'
-import dashboardMetricsRouter from '../dashboard/routes/metrics'
+import { nodeinfo21Handler, nodeinfoHandler } from '../handlers/request-handlers/nodeinfo-handler'
 import { getHealthRequestHandler } from '../handlers/request-handlers/get-health-request-handler'
 import { getMetricsRequestHandler } from '../handlers/request-handlers/get-metrics-request-handler'
 import { getTermsRequestHandler } from '../handlers/request-handlers/get-terms-request-handler'
-import { nodeinfo21Handler, nodeinfoHandler } from '../handlers/request-handlers/nodeinfo-handler'
 import { rateLimiterMiddleware } from '../handlers/request-handlers/rate-limiter-middleware'
 import { rootRequestHandler } from '../handlers/request-handlers/root-request-handler'
+import dashboardEconomicsRouter from '../dashboard/routes/economics'
+import dashboardEscrowRouter from '../dashboard/routes/escrow'
+import dashboardMetricsRouter from '../dashboard/routes/metrics'
 import admissionRouter from './admissions'
 import invoiceRouter from './invoices'
+import express from 'express'
 
 /* eslint-disable sort-imports */
 /* eslint-enable sort-imports */

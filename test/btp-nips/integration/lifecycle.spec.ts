@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { randomBytes } from 'crypto'
-import { schnorr } from '@noble/secp256k1'
-import { DeletionHandler } from '../../../src/btp-nips/utils/deletion-handler'
+import { calculateEventId } from '../../../src/btp-nips/crypto'
 import { EventCache } from '../../../src/btp-nips/storage/event-cache'
 import { EventRepository } from '../../../src/btp-nips/storage/event-repository'
 import { ExpirationCleanupService } from '../../../src/btp-nips/storage/expiration-cleanup'
-import { calculateEventId } from '../../../src/btp-nips/crypto'
+import { DeletionHandler } from '../../../src/btp-nips/utils/deletion-handler'
 import { getMasterDbClient } from '../../../src/database/client'
+import { schnorr } from '@noble/secp256k1'
+import { randomBytes } from 'crypto'
 
 import type { NostrEvent } from '../../../src/btp-nips/types'
 

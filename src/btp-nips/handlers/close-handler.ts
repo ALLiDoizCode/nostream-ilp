@@ -1,9 +1,9 @@
-import { SubscriptionManager } from '../subscription-manager.js'
-import { createLogger } from '../../factories/logger-factory'
 import { sendClosedPacket, sendNoticePacket } from '../utils/packet-sender.js'
+import { createLogger } from '../../factories/logger-factory'
+import { SubscriptionManager } from '../subscription-manager.js'
 
-import type { BTPNIPsPacket, NostrClose } from '../types/index.js'
 import type { StreamConnection } from '../subscription-manager.js'
+import type { BTPNIPsPacket, NostrClose } from '../types/index.js'
 
 /**
  * CLOSE Handler

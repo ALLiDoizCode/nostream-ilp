@@ -1,8 +1,8 @@
 import { SubscriptionFilter } from '../../../src/@types/subscription'
-import { assocPath } from 'ramda'
-import { expect } from 'chai'
 import { filterSchema } from '../../../src/schemas/filter-schema'
 import { validateSchema } from '../../../src/utils/validation'
+import { expect } from 'chai'
+import { assocPath } from 'ramda'
 
 describe('NIP-01', () => {
   let filter: SubscriptionFilter

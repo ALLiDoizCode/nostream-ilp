@@ -1,13 +1,13 @@
 import * as chai from 'chai'
 import * as sinon from 'sinon'
-import knex from 'knex'
-import sinonChai from 'sinon-chai'
+import { Event, ParameterizedReplaceableEvent } from '../../../src/@types/event'
 import { ContextMetadataKey, EventDeduplicationMetadataKey, EventTags } from '../../../src/constants/base'
 import { DatabaseClient } from '../../../src/@types/base'
-import { Event, ParameterizedReplaceableEvent } from '../../../src/@types/event'
-import { EventRepository } from '../../../src/repositories/event-repository'
 import { IEventRepository } from '../../../src/@types/repositories'
 import { SubscriptionFilter } from '../../../src/@types/subscription'
+import { EventRepository } from '../../../src/repositories/event-repository'
+import knex from 'knex'
+import sinonChai from 'sinon-chai'
 
 chai.use(sinonChai)
 

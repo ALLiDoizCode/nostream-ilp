@@ -1,6 +1,6 @@
-import sinon from 'sinon'
 import { Alternative } from '../../../../src/utils/runes/alternative'
 import { expect } from 'chai'
+import sinon from 'sinon'
 
 describe('Alternative', () => {
   describe('constructor', () => {

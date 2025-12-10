@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
-import type { FastifyInstance } from 'fastify'
+import type { AktPurchaseRepository } from '../../repositories/akt-purchase.repository'
 import type { AktBalanceMonitor } from '../../services/economic-monitor/akt-balance-monitor'
 import type { AktPurchaseRecommendation } from '../../services/economic-monitor/akt-purchase-recommendation'
-import type { AktPurchaseRepository } from '../../repositories/akt-purchase.repository'
+import type { FastifyInstance } from 'fastify'
 
 /**
  * AKT Purchase Dashboard API Routes

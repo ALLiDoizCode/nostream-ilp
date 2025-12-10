@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it } from 'vitest'
 import { AkashWallet, AkashWalletConfig } from '../../src/akash/wallet'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 /**
  * Integration tests for Akash wallet with real testnet RPC.

@@ -1,17 +1,17 @@
 import * as secp256k1 from '@noble/secp256k1'
-import cluster from 'cluster'
-import { applySpec, pipe, prop } from 'ramda'
-import { createCipheriv, getRandomValues } from 'crypto'
-import { CanonicalEvent, DBEvent, Event, UnidentifiedEvent, UnsignedEvent } from '../@types/event'
 import { EventId, Pubkey, Tag } from '../@types/base'
+import { CanonicalEvent, DBEvent, Event, UnidentifiedEvent, UnsignedEvent } from '../@types/event'
 import { EventKinds, EventTags } from '../constants/base'
+import { createCipheriv, getRandomValues } from 'crypto'
+import { applySpec, pipe, prop } from 'ramda'
 import { EventKindsRange } from '../@types/settings'
 import { SubscriptionFilter } from '../@types/subscription'
 import { WebSocketServerAdapterEvent } from '../constants/adapter'
+import { isGenericTagQuery } from './filter'
+import { getLeadingZeroBits } from './proof-of-work'
 import { deriveFromSecret } from './secret'
 import { fromBuffer } from './transform'
-import { getLeadingZeroBits } from './proof-of-work'
-import { isGenericTagQuery } from './filter'
+import cluster from 'cluster'
 
 export const serializeEvent = (event: UnidentifiedEvent): CanonicalEvent => [
   0,

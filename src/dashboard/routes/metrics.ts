@@ -1,13 +1,13 @@
-import express, { NextFunction, Request, Response } from 'express'
-import rateLimit from 'express-rate-limit'
-import { createLogger } from '../../factories/logger-factory'
-import { dashboardAuth } from '../middleware/auth'
+import { getMasterDbClient } from '../../database/client'
 import { getDassieClient } from '../../factories/dassie-client-factory'
 import { getHealthCheckService } from '../../factories/health-check-service-factory'
-import { getMasterDbClient } from '../../database/client'
+import { createLogger } from '../../factories/logger-factory'
+import { dashboardAuth } from '../middleware/auth'
+import express, { NextFunction, Request, Response } from 'express'
+import rateLimit from 'express-rate-limit'
 
-import type { CurrencyBalances } from '../../services/payment/dassie-client'
 import type { SystemHealth } from '../../services/health/health-check-service'
+import type { CurrencyBalances } from '../../services/payment/dassie-client'
 
 const router: express.Router = express.Router()
 const logger = createLogger('dashboard:metrics')

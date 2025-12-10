@@ -1,12 +1,12 @@
-import express, { Express } from 'express'
-import request from 'supertest'
 import { afterEach, beforeAll, describe, expect, it } from 'vitest'
-import { randomBytes } from 'crypto'
-import { schnorr } from '@noble/secp256k1'
-import storageRouter from '../../../src/dashboard/routes/storage'
+import { calculateEventId } from '../../../src/btp-nips/crypto'
 import { EventCache } from '../../../src/btp-nips/storage/event-cache'
 import { EventRepository } from '../../../src/btp-nips/storage/event-repository'
-import { calculateEventId } from '../../../src/btp-nips/crypto'
+import { schnorr } from '@noble/secp256k1'
+import { randomBytes } from 'crypto'
+import storageRouter from '../../../src/dashboard/routes/storage'
+import express, { Express } from 'express'
+import request from 'supertest'
 
 import type { NostrEvent } from '../../../src/btp-nips/types'
 

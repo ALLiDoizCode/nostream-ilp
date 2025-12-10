@@ -1,7 +1,7 @@
+import { createLogger } from '../factories/logger-factory'
+import { readFileSync } from 'fs'
 import { join } from 'path'
 import { parse as parseYaml } from 'yaml'
-import { readFileSync } from 'fs'
-import { createLogger } from '../factories/logger-factory'
 
 import type { NostrEvent } from './types/nostr'
 

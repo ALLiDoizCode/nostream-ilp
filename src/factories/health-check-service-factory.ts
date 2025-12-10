@@ -1,8 +1,8 @@
-import { HealthCheckService } from '../services/health/health-check-service'
 import { getCacheClient } from '../cache/client'
 import { getMasterDbClient } from '../database/client'
-import { createLogger as createDebugLogger } from './logger-factory'
+import { HealthCheckService } from '../services/health/health-check-service'
 import { getDassieClient } from './dassie-client-factory'
+import { createLogger as createDebugLogger } from './logger-factory'
 
 /**
  * Health Check Service Factory

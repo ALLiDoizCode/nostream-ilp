@@ -1,11 +1,11 @@
 import { afterEach, beforeAll, describe, expect, it } from 'vitest'
-import { performance } from 'perf_hooks'
-import { randomBytes } from 'crypto'
-import { schnorr } from '@noble/secp256k1'
+import { calculateEventId } from '../../../src/btp-nips/crypto'
 import { EventCache } from '../../../src/btp-nips/storage/event-cache'
 import { EventRepository } from '../../../src/btp-nips/storage/event-repository'
 import { StorageStats } from '../../../src/btp-nips/storage/storage-stats'
-import { calculateEventId } from '../../../src/btp-nips/crypto'
+import { schnorr } from '@noble/secp256k1'
+import { randomBytes } from 'crypto'
+import { performance } from 'perf_hooks'
 
 import type { NostrEvent, NostrFilter } from '../../../src/btp-nips/types'
 

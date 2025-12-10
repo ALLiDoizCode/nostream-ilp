@@ -1,8 +1,8 @@
-import WebSocket from 'ws'
-import { Before, Then, When, World } from '@cucumber/cucumber'
-import { expect } from 'chai'
-import { Event } from '../../../../src/@types/event'
 import { createEvent, createSubscription, sendEvent, waitForNextEvent } from '../helpers'
+import { Before, Then, When, World } from '@cucumber/cucumber'
+import { Event } from '../../../../src/@types/event'
+import { expect } from 'chai'
+import WebSocket from 'ws'
 
 Before(function () {
   this.parameters.channels = []

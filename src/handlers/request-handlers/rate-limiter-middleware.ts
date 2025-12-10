@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import { Settings } from '../../@types/settings'
 import { createLogger } from '../../factories/logger-factory'
+import { slidingWindowRateLimiterFactory } from '../../factories/rate-limiter-factory'
 import { createSettings } from '../../factories/settings-factory'
 import { getRemoteAddress } from '../../utils/http'
-import { slidingWindowRateLimiterFactory } from '../../factories/rate-limiter-factory'
 
 const debug = createLogger('rate-limiter-middleware')
 

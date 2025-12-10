@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it } from 'vitest'
 import { AkashWallet, AkashWalletConfig } from '../../src/akash/wallet'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 describe('AkashWallet - Unit Tests', () => {
   let testConfig: AkashWalletConfig

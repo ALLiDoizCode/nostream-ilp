@@ -1,5 +1,5 @@
-import { expect } from 'chai'
 import { fromBuffer, toBuffer, toJSON } from '../../../src/utils/transform'
+import { expect } from 'chai'
 
 describe('toJSON', () => {
   it('returns given value JSON stringified', () => {

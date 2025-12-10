@@ -1,12 +1,12 @@
-import { IncomingMessage } from 'http'
-import { WebSocket } from 'ws'
-import { FreeTierTracker } from '../services/payment/free-tier-tracker'
 import { IEventRepository, IUserRepository } from '../@types/repositories'
 import { IWebSocketServerAdapter } from '../@types/adapters'
 import { WebSocketAdapter } from '../adapters/web-socket-adapter'
-import { createSettings } from './settings-factory'
+import { FreeTierTracker } from '../services/payment/free-tier-tracker'
 import { messageHandlerFactory } from './message-handler-factory'
 import { slidingWindowRateLimiterFactory } from './rate-limiter-factory'
+import { createSettings } from './settings-factory'
+import { IncomingMessage } from 'http'
+import { WebSocket } from 'ws'
 
 /* eslint-disable sort-imports */
 /* eslint-enable sort-imports */

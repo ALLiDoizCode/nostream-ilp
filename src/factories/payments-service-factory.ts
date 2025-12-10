@@ -1,8 +1,8 @@
+import { getMasterDbClient, getReadReplicaDbClient } from '../database/client'
 import { EventRepository } from '../repositories/event-repository'
 import { InvoiceRepository } from '../repositories/invoice-repository'
-import { PaymentsService } from '../services/payments-service'
 import { UserRepository } from '../repositories/user-repository'
-import { getMasterDbClient, getReadReplicaDbClient } from '../database/client'
+import { PaymentsService } from '../services/payments-service'
 import { createPaymentsProcessor } from './payments-processor-factory'
 import { createSettings } from './settings-factory'
 

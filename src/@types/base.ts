@@ -1,6 +1,6 @@
+import { EventTags } from '../constants/base'
 import { Knex } from 'knex'
 import { SocketAddress } from 'net'
-import { EventTags } from '../constants/base'
 
 export type EventId = string
 export type Pubkey = string

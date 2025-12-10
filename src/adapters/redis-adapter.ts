@@ -1,5 +1,6 @@
-import { CacheClient } from '../@types/cache'
 import { ICacheAdapter } from '../@types/adapters'
+import { CacheClient } from '../@types/cache'
+
 import { createLogger } from '../factories/logger-factory'
 
 const debug = createLogger('redis-adapter')

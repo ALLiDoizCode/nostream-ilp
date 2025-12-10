@@ -1,6 +1,7 @@
 import { PassThrough } from 'stream'
-import { DBEvent, Event } from './event'
+
 import { DatabaseClient, EventId, Pubkey } from './base'
+import { DBEvent, Event } from './event'
 import { Invoice } from './invoice'
 import { SubscriptionFilter } from './subscription'
 import { User } from './user'

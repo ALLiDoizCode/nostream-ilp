@@ -1,10 +1,10 @@
+import { getMasterDbClient } from '../../database/client'
+import { getEscrowDepositor } from '../../factories/economic-monitor-factory'
+import { createLogger } from '../../factories/logger-factory'
+import { EscrowDepositRepository } from '../../repositories/escrow-deposit.repository'
+import { dashboardAuth } from '../middleware/auth'
 import express, { NextFunction, Request, Response } from 'express'
 import rateLimit from 'express-rate-limit'
-import { EscrowDepositRepository } from '../../repositories/escrow-deposit.repository'
-import { createLogger } from '../../factories/logger-factory'
-import { dashboardAuth } from '../middleware/auth'
-import { getEscrowDepositor } from '../../factories/economic-monitor-factory'
-import { getMasterDbClient } from '../../database/client'
 
 /**
  * Dashboard Escrow Management Routes
@@ -27,13 +27,6 @@ import { getMasterDbClient } from '../../database/client'
 
 const router: express.Router = express.Router()
 const logger = createLogger('dashboard:escrow')
-
-/**
- * Request body types
- */
-interface _ManualDepositBody {
-  amountAkt?: number
-}
 
 /**
  * Rate limiter for read endpoints (status, deposits, total)

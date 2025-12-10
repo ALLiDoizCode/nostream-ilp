@@ -1,9 +1,9 @@
-import { always, applySpec, omit, pipe, prop } from 'ramda'
-import { DBUser, User } from '../@types/user'
 import { DatabaseClient, Pubkey } from '../@types/base'
+import { DBUser, User } from '../@types/user'
+import { fromDBUser, toBuffer } from '../utils/transform'
+import { always, applySpec, omit, pipe, prop } from 'ramda'
 import { IUserRepository } from '../@types/repositories'
 import { createLogger } from '../factories/logger-factory'
-import { fromDBUser, toBuffer } from '../utils/transform'
 
 const debug = createLogger('user-repository')
 

@@ -1,8 +1,8 @@
-import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers'
-import { ethers } from 'hardhat'
-import { expect } from 'chai'
-import { time } from '@nomicfoundation/hardhat-network-helpers'
 import { MockAKT, MockCRO, MockUSDC, MultiTokenPaymentChannelFactory } from '../typechain-types'
+import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers'
+import { time } from '@nomicfoundation/hardhat-network-helpers'
+import { expect } from 'chai'
+import { ethers } from 'hardhat'
 
 // Test constants
 const ALICE_INITIAL_BALANCE_6DEC = ethers.parseUnits('10000', 6) // 10k tokens (6 decimals)

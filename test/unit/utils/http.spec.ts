@@ -1,6 +1,6 @@
-import { IncomingMessage } from 'http'
-import { expect } from 'chai'
 import { getRemoteAddress } from '../../../src/utils/http'
+import { expect } from 'chai'
+import { IncomingMessage } from 'http'
 
 describe('getRemoteAddress', () => {
   const header = 'x-forwarded-for'

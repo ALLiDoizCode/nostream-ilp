@@ -1,6 +1,6 @@
-import { EventEmitter } from 'events'
 import { EscrowDepositRepository } from '../repositories/escrow-deposit.repository'
 import { IAkashWallet } from './wallet'
+import { EventEmitter } from 'events'
 
 /**
  * Configuration for automatic escrow deposits

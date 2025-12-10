@@ -1,10 +1,10 @@
-import { createLogger } from '../../factories/logger-factory'
 import { getMasterDbClient, getReadReplicaDbClient } from '../../database/client'
 import { EventCache, getEventCache } from './event-cache.js'
 import { getQueryMonitor, QueryMonitor } from './query-monitor.js'
+import { createLogger } from '../../factories/logger-factory'
 
-import type { Knex } from 'knex'
 import type { NostrEvent, NostrFilter } from '../types/index.js'
+import type { Knex } from 'knex'
 
 /**
  * BTP-NIPs Event Repository

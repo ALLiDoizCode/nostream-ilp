@@ -1,6 +1,6 @@
 import { DegradedModeManager } from '../services/payment/degraded-mode-manager'
-import { createLogger as createDebugLogger } from './logger-factory'
 import { getDassieClient } from './dassie-client-factory'
+import { createLogger as createDebugLogger } from './logger-factory'
 
 /**
  * Degraded Mode Manager Factory

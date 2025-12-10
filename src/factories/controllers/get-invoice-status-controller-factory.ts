@@ -1,6 +1,6 @@
 import { GetInvoiceStatusController } from '../../controllers/invoices/get-invoice-status-controller'
-import { InvoiceRepository } from '../../repositories/invoice-repository'
 import { getReadReplicaDbClient } from '../../database/client'
+import { InvoiceRepository } from '../../repositories/invoice-repository'
 
 export const createGetInvoiceStatusController = () => {
   const rrDbClient = getReadReplicaDbClient()

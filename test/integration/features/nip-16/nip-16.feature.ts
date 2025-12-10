@@ -1,8 +1,8 @@
-import WebSocket from 'ws'
-import { Then, When } from '@cucumber/cucumber'
-import { expect } from 'chai'
-import { Event } from '../../../../src/@types/event'
 import { createEvent, sendEvent, waitForEventCount, waitForNextEvent } from '../helpers'
+import { Then, When } from '@cucumber/cucumber'
+import { Event } from '../../../../src/@types/event'
+import { expect } from 'chai'
+import WebSocket from 'ws'
 
 When(/^(\w+) sends a replaceable_event_0 event with content "([^"]+)"$/, async function(
   name: string,

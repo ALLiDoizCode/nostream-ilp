@@ -1,9 +1,9 @@
-import Sinon from 'sinon'
-import fs from 'fs/promises'
 import { addOnion, closeTorClient, createTorConfig, getTorClient } from '../../../src/tor/client'
-import { expect } from 'chai'
 import { hiddenService, Tor } from 'tor-control-ts'
+import { expect } from 'chai'
 import { hostname } from 'os'
+import fs from 'fs/promises'
+import Sinon from 'sinon'
 
 export function mockModule<T extends { [K: string]: any }>
         (

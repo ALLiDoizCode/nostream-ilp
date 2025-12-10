@@ -1,10 +1,10 @@
+import { getMasterDbClient } from '../../database/client'
+import { getEscrowDepositor } from '../../factories/economic-monitor-factory'
+import { createLogger } from '../../factories/logger-factory'
+import { EconomicSnapshotRepository } from '../../repositories/economic-snapshot.repository'
+import { dashboardAuth } from '../middleware/auth'
 import express, { NextFunction, Request, Response } from 'express'
 import rateLimit from 'express-rate-limit'
-import { EconomicSnapshotRepository } from '../../repositories/economic-snapshot.repository'
-import { createLogger } from '../../factories/logger-factory'
-import { dashboardAuth } from '../middleware/auth'
-import { getEscrowDepositor } from '../../factories/economic-monitor-factory'
-import { getMasterDbClient } from '../../database/client'
 
 /**
  * Dashboard Economics Routes

@@ -1,15 +1,15 @@
-import WebSocket, { OPEN, WebSocketServer } from 'ws'
-import { IncomingMessage, Server } from 'http'
-import { propEq } from 'ramda'
-import { Event } from '../@types/event'
-import { Factory } from '../@types/base'
 import { IWebSocketAdapter, IWebSocketServerAdapter } from '../@types/adapters'
-import { Settings } from '../@types/settings'
 import { WebSocketAdapterEvent, WebSocketServerAdapterEvent } from '../constants/adapter'
+import { IncomingMessage, Server } from 'http'
+import { Factory } from '../@types/base'
+import { Event } from '../@types/event'
+import { Settings } from '../@types/settings'
 import { createLogger } from '../factories/logger-factory'
-import { getRemoteAddress } from '../utils/http'
 import { isRateLimited } from '../handlers/request-handlers/rate-limiter-middleware'
+import { getRemoteAddress } from '../utils/http'
 import { WebServerAdapter } from './web-server-adapter'
+import { propEq } from 'ramda'
+import WebSocket, { OPEN, WebSocketServer } from 'ws'
 
 const debug = createLogger('web-socket-server-adapter')
 

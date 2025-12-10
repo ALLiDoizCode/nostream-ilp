@@ -1,6 +1,6 @@
-import { createHash } from 'crypto'
-import { createLogger } from '../../factories/logger-factory'
 import { getCacheClient } from '../../cache/client'
+import { createLogger } from '../../factories/logger-factory'
+import { createHash } from 'crypto'
 
 import type { CacheClient } from '../../@types/cache'
 import type { NostrEvent, NostrFilter } from '../types/index.js'
