@@ -1,5 +1,8 @@
-import {
 import { BTPNIPsPacket, NostrEvent, NostrMessageType } from '../types'
+import {
+  parseBTPNIPsPacket,
+  serializeBTPNIPsPacket,
+} from '../parser'
 
 /**
  * BTP-NIPs Parser Usage Examples
@@ -7,10 +10,6 @@ import { BTPNIPsPacket, NostrEvent, NostrMessageType } from '../types'
  * This file demonstrates how to use the BTP-NIPs parser for common scenarios.
  * Run with: npx tsx src/btp-nips/examples/parser-usage.ts
  */
-
-  parseBTPNIPsPacket,
-  serializeBTPNIPsPacket,
-} from '../parser'
 
 // ============================================================================
 // Example 1: Parse Incoming ILP Packet Data

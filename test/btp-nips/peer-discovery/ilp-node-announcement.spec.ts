@@ -1,10 +1,29 @@
-import {
-import {
-import {
-import {
-import {
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+
 import { getPublicKey, signEvent } from '../../../src/btp-nips/crypto.js'
+import {
+  generateIlpAddress,
+  isValidIlpAddress,
+  parseIlpAddress,
+  validateNodeId,
+  validatePubkey,
+} from '../../../src/btp-nips/peer-discovery/ilp-address-generator.js'
+import {
+  NodeAnnouncementPublisher,
+} from '../../../src/btp-nips/peer-discovery/announcement-publisher.js'
+import {
+  AnnouncementQuery,
+} from '../../../src/btp-nips/peer-discovery/announcement-query.js'
+import {
+  validateNodeAnnouncement,
+  validateNodeAnnouncementDetailed,
+  ValidationErrorCode,
+} from '../../../src/btp-nips/peer-discovery/announcement-validator.js'
+import {
+  ILP_NODE_D_TAG,
+  ILP_NODE_KIND,
+  ILPNodeTag,
+} from '../../../src/btp-nips/types/ilp-node-announcement.js'
 
 import type { NostrEvent } from '../../../src/btp-nips/types/index.js'
 
@@ -23,26 +42,6 @@ import type { NostrEvent } from '../../../src/btp-nips/types/index.js'
  *
  * Reference: docs/stories/6.1.story.md#task-9
  */
-
-
-  generateIlpAddress,
-  isValidIlpAddress,
-  parseIlpAddress,
-  validateNodeId,
-  validatePubkey,
-} from '../../../src/btp-nips/peer-discovery/ilp-address-generator.js'
-  NodeAnnouncementPublisher,
-} from '../../../src/btp-nips/peer-discovery/announcement-publisher.js'
-  AnnouncementQuery,
-} from '../../../src/btp-nips/peer-discovery/announcement-query.js'
-  validateNodeAnnouncement,
-  validateNodeAnnouncementDetailed,
-  ValidationErrorCode,
-} from '../../../src/btp-nips/peer-discovery/announcement-validator.js'
-  ILP_NODE_D_TAG,
-  ILP_NODE_KIND,
-  ILPNodeTag,
-} from '../../../src/btp-nips/types/ilp-node-announcement.js'
 
 // Test fixtures
 const TEST_PRIVATE_KEY = Buffer.from(

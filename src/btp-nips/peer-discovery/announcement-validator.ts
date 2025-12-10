@@ -1,5 +1,15 @@
-import {
 import { isAddress } from 'viem'
+
+import {
+  extractBaseAddress,
+  extractEndpoint,
+  extractFeatures,
+  extractIlpAddress,
+  extractSupportedTokens,
+  extractVersion,
+  ILP_NODE_D_TAG,
+  ILP_NODE_KIND,
+} from '../types/ilp-node-announcement.js'
 import { verifyNostrSignature } from '../crypto.js'
 import { isValidIlpAddress } from './ilp-address-generator.js'
 
@@ -14,16 +24,6 @@ import type { NostrEvent } from '../types/index.js'
  *
  * Reference: docs/stories/6.1.story.md
  */
-
-  extractBaseAddress,
-  extractEndpoint,
-  extractFeatures,
-  extractIlpAddress,
-  extractSupportedTokens,
-  extractVersion,
-  ILP_NODE_D_TAG,
-  ILP_NODE_KIND,
-} from '../types/ilp-node-announcement.js'
 /**
  * Validation result with detailed errors
  */
