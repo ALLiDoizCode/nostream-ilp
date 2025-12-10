@@ -1,5 +1,4 @@
 import { IncomingMessage } from 'http'
-
 import { Settings } from '../@types/settings'
 
 export const getRemoteAddress = (request: IncomingMessage, settings: Settings): string => {

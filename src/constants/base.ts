@@ -1,3 +1,4 @@
+
 export enum EventKinds {
   SET_METADATA = 0,
   TEXT_NOTE = 1,

@@ -1,3 +1,6 @@
+import { Event } from '../../@types/event'
+import { pricingConfig } from './pricing-config'
+
 /**
  * Pricing Calculator Module
  *
@@ -6,9 +9,6 @@
  *
  * @module services/payment/pricing-calculator
  */
-
-import { Event } from '../../@types/event'
-import { pricingConfig } from './pricing-config'
 
 /**
  * Calculate required payment for a relay operation

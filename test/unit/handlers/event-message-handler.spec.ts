@@ -1,21 +1,19 @@
 import EventEmitter from 'events'
-
 import Sinon, { SinonFakeTimers, SinonStub } from 'sinon'
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import sinonChai from 'sinon-chai'
-
-chai.use(sinonChai)
-chai.use(chaiAsPromised)
-
-import { EventLimits, Settings } from '../../../src/@types/settings'
-import { IncomingEventMessage, MessageType } from '../../../src/@types/messages'
 import { Event } from '../../../src/@types/event'
 import { EventKinds } from '../../../src/constants/base'
+import { EventLimits, Settings } from '../../../src/@types/settings'
 import { EventMessageHandler } from '../../../src/handlers/event-message-handler'
 import { IUserRepository } from '../../../src/@types/repositories'
 import { IWebSocketAdapter } from '../../../src/@types/adapters'
+import { IncomingEventMessage, MessageType } from '../../../src/@types/messages'
 import { WebSocketAdapterEvent } from '../../../src/constants/adapter'
+
+chai.use(sinonChai)
+chai.use(chaiAsPromised)
 
 const { expect } = chai
 

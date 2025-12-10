@@ -17,7 +17,7 @@ export default defineConfig({
     fileParallelism: true,
     maxConcurrency: 5,
     coverage: {
-      provider: 'c8',
+      provider: 'v8',
       reporter: ['text', 'json', 'html'],
       exclude: [
         'node_modules/',

@@ -1,11 +1,9 @@
-import { readFile, writeFile } from 'fs/promises'
+import { Tor } from 'tor-control-ts'
 import { homedir } from 'os'
 import { join } from 'path'
-import { Tor } from 'tor-control-ts'
-
-import { createLogger } from '../factories/logger-factory'
+import { readFile, writeFile } from 'fs/promises'
 import { TorConfig } from '../@types/tor'
-
+import { createLogger } from '../factories/logger-factory'
 
 const debug = createLogger('tor-client')
 

@@ -1,8 +1,7 @@
-import { expect } from 'chai'
 import Sinon from 'sinon'
-
-import { createSettings } from '../../../src/factories/settings-factory'
 import { SettingsStatic } from '../../../src/utils/settings'
+import { createSettings } from '../../../src/factories/settings-factory'
+import { expect } from 'chai'
 
 describe('getSettings', () => {
  let createSettingsStub: Sinon.SinonStub

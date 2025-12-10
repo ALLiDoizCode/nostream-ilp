@@ -1,10 +1,9 @@
-import { expect } from 'chai'
-import { range } from 'ramda'
-
 import { Event } from '../../../src/@types/event'
-import { getEvents } from '../data/events'
 import { IncomingMessage } from '../../../src/@types/messages'
+import { expect } from 'chai'
+import { getEvents } from '../data/events'
 import { messageSchema } from '../../../src/schemas/message-schema'
+import { range } from 'ramda'
 import { validateSchema } from '../../../src/utils/validation'
 
 describe('NIP-01', () => {
@@ -17,7 +16,7 @@ describe('NIP-01', () => {
       })
 
       it('returns same message if valid', () => {
-        events.forEach((event) => {
+        events.forEach((_event) => {
           message = [
             'EVENT',
             event,

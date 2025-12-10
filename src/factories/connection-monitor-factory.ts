@@ -1,3 +1,8 @@
+import { ConnectionMonitor } from '../services/health/connection-monitor'
+import { createLogger as createDebugLogger } from './logger-factory'
+import { getDassieClient } from './dassie-client-factory'
+import { getDegradedModeManager } from './degraded-mode-manager-factory'
+
 /**
  * Connection Monitor Factory
  *
@@ -5,11 +10,6 @@
  *
  * @module connection-monitor-factory
  */
-
-import { ConnectionMonitor } from '../services/health/connection-monitor'
-import { createLogger as createDebugLogger } from './logger-factory'
-import { getDassieClient } from './dassie-client-factory'
-import { getDegradedModeManager } from './degraded-mode-manager-factory'
 
 let connectionMonitorInstance: ConnectionMonitor | null = null
 

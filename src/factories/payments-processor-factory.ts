@@ -1,7 +1,7 @@
-import { createLogger } from './logger-factory'
-import { createSettings } from './settings-factory'
 import { IPaymentsProcessor } from '../@types/clients'
 import { NullPaymentsProcessor } from '../payments-processors/null-payments-processor'
+import { createLogger } from './logger-factory'
+import { createSettings } from './settings-factory'
 
 const debug = createLogger('create-payments-processor')
 

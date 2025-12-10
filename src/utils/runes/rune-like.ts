@@ -1,7 +1,6 @@
 import { IRestriction, IRuneLike } from '../../@types/runes'
 import { Restriction } from './restriction'
 
-
 export class RuneLike implements IRuneLike {
   public constructor(
     private readonly restrictions: IRestriction[]

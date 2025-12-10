@@ -1,6 +1,5 @@
 import { always, applySpec, cond, equals, ifElse, is, isNil, multiply, path, pathSatisfies, pipe, prop, propSatisfies, T } from 'ramda'
 import { bech32 } from 'bech32'
-
 import { Invoice, InvoiceStatus, InvoiceUnit } from '../@types/invoice'
 import { User } from '../@types/user'
 

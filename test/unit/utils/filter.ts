@@ -1,5 +1,4 @@
 import { expect } from 'chai'
-
 import { isGenericTagQuery } from '../../../src/utils/filter'
 
 describe('isGenericTagQuery', () => {

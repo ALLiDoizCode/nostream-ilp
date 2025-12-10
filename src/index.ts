@@ -1,11 +1,11 @@
 import cluster from 'cluster'
 import dotenv from 'dotenv'
-dotenv.config()
-
 import { appFactory } from './factories/app-factory'
 import { maintenanceWorkerFactory } from './factories/maintenance-worker-factory'
 import { staticMirroringWorkerFactory } from './factories/static-mirroring.worker-factory'
 import { workerFactory } from './factories/worker-factory'
+
+dotenv.config()
 
 export const getRunner = () => {
   if (cluster.isPrimary) {

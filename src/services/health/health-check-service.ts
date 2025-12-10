@@ -1,3 +1,8 @@
+import { healthStatusToValue, serviceHealthStatus } from '../metrics'
+
+import type { Knex } from 'knex'
+import type { ConnectionState, DassieClient } from '../payment/dassie-client'
+
 /**
  * Health Check Service for Nostream
  *
@@ -11,11 +16,6 @@
  *
  * @module health-check-service
  */
-
-import type { Knex } from 'knex'
-
-import type { ConnectionState, DassieClient } from '../payment/dassie-client'
-import { healthStatusToValue, serviceHealthStatus } from '../metrics'
 
 /**
  * Health status for individual service

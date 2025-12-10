@@ -102,6 +102,296 @@
           <ul id="warnings-list"></ul>
         </div>
       </section>
+
+      <!-- Akash Escrow Management (Story 7.4) -->
+      <section id="akash-escrow" class="card akash-escrow">
+        <h2>Akash Escrow Management</h2>
+
+        <!-- Escrow Status -->
+        <div class="escrow-status">
+          <h3>Current Status</h3>
+          <div id="escrow-status-content" class="metrics">
+            <div class="metric">
+              <label>Escrow Balance</label>
+              <span id="escrow-balance" class="value">0.0 AKT</span>
+            </div>
+            <div class="metric">
+              <label>Days Remaining</label>
+              <span id="days-remaining" class="value">0</span>
+            </div>
+            <div class="metric">
+              <label>Status</label>
+              <span id="warning-level" class="status-ok">OK</span>
+            </div>
+            <div class="metric">
+              <label>Target Balance</label>
+              <span id="target-balance" class="value">45.0 AKT (30 days)</span>
+            </div>
+          </div>
+          <div id="escrow-alerts" class="alerts">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Manual Deposit Form -->
+        <div class="manual-deposit">
+          <h3>Manual Deposit</h3>
+          <form id="manual-deposit-form">
+            <div class="form-row">
+              <p class="note">Click the button below to manually trigger an escrow deposit. The system will automatically calculate the amount needed to reach your target balance.</p>
+            </div>
+            <button type="submit" class="btn">Deposit to Escrow</button>
+          </form>
+          <div id="deposit-result" class="deposit-result hidden"></div>
+        </div>
+
+        <!-- Recent Deposits Table -->
+        <div class="recent-deposits">
+          <h3>Recent Deposits</h3>
+          <table id="deposits-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Amount (AKT)</th>
+                <th>New Balance (AKT)</th>
+                <th>TX Hash</th>
+              </tr>
+            </thead>
+            <tbody id="deposits-tbody">
+              <tr><td colspan="4">No deposits recorded yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Economics Dashboard (Story 7.5) -->
+      <section id="economics" class="card economics-section">
+        <h2>Economic Health</h2>
+
+        <!-- Status Banner -->
+        <div class="economics-status-banner">
+          <div class="status-indicator">
+            <label>Status</label>
+            <div id="economics-status" class="status-badge status-profitable">
+              ✅ PROFITABLE
+            </div>
+          </div>
+        </div>
+
+        <!-- Key Metrics Grid -->
+        <div class="metrics-grid">
+          <!-- Today -->
+          <div class="metric-card">
+            <h3>Today</h3>
+            <div class="metric">
+              <label>Revenue</label>
+              <span id="today-revenue" class="value">$0.00</span>
+            </div>
+            <div class="metric">
+              <label>Expenses</label>
+              <span id="today-expenses" class="value">$0.00</span>
+            </div>
+            <div class="metric">
+              <label>Profit</label>
+              <span id="today-profit" class="value profit">$0.00</span>
+            </div>
+          </div>
+
+          <!-- This Month -->
+          <div class="metric-card">
+            <h3>This Month (30 days)</h3>
+            <div class="metric">
+              <label>Revenue</label>
+              <span id="month-revenue" class="value">$0.00</span>
+            </div>
+            <div class="metric">
+              <label>Expenses</label>
+              <span id="month-expenses" class="value">$0.00</span>
+            </div>
+            <div class="metric">
+              <label>Profit</label>
+              <span id="month-profit" class="value profit">$0.00</span>
+            </div>
+            <div class="metric">
+              <label>Profitability</label>
+              <span id="month-profitability" class="value">0%</span>
+            </div>
+          </div>
+
+          <!-- All Time -->
+          <div class="metric-card">
+            <h3>All Time</h3>
+            <div class="metric">
+              <label>Total Revenue</label>
+              <span id="alltime-revenue" class="value">$0.00</span>
+            </div>
+            <div class="metric">
+              <label>Total Expenses</label>
+              <span id="alltime-expenses" class="value">$0.00</span>
+            </div>
+            <div class="metric">
+              <label>Net Profit</label>
+              <span id="alltime-profit" class="value profit">$0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Revenue Breakdown -->
+        <div class="breakdown-section">
+          <h3>Revenue Breakdown</h3>
+          <div class="breakdown-grid">
+            <div class="breakdown-item">
+              <label>Subscriptions</label>
+              <span id="revenue-subscriptions" class="value">$0.00</span>
+            </div>
+            <div class="breakdown-item">
+              <label>Routing Fees</label>
+              <span id="revenue-routing" class="value">$0.00</span>
+            </div>
+            <div class="breakdown-item">
+              <label>Content Fees</label>
+              <span id="revenue-content" class="value">$0.00</span>
+            </div>
+          </div>
+          <canvas id="revenue-pie-chart" class="chart-canvas"></canvas>
+        </div>
+
+        <!-- Expense Breakdown -->
+        <div class="breakdown-section">
+          <h3>Expense Breakdown</h3>
+          <div class="breakdown-grid">
+            <div class="breakdown-item">
+              <label>Akash Hosting</label>
+              <span id="expense-akash" class="value">$0.00</span>
+            </div>
+            <div class="breakdown-item">
+              <label>Gas Fees</label>
+              <span id="expense-gas" class="value">$0.00</span>
+            </div>
+            <div class="breakdown-item">
+              <label>Other</label>
+              <span id="expense-other" class="value">$0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Balance Overview -->
+        <div class="balance-overview">
+          <h3>Balance Overview</h3>
+          <div class="balance-grid">
+            <div class="balance-item">
+              <label>ETH Balance</label>
+              <span id="balance-eth" class="value">0.000000 ETH</span>
+            </div>
+            <div class="balance-item">
+              <label>USDC Balance</label>
+              <span id="balance-usdc" class="value">0.000000 USDC</span>
+            </div>
+            <div class="balance-item">
+              <label>AKT Wallet</label>
+              <span id="balance-akt-wallet" class="value">0.000000 AKT</span>
+            </div>
+            <div class="balance-item">
+              <label>AKT Escrow</label>
+              <span id="balance-akt-escrow" class="value">0.000000 AKT</span>
+            </div>
+            <div class="balance-item highlight">
+              <label>Hosting Days Remaining</label>
+              <span id="hosting-days" class="value">0 days</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-section">
+          <h3>30-Day Trend</h3>
+          <canvas id="revenue-expense-chart" class="chart-canvas"></canvas>
+        </div>
+
+        <!-- Export -->
+        <div class="export-section">
+          <h3>Export Data</h3>
+          <div class="export-controls">
+            <button id="export-csv" class="btn">Download CSV</button>
+            <button id="export-json" class="btn btn-secondary">Download JSON</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- AKT Purchase Management Section (Story 7.3) -->
+      <section id="akt-purchase" class="card akt-purchase">
+        <h2>AKT Purchase Management</h2>
+
+        <!-- Purchase Recommendation -->
+        <div class="purchase-recommendation">
+          <h3>Purchase Recommendation</h3>
+          <div id="recommendation-content">
+            <div class="metric">
+              <label>Revenue</label>
+              <span id="revenue-usd" class="value">$0.00</span>
+            </div>
+            <div class="metric">
+              <label>Current AKT Balance</label>
+              <span id="current-akt" class="value">0.0 AKT</span>
+              (<span id="current-akt-usd">$0.00</span>)
+            </div>
+            <div class="metric">
+              <label>Target Balance</label>
+              <span id="target-akt" class="value">45.0 AKT</span>
+              (30 days hosting)
+            </div>
+            <div class="metric metric-highlight">
+              <label>Need to Purchase</label>
+              <span id="needed-akt" class="value">0.0 AKT</span>
+              (<span id="needed-usd">$0.00</span>)
+            </div>
+          </div>
+          <div id="buy-akt-buttons" class="button-group">
+            <a href="https://www.kraken.com/prices/akash-akt-price-chart/usd-us-dollar" target="_blank" rel="noopener noreferrer" class="btn">Buy on Kraken</a>
+            <a href="https://www.coinbase.com/price/akash-network" target="_blank" rel="noopener noreferrer" class="btn">Buy on Coinbase</a>
+          </div>
+          <p class="wallet-address">
+            Send AKT to: <code id="akash-wallet-address">Loading...</code>
+            <button id="copy-address" class="btn-small">Copy</button>
+          </p>
+        </div>
+
+        <!-- Record Purchase Form -->
+        <div class="record-purchase">
+          <h3>Record Manual Purchase</h3>
+          <form id="record-purchase-form">
+            <div class="form-row">
+              <label>USD Amount: <input type="number" name="usdAmount" step="0.01" required placeholder="100.00" /></label>
+              <label>AKT Amount: <input type="number" name="aktAmount" step="0.01" required placeholder="40.0" /></label>
+            </div>
+            <div class="form-row">
+              <label>Exchange: <input type="text" name="exchange" placeholder="Kraken, Coinbase, etc." /></label>
+              <label>TX Hash: <input type="text" name="txHash" placeholder="Akash transaction hash" /></label>
+            </div>
+            <button type="submit" class="btn">Record Purchase</button>
+          </form>
+        </div>
+
+        <!-- Recent Purchases Table -->
+        <div class="recent-purchases">
+          <h3>Recent Purchases</h3>
+          <table id="purchases-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>AKT Amount</th>
+                <th>USD Amount</th>
+                <th>Price (USD/AKT)</th>
+                <th>Exchange</th>
+                <th>TX Hash</th>
+              </tr>
+            </thead>
+            <tbody id="purchases-tbody">
+              <tr><td colspan="6">No purchases recorded yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
 
     <!-- Footer -->
@@ -110,6 +400,7 @@
     </footer>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="/dashboard/app.js"></script>
 </body>
 </html>

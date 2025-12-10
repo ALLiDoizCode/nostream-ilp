@@ -1,8 +1,7 @@
 import Schema from 'joi'
-
+import { MessageType } from '../@types/messages'
 import { eventSchema } from './event-schema'
 import { filterSchema } from './filter-schema'
-import { MessageType } from '../@types/messages'
 import { subscriptionSchema } from './base-schema'
 
 export const eventMessageSchema = Schema.array().ordered(

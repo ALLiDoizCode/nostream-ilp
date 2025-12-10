@@ -1,8 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { Knex } from 'knex'
-
 import type { DassieClient } from '../../../../src/services/payment/dassie-client'
+import type { Knex } from 'knex'
 
 describe('HealthCheckService', () => {
   let mockDassieClient: DassieClient

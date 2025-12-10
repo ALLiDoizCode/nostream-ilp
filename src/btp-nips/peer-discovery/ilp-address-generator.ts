@@ -1,3 +1,4 @@
+
 /**
  * ILP Address Generator
  * Generates hierarchical ILP addresses from node ID and Nostr public key

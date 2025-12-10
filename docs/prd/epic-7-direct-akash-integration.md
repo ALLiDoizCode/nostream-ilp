@@ -15,7 +15,7 @@
 **so that** I can monitor economic health.
 
 **Acceptance Criteria:**
-1. Create economic monitor: `packages/app-dassie/src/economic/monitor.ts`
+1. Create economic monitor in Nostream: `src/services/economic-monitor/monitor.ts` (Note: Implementation is in Nostream repo, not Dassie)
 2. Track revenue sources:
    - Subscription fees (from REQ payments)
    - Routing fees (from ILP packet forwarding)

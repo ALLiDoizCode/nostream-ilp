@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import { path } from 'ramda'
-
-import { createSettings } from '../../factories/settings-factory'
-import { FeeSchedule } from '../../@types/settings'
-import { fromBech32 } from '../../utils/transform'
 import packageJson from '../../../package.json'
+import { FeeSchedule } from '../../@types/settings'
+import { createSettings } from '../../factories/settings-factory'
+import { fromBech32 } from '../../utils/transform'
 import { pricingConfig } from '../../services/payment/pricing-config'
 
 export const rootRequestHandler = (request: Request, response: Response, next: NextFunction) => {

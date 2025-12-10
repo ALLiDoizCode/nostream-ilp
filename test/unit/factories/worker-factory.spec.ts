@@ -1,12 +1,9 @@
-import { expect } from 'chai'
-import Sinon from 'sinon'
-
 import * as databaseClientModule from '../../../src/database/client'
-
+import Sinon from 'sinon'
 import { AppWorker } from '../../../src/app/worker'
 import { SettingsStatic } from '../../../src/utils/settings'
+import { expect } from 'chai'
 import { workerFactory } from '../../../src/factories/worker-factory'
-
 
 describe('workerFactory', () => {
   let createSettingsStub: Sinon.SinonStub

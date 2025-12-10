@@ -1,16 +1,18 @@
-/* eslint-disable sort-imports */
-import { IEventRepository, IUserRepository } from '../@types/repositories'
-import { IncomingMessage, MessageType } from '../@types/messages'
-import { IWebSocketAdapter } from '../@types/adapters'
-import { createSettings } from './settings-factory'
 import { EventMessageHandler } from '../handlers/event-message-handler'
+import { IEventRepository, IUserRepository } from '../@types/repositories'
+import { IWebSocketAdapter } from '../@types/adapters'
+import { IncomingMessage, MessageType } from '../@types/messages'
+import { SubscribeMessageHandler } from '../handlers/subscribe-message-handler'
+import { UnsubscribeMessageHandler } from '../handlers/unsubscribe-message-handler'
+import { createSettings } from './settings-factory'
 import { eventStrategyFactory } from './event-strategy-factory'
 import { getDassieClient } from './dassie-client-factory'
 import { getDegradedModeManager } from './degraded-mode-manager-factory'
 import { slidingWindowRateLimiterFactory } from './rate-limiter-factory'
-import { SubscribeMessageHandler } from '../handlers/subscribe-message-handler'
-import { UnsubscribeMessageHandler } from '../handlers/unsubscribe-message-handler'
+
 import type { FreeTierTracker } from '../services/payment/free-tier-tracker'
+
+/* eslint-disable sort-imports */
 /* eslint-enable sort-imports */
 
 export const messageHandlerFactory = (

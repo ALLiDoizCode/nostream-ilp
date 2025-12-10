@@ -58,21 +58,27 @@
 
 ## Future Epics (Post-MVP)
 
-### Epic 10: Autonomous Agents
+### Epic 10: Interactive Protocol Visualization Landing Page
+**Status:** Planned
+**Goal:** Create interactive landing page with React Flow UI demonstrating protocol flows, fee structures, and N-hop routing profitability.
+**Type:** Brownfield Enhancement (Separate Repository)
+**Timeline:** 2-3 weeks (can be done in parallel with MVP work)
+
+### Epic 11: Autonomous Agents
 **Status:** Research Complete, Implementation Deferred
 **Goal:** Add AI decision layer on top of BTP-NIPs foundation for autonomous network operation.
 **Research:** [docs/research/autonomous-agent-relays/](../research/autonomous-agent-relays/)
 **Timeline:** 8-12 months after Epic 9
 
-### Epic 11: Arweave Permanent Storage
+### Epic 12: Arweave Permanent Storage
 **Status:** Deferred
 **Goal:** Integrate Arweave for large content and event backups.
 
-### Epic 12: Multi-Chain Expansion
+### Epic 13: Multi-Chain Expansion
 **Status:** Deferred
 **Goal:** Add support for additional EVM chains (Arbitrum, Optimism) and non-EVM chains (Cosmos, XRP).
 
-### Epic 13: Privacy Layer
+### Epic 14: Privacy Layer
 **Status:** Future Research
 **Goal:** Onion routing, Tor integration, zk-SNARKs for metadata privacy.
 
@@ -99,6 +105,7 @@ MVP Complete: Week 13 (3 months)
 |------|---------|-------------|
 | 2025-01-24 | 1.0 | Initial epic list (traditional architecture) |
 | 2025-12-05 | 2.0 | Revised for BTP-NIPs P2P network architecture |
+| 2025-12-08 | 2.1 | Added Epic 10 (Interactive Protocol Visualization Landing Page), renumbered future epics |
 
 ---
 

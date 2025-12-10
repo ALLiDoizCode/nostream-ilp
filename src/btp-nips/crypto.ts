@@ -1,3 +1,8 @@
+import { createHash } from 'crypto'
+import { schnorr } from '@noble/secp256k1'
+
+import type { NostrEvent } from './types/nostr'
+
 /**
  * Nostr Cryptographic Utilities
  *
@@ -7,12 +12,6 @@
  * @module btp-nips/crypto
  * @see {@link https://github.com/nostr-protocol/nips/blob/master/01.md NIP-01}
  */
-
-import { createHash } from 'crypto'
-
-import { schnorr, utils } from '@noble/secp256k1'
-
-import type { NostrEvent } from './types/nostr'
 
 /**
  * Serialize a Nostr event for ID calculation according to NIP-01.

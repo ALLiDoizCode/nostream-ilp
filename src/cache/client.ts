@@ -2,7 +2,6 @@ import { createClient, RedisClientOptions } from 'redis'
 import { CacheClient } from '../@types/cache'
 import { createLogger } from '../factories/logger-factory'
 
-
 const debug = createLogger('cache-client')
 
 export const getCacheConfig = (): RedisClientOptions => ({

@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 import type { DassieClient } from '../../../../src/services/payment/dassie-client'
 import type { Event } from '../../../../src/@types/event'
 import type { PaymentClaim } from '../../../../src/@types/payment-claim'
@@ -110,7 +111,7 @@ describe('DegradedModeManager', () => {
 
       const manager = new DegradedModeManager(mockDassieClient, mockLogger, 10000)
 
-      const event = createMockEvent('event-1', 'pubkey-1')
+      const _event = createMockEvent('event-1', 'pubkey-1')
       const claim = createMockPaymentClaim('1')
 
       manager.queuePaymentVerification(event, claim)

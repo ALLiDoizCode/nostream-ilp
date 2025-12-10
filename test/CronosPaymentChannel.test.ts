@@ -1,8 +1,8 @@
-import { CronosPaymentChannel, MockAKT } from '../typechain-types'
+import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers'
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
-import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers'
 import { time } from '@nomicfoundation/hardhat-network-helpers'
+import { CronosPaymentChannel, MockAKT } from '../typechain-types'
 
 // Test constants
 const ALICE_INITIAL_BALANCE = ethers.parseUnits('10000', 6) // 10k AKT
@@ -52,7 +52,7 @@ describe('CronosPaymentChannel', function () {
       const receipt = await tx.wait()
 
       // Verify ChannelOpened event
-      const event = receipt?.logs.find(
+      const _event = receipt?.logs.find(
         (log: any) => log.fragment && log.fragment.name === 'ChannelOpened'
       )
       expect(event).to.not.be.undefined
@@ -463,7 +463,7 @@ describe('CronosPaymentChannel', function () {
       // Should now succeed
       const tx = await paymentChannel.connect(alice).openChannel(recipient, expiration, amount)
       const receipt = await tx.wait()
-      const event = receipt?.logs.find((log: any) => log.fragment && log.fragment.name === 'ChannelOpened')
+      const _event = receipt?.logs.find((log: any) => log.fragment && log.fragment.name === 'ChannelOpened')
       expect(event).to.not.be.undefined
     })
 

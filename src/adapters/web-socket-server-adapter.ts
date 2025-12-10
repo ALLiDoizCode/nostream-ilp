@@ -1,15 +1,14 @@
-import { IncomingMessage, Server } from 'http'
 import WebSocket, { OPEN, WebSocketServer } from 'ws'
+import { IncomingMessage, Server } from 'http'
 import { propEq } from 'ramda'
-
-import { IWebSocketAdapter, IWebSocketServerAdapter } from '../@types/adapters'
-import { WebSocketAdapterEvent, WebSocketServerAdapterEvent } from '../constants/adapter'
-import { createLogger } from '../factories/logger-factory'
 import { Event } from '../@types/event'
 import { Factory } from '../@types/base'
+import { IWebSocketAdapter, IWebSocketServerAdapter } from '../@types/adapters'
+import { Settings } from '../@types/settings'
+import { WebSocketAdapterEvent, WebSocketServerAdapterEvent } from '../constants/adapter'
+import { createLogger } from '../factories/logger-factory'
 import { getRemoteAddress } from '../utils/http'
 import { isRateLimited } from '../handlers/request-handlers/rate-limiter-middleware'
-import { Settings } from '../@types/settings'
 import { WebServerAdapter } from './web-server-adapter'
 
 const debug = createLogger('web-socket-server-adapter')
@@ -40,7 +39,7 @@ export class WebSocketServerAdapter extends WebServerAdapter implements IWebSock
 
     this.webSocketServer
       .on(WebSocketServerAdapterEvent.Connection, this.onConnection.bind(this))
-      .on('error', (error) => {
+      .on('error', (_error) => {
         debug('error: %o', error)
       })
     this.heartbeatInterval = setInterval(this.onHeartbeat.bind(this), WSS_CLIENT_HEALTH_PROBE_INTERVAL)

@@ -1,3 +1,4 @@
+
 /**
  * BTP-NIPs (Bitcoin Transfer Protocol for Nostr Implementation Possibilities)
  * Type definitions for embedding Nostr protocol messages in ILP STREAM packets
@@ -203,3 +204,21 @@ export interface BTPNIPsPacket {
 
 // Export ILP node announcement types
 export * from './ilp-node-announcement.js'
+
+// Export ILP peer info types (Story 6.2)
+export type { ILPPeerInfo } from './ilp-peer-info.js'
+export { parseNodeAnnouncement } from './ilp-peer-info.js'
+
+// Export peer connection types (Story 6.5)
+export type {
+  PeerConnection,
+  ConnectionConfig,
+  PriorityContext,
+  ConnectionStateChangeEvent,
+  ChannelNeededEvent,
+} from './peer-connection.js'
+export {
+  PeerConnectionState,
+  DEFAULT_CONNECTION_CONFIG,
+  VALID_STATE_TRANSITIONS,
+} from './peer-connection.js'

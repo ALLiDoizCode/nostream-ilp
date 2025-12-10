@@ -1,3 +1,9 @@
+import { degradedModeActive, degradedModeQueueSize } from '../metrics'
+
+import type { Event } from '@/@types/event'
+import type { PaymentClaim } from '@/@types/payment-claim'
+import type { DassieClient } from './dassie-client'
+
 /**
  * Degraded Mode Manager
  *
@@ -11,13 +17,6 @@
  *
  * @module degraded-mode-manager
  */
-
-import type { Event } from '@/@types/event'
-import type { PaymentClaim } from '@/@types/payment-claim'
-
-import type { DassieClient } from './dassie-client'
-
-import { degradedModeActive, degradedModeQueueSize } from '../metrics'
 
 /**
  * Queued payment verification

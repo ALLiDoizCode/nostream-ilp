@@ -62,9 +62,21 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.CronosPaymentChannel__factory>;
     getContractFactory(
+      name: "MultiTokenPaymentChannelFactory",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MultiTokenPaymentChannelFactory__factory>;
+    getContractFactory(
       name: "MockAKT",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockAKT__factory>;
+    getContractFactory(
+      name: "MockCRO",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MockCRO__factory>;
+    getContractFactory(
+      name: "MockUSDC",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MockUSDC__factory>;
 
     getContractAt(
       name: "IERC1155Errors",
@@ -127,10 +139,25 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.CronosPaymentChannel>;
     getContractAt(
+      name: "MultiTokenPaymentChannelFactory",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MultiTokenPaymentChannelFactory>;
+    getContractAt(
       name: "MockAKT",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.MockAKT>;
+    getContractAt(
+      name: "MockCRO",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MockCRO>;
+    getContractAt(
+      name: "MockUSDC",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MockUSDC>;
 
     deployContract(
       name: "IERC1155Errors",
@@ -181,9 +208,21 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CronosPaymentChannel>;
     deployContract(
+      name: "MultiTokenPaymentChannelFactory",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.MultiTokenPaymentChannelFactory>;
+    deployContract(
       name: "MockAKT",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.MockAKT>;
+    deployContract(
+      name: "MockCRO",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.MockCRO>;
+    deployContract(
+      name: "MockUSDC",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.MockUSDC>;
 
     deployContract(
       name: "IERC1155Errors",
@@ -246,10 +285,25 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CronosPaymentChannel>;
     deployContract(
+      name: "MultiTokenPaymentChannelFactory",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.MultiTokenPaymentChannelFactory>;
+    deployContract(
       name: "MockAKT",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.MockAKT>;
+    deployContract(
+      name: "MockCRO",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.MockCRO>;
+    deployContract(
+      name: "MockUSDC",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.MockUSDC>;
 
     // default types
     getContractFactory(

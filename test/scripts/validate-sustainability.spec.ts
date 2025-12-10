@@ -1,4 +1,6 @@
 import {
+import { describe, expect, it } from 'vitest'
+
   calculateAkashCost,
   calculateDailyExpenses,
   calculateDailyRevenue,
@@ -11,8 +13,6 @@ import {
   type SimulationInputs,
   validateResult,
 } from '../../scripts/validate-sustainability'
-import { describe, expect, it } from 'vitest'
-
 describe('Revenue Calculations', () => {
   it('should calculate subscription revenue correctly', () => {
     // 50 followers × 5000 msats/hour × 24 hours = 6,000,000 msats/day

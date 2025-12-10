@@ -1,14 +1,12 @@
 import * as secp256k1 from '@noble/secp256k1'
-import { createHash, createHmac, getRandomValues, Hash } from 'crypto'
-import { Observable } from 'rxjs'
 import WebSocket from 'ws'
-
+import { Observable } from 'rxjs'
+import { createHash, createHmac, getRandomValues, Hash } from 'crypto'
 import { CommandResult, MessageType, OutgoingMessage } from '../../../src/@types/messages'
 import { Event } from '../../../src/@types/event'
+import { SubscriptionFilter } from '../../../src/@types/subscription'
 import { serializeEvent } from '../../../src/utils/event'
 import { streams } from './shared'
-import { SubscriptionFilter } from '../../../src/@types/subscription'
-
 
 secp256k1.utils.sha256Sync = (...messages: Uint8Array[]) =>
   messages.reduce((hash: Hash, message: Uint8Array) => hash.update(message),  createHash('sha256')).digest()
@@ -140,7 +138,7 @@ export async function waitForNextEvent(ws: WebSocket, subscription: string, cont
 
     observable.subscribe((message: OutgoingMessage) => {
       if (message[0] === MessageType.EVENT && message[1] === subscription) {
-        const event = message[2] as Event
+        const _event = message[2] as Event
         if (typeof content !== 'string' || event.content === content) {
           resolve(message[2])
         }

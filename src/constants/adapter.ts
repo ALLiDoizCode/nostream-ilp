@@ -1,3 +1,4 @@
+
 export enum WebSocketAdapterEvent {
   Event = 'event',
   Message = 'message',

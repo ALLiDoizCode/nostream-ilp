@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express'
-
 import { createLogger } from '../../factories/logger-factory'
 
 const logger = createLogger('dashboard:auth')

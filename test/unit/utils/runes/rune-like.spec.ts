@@ -1,9 +1,8 @@
-import { expect } from 'chai'
 import sinon from 'sinon'
-
 import { Alternative } from '../../../../src/utils/runes/alternative'
 import { Restriction } from '../../../../src/utils/runes/restriction'
 import { RuneLike } from '../../../../src/utils/runes/rune-like'
+import { expect } from 'chai'
 
 describe('RuneLike', () => {
   describe('test', () => {

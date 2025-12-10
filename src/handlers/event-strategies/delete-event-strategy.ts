@@ -1,5 +1,3 @@
-import { createCommandResult } from '../../utils/messages'
-import { createLogger } from '../../factories/logger-factory'
 import { Event } from '../../@types/event'
 import { EventTags } from '../../constants/base'
 import { IEventRepository } from '../../@types/repositories'
@@ -7,6 +5,8 @@ import { IEventStrategy } from '../../@types/message-handlers'
 import { IWebSocketAdapter } from '../../@types/adapters'
 import { Tag } from '../../@types/base'
 import { WebSocketAdapterEvent } from '../../constants/adapter'
+import { createCommandResult } from '../../utils/messages'
+import { createLogger } from '../../factories/logger-factory'
 
 const debug = createLogger('delete-event-strategy')
 

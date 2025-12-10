@@ -1,3 +1,6 @@
+import { DassieClient, type DassieClientConfig } from '../services/payment/dassie-client'
+import { createLogger as createDebugLogger } from './logger-factory'
+
 /**
  * Dassie Client Factory
  *
@@ -10,9 +13,6 @@
  *
  * @module dassie-client-factory
  */
-
-import { DassieClient, type DassieClientConfig } from '../services/payment/dassie-client'
-import { createLogger as createDebugLogger } from './logger-factory'
 
 let dassieClientInstance: DassieClient | null = null
 

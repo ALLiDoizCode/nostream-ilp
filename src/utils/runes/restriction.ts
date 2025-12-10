@@ -1,7 +1,6 @@
 import { IAlternative, IRestriction } from '../../@types/runes'
 import { Alternative } from './alternative'
 
-
 export class Restriction implements IRestriction {
   public constructor(
     private readonly alternatives: IAlternative[]

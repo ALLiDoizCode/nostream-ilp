@@ -1,26 +1,24 @@
 import cluster from 'cluster'
-import { EventEmitter } from 'stream'
+import { EventEmitter as _EventEmitter } from 'stream'
 import { IncomingMessage as IncomingHttpMessage } from 'http'
+import { SocketAddress } from 'net'
 import { WebSocket } from 'ws'
-
 import { ContextMetadata, Factory } from '../@types/base'
-import { createNoticeMessage, createOutgoingEventMessage } from '../utils/messages'
+import { ContextMetadataKey } from '../constants/base'
+import { Event } from '../@types/event'
 import { IAbortable, IMessageHandler } from '../@types/message-handlers'
-import { IncomingMessage, OutgoingMessage } from '../@types/messages'
+import { IRateLimiter } from '../@types/utils'
 import { IWebSocketAdapter, IWebSocketServerAdapter } from '../@types/adapters'
+import { IncomingMessage, OutgoingMessage } from '../@types/messages'
+import { Settings } from '../@types/settings'
 import { SubscriptionFilter, SubscriptionId } from '../@types/subscription'
 import { WebSocketAdapterEvent, WebSocketServerAdapterEvent } from '../constants/adapter'
 import { attemptValidation } from '../utils/validation'
-import { ContextMetadataKey } from '../constants/base'
 import { createLogger } from '../factories/logger-factory'
-import { Event } from '../@types/event'
+import { createNoticeMessage, createOutgoingEventMessage } from '../utils/messages'
 import { getRemoteAddress } from '../utils/http'
-import { IRateLimiter } from '../@types/utils'
 import { isEventMatchingFilter } from '../utils/event'
 import { messageSchema } from '../schemas/message-schema'
-import { Settings } from '../@types/settings'
-import { SocketAddress } from 'net'
-
 
 const debug = createLogger('web-socket-adapter')
 const debugHeartbeat = debug.extend('heartbeat')
@@ -55,7 +53,7 @@ export class WebSocketAdapter extends EventEmitter implements IWebSocketAdapter 
     })
 
     this.client
-      .on('error', (error) => {
+      .on('error', (_error) => {
         if (error.name === 'RangeError' && error.message === 'Max payload size exceeded') {
           console.error(`web-socket-adapter: client ${this.clientId} (${this.getClientAddress()}) sent payload too large`)
         } else if (error.name === 'RangeError' && error.message === 'Invalid WebSocket frame: RSV1 must be clear') {

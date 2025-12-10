@@ -1,6 +1,6 @@
-import { Pubkey, Secret } from './base'
 import { EventKinds } from '../constants/base'
 import { MessageType } from './messages'
+import { Pubkey, Secret } from './base'
 import { SubscriptionFilter } from './subscription'
 
 export interface Info {

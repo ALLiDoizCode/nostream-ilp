@@ -1,3 +1,10 @@
+import WebSocket from 'ws'
+import {
+import { EventEmitter as _EventEmitter } from 'events'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
+import type { PaymentClaim } from '../../../../src/@types/payment-claim'
+
 /**
  * Unit tests for Dassie RPC Client
  *
@@ -5,7 +12,6 @@
  * Validates error handling, reconnection logic, and subscription management.
  */
 
-import {
   ConnectionState,
   createDassieClient,
   createDassieClientFromEnv,
@@ -14,13 +20,6 @@ import {
   DassieConnectionError,
   DassieTimeoutError,
 } from '../../../../src/services/payment/dassie-client'
-import type { PaymentClaim } from '../../../../src/@types/payment-claim'
-
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-
-import { EventEmitter } from 'events'
-import WebSocket from 'ws'
-
 // Mock WebSocket
 class MockWebSocket extends EventEmitter {
   public readyState = WebSocket.OPEN

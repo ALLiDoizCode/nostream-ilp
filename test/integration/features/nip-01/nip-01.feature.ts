@@ -1,13 +1,15 @@
+import chai from 'chai'
+import sinonChai from 'sinon-chai'
 import {
+import {
+import { WebSocket } from 'ws'
+import { Event } from '../../../../src/@types/event'
+import { isDraft } from '../shared'
+
   Then,
   When,
   World,
 } from '@cucumber/cucumber'
-import chai from 'chai'
-import sinonChai from 'sinon-chai'
-import { WebSocket } from 'ws'
-
-import {
   createEvent,
   createSubscription,
   sendEvent,
@@ -17,15 +19,12 @@ import {
   waitForNextEvent,
   waitForNotice,
 } from '../helpers'
-import { Event } from '../../../../src/@types/event'
-import { isDraft } from '../shared'
-
 chai.use(sinonChai)
 const { expect } = chai
 
 When(/(\w+) subscribes to last event from (\w+)$/, async function(this: World<Record<string, any>>, from: string, to: string) {
   const ws = this.parameters.clients[from] as WebSocket
-  const event = this.parameters.events[to].pop()
+  const _event = this.parameters.events[to].pop()
   const subscription = { name: `test-${Math.random()}`, filters: [{ ids: [event.id] }] }
   this.parameters.subscriptions[from].push(subscription)
 
@@ -158,7 +157,7 @@ When(/(\w+) sends a recommend_server event with content "(.+?)"/, async function
 Then(/(\w+) receives a set_metadata event from (\w+)/, async function(name: string, author: string) {
   const ws = this.parameters.clients[name] as WebSocket
   const subscription = this.parameters.subscriptions[name][this.parameters.subscriptions[name].length - 1]
-  const event = this.parameters.events[author][this.parameters.events[author].length - 1]
+  const _event = this.parameters.events[author][this.parameters.events[author].length - 1]
 
   const receivedEvent = await waitForNextEvent(ws, subscription.name, event.content)
 

@@ -185,63 +185,69 @@
 
 ---
 
-## Story 5.4: Nostr Storage Layer
+## Story 5.4: Redis Caching & Tag Filtering ✅
+
+**Status:** Done (Scope reduced from original "Nostr Storage Layer Enhancements")
 
 **As a** peer,
-**I want** persistent storage for Nostr events,
-**so that** I can query and serve events to subscribers.
+**I want** Redis caching and advanced tag filtering for event queries,
+**so that** I can efficiently serve events with sub-100ms query latency.
 
 **Acceptance Criteria:**
-1. PostgreSQL schema:
-   ```sql
-   CREATE TABLE events (
-     id VARCHAR(64) PRIMARY KEY,
-     pubkey VARCHAR(64) NOT NULL,
-     created_at INTEGER NOT NULL,
-     kind INTEGER NOT NULL,
-     tags JSONB NOT NULL,
-     content TEXT NOT NULL,
-     sig VARCHAR(128) NOT NULL,
-     received_at TIMESTAMPTZ DEFAULT NOW()
-   );
-
-   CREATE INDEX idx_events_pubkey ON events(pubkey);
-   CREATE INDEX idx_events_kind ON events(kind);
-   CREATE INDEX idx_events_created_at ON events(created_at);
-   CREATE INDEX idx_events_tags ON events USING GIN(tags);
-   ```
-2. Storage module: `packages/nostr-storage/src/index.ts`
-3. CRUD operations:
-   - `saveEvent(event)` - Insert with conflict handling
-   - `getEvent(id)` - Query by ID
-   - `queryEvents(filters)` - Query with NostrFilter
-   - `deleteEvent(id)` - Mark as deleted (soft delete)
-4. Filter query builder:
-   - Support `authors`, `kinds`, `ids`, `since`, `until`, `limit`
-   - Support tag filters (`#e`, `#p`, etc.)
-   - Build efficient SQL queries
-5. Redis caching:
-   - Cache recent events (last 24 hours)
-   - Cache popular queries
-   - Invalidate on new events
-6. Performance:
-   - Query with complex filters < 100ms
-   - Store event < 10ms
-   - Support 1,000+ events/sec write throughput
-7. Tests:
-   - Save and retrieve events
-   - Query with various filters
-   - Tag filter queries
-   - Cache hit/miss behavior
-   - Concurrent writes (race conditions)
-
-**Dependencies:**
-- None (standalone module)
+1. Implement Redis caching layer for hot events (24h TTL)
+2. Add tag-based filtering using JSONB GIN index (`#e`, `#p`, `#a`)
+3. Integrate cache-aside pattern for event retrieval and queries
+4. Add database schema enhancements (is_deleted, expires_at columns for future stories)
 
 **Outputs:**
-- Nostr storage layer
-- PostgreSQL schema migration
-- Redis caching layer
+- Enhanced EventCache with query caching and SHA-256 filter hashing
+- EventRepository with cache integration and JSONB tag filtering
+- Database migration with lifecycle columns
+
+---
+
+## Story 5.6: Event Lifecycle Management (NIP-09/40)
+
+**As a** peer,
+**I want** to handle event deletion and expiration per Nostr NIPs,
+**so that** users can delete their events and set expiration timestamps.
+
+**Acceptance Criteria:**
+1. Implement NIP-09 event deletion handler (soft delete)
+2. Implement NIP-40 event expiration (tag extraction, validation)
+3. Create expiration cleanup background task (hourly)
+4. Tests for deletion and expiration workflows
+
+**Dependencies:**
+- Story 5.4 complete (migration with lifecycle columns)
+
+**Outputs:**
+- Deletion handler utility (NIP-09)
+- Expiration tag extraction and cleanup actor (NIP-40)
+- Integration tests for event lifecycle
+
+---
+
+## Story 5.7: Storage Statistics & Dashboard Integration
+
+**As a** relay operator,
+**I want** real-time storage statistics and dashboard monitoring,
+**so that** I can track event storage, query performance, and cache efficiency.
+
+**Acceptance Criteria:**
+1. Create storage statistics module (event counts, storage size, cache metrics)
+2. Implement query performance monitoring (ring buffer, percentiles)
+3. Add dashboard API endpoint (`GET /dashboard/storage`)
+4. Performance optimization and benchmarks
+
+**Dependencies:**
+- Story 5.4 complete (EventCache and EventRepository)
+
+**Outputs:**
+- StorageStats module
+- QueryMonitor middleware
+- Dashboard API endpoint
+- Performance benchmarks
 
 ---
 
@@ -302,51 +308,24 @@
 
 ---
 
-## Story 5.6: BTP-NIPs Integration Tests
+## Story 5.8: BTP-NIPs Integration Tests
 
 **As a** developer,
 **I want** end-to-end tests for the complete BTP-NIPs protocol,
 **so that** I can verify all components work together.
 
 **Acceptance Criteria:**
-1. Test environment:
-   - Spin up 2 Dassie nodes (Alice, Bob)
-   - Initialize PostgreSQL for both
-   - Connect nodes as ILP peers
-2. Test: Publish Event
-   - Alice publishes EVENT via ILP
-   - Bob receives and stores
-   - Verify event in Bob's database
-3. Test: Subscribe and Receive
-   - Bob sends REQ to Alice with payment
-   - Alice sends stored events
-   - Alice sends EOSE
-   - Alice publishes new event
-   - Bob receives new event via subscription
-4. Test: Close Subscription
-   - Bob sends CLOSE
-   - Alice stops sending events
-   - Alice sends CLOSED confirmation
-5. Test: Subscription Expiry
-   - Bob subscribes with 5-second TTL
-   - Wait 6 seconds
-   - Verify Alice auto-closed subscription
-6. Test: Multi-Hop Routing
-   - Set up 3 nodes: Alice → Bob → Carol
-   - Alice subscribes to Carol (routed through Bob)
-   - Carol publishes event
-   - Event propagates: Carol → Bob → Alice
-   - Verify Alice receives event
-7. Test: Payment Failures
-   - Insufficient payment → REQ rejected
-   - Invalid signature → EVENT rejected but payment fulfilled
-8. Performance tests:
-   - 100 events/sec throughput
-   - <100ms p50 latency
-   - 1,000 active subscriptions
+1. Test environment (2 Dassie nodes: Alice, Bob with PostgreSQL)
+2. Test: Publish Event (Alice → Bob via ILP)
+3. Test: Subscribe and Receive (REQ, EOSE, streaming events)
+4. Test: Close Subscription (CLOSE, CLOSED confirmation)
+5. Test: Subscription Expiry (TTL enforcement)
+6. Test: Multi-Hop Routing (Alice → Bob → Carol)
+7. Test: Payment Failures (insufficient payment, invalid signature)
+8. Performance tests (100 events/sec, <100ms latency, 1000 subscriptions)
 
 **Dependencies:**
-- All stories 5.1-5.5 complete
+- All stories 5.1-5.7 complete
 
 **Outputs:**
 - Comprehensive integration test suite
@@ -357,15 +336,28 @@
 
 ## Epic 5 Summary
 
-**Stories:** 5.1, 5.2, 5.3, 5.4, 5.5, 5.6 (6 stories)
-**Timeline:** 4 weeks
+**Stories:** 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8 (8 stories)
+**Timeline:** 5-6 weeks (adjusted for story split)
 **Output:** Complete BTP-NIPs protocol implementation, ready for peer-to-peer network
+
+**Story Sequence:**
+1. **5.1** - BTP-NIPs Packet Parser ✅
+2. **5.2** - EVENT Message Handler ✅
+3. **5.3** - REQ/CLOSE Subscription Handler ✅
+4. **5.4** - Redis Caching & Tag Filtering ✅
+5. **5.5** - Subscription Manager (in progress)
+6. **5.6** - Event Lifecycle Management (NIP-09/40) (new)
+7. **5.7** - Storage Statistics & Dashboard Integration (new)
+8. **5.8** - BTP-NIPs Integration Tests (renumbered from 5.6)
 
 **Key Deliverables:**
 - Nostr events embedded in ILP packets ✅
 - EVENT, REQ, CLOSE message handlers ✅
 - PostgreSQL storage with efficient querying ✅
-- Subscription management with indexing ✅
-- End-to-end integration tests ✅
+- Redis caching and JSONB tag filtering ✅
+- Event lifecycle management (deletion, expiration)
+- Storage statistics and monitoring
+- Subscription management with indexing
+- End-to-end integration tests
 
 ---

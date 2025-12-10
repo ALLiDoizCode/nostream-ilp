@@ -1,10 +1,10 @@
-import { getMasterDbClient, getReadReplicaDbClient } from '../database/client'
-import { createPaymentsProcessor } from './payments-processor-factory'
-import { createSettings } from './settings-factory'
 import { EventRepository } from '../repositories/event-repository'
 import { InvoiceRepository } from '../repositories/invoice-repository'
 import { PaymentsService } from '../services/payments-service'
 import { UserRepository } from '../repositories/user-repository'
+import { getMasterDbClient, getReadReplicaDbClient } from '../database/client'
+import { createPaymentsProcessor } from './payments-processor-factory'
+import { createSettings } from './settings-factory'
 
 export const createPaymentsService = () => {
   const dbClient = getMasterDbClient()

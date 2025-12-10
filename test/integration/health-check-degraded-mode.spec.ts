@@ -1,3 +1,11 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { ConnectionMonitor } from '../../src/services/health/connection-monitor'
+import { ConnectionState, DassieClient } from '../../src/services/payment/dassie-client'
+import { DegradedModeManager } from '../../src/services/payment/degraded-mode-manager'
+import { HealthCheckService } from '../../src/services/health/health-check-service'
+
+import type { PaymentClaim } from '../../src/@types/payment-claim'
+
 /**
  * Integration Test for Story 1.7: Health Check and Degraded Mode
  *
@@ -11,15 +19,6 @@
  * Uses mocked WebSocket to simulate Dassie disconnect/reconnect.
  * Future enhancement: Use Testcontainers for real Dassie instance.
  */
-
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-
-import { ConnectionState, DassieClient } from '../../src/services/payment/dassie-client'
-import { ConnectionMonitor } from '../../src/services/health/connection-monitor'
-import { DegradedModeManager } from '../../src/services/payment/degraded-mode-manager'
-import { HealthCheckService } from '../../src/services/health/health-check-service'
-
-import type { PaymentClaim } from '../../src/@types/payment-claim'
 
 // Note: MockWebSocket not currently used in tests, but available for future enhancements
 

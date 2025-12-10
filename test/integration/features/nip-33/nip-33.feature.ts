@@ -1,10 +1,9 @@
+import WebSocket from 'ws'
 import { Then, When, World } from '@cucumber/cucumber'
 import { expect } from 'chai'
-import WebSocket from 'ws'
-
-import { createEvent, createSubscription, sendEvent, waitForEventCount, waitForNextEvent } from '../helpers'
-import { EventKinds, EventTags } from '../../../../src/constants/base'
 import { Event } from '../../../../src/@types/event'
+import { EventKinds, EventTags } from '../../../../src/constants/base'
+import { createEvent, createSubscription, sendEvent, waitForEventCount, waitForNextEvent } from '../helpers'
 import { isDraft } from '../shared'
 
 When(/^(\w+) sends a parameterized_replaceable_event_0 event with content "([^"]+)" and tag (\w) containing "([^"]+)"$/, async function(

@@ -1,3 +1,10 @@
+import {
+import { EventCache } from '../storage/event-cache.js'
+import { EventRepository } from '../storage/event-repository.js'
+
+import type {
+import type { NostrEvent } from '../types/index.js'
+
 /**
  * ILP Node Announcement Query Module
  * Queries and caches ILP node announcements (Kind 32001)
@@ -8,16 +15,11 @@
  * Reference: docs/stories/6.1.story.md
  */
 
-import { EventCache } from '../storage/event-cache.js'
-import { EventRepository } from '../storage/event-repository.js'
-import type {
   ILPNodeAnnouncement,
 } from '../types/ilp-node-announcement.js'
-import {
   ILP_NODE_D_TAG,
   ILP_NODE_KIND,
 } from '../types/ilp-node-announcement.js'
-import type { NostrEvent } from '../types/index.js'
 
 /**
  * Cache configuration for announcements

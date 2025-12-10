@@ -1,5 +1,4 @@
 import { Knex } from 'knex'
-
 import { DatabaseClient, DatabaseTransaction } from '../@types/base'
 import { ITransaction } from '../@types/database'
 

@@ -1,20 +1,22 @@
-import { is, path, pathSatisfies } from 'ramda'
 import http from 'http'
 import process from 'process'
 import { WebSocketServer } from 'ws'
+import { is, path, pathSatisfies } from 'ramda'
+import { AppWorker } from '../app/worker'
+import { EventRepository } from '../repositories/event-repository'
+import { FreeTierRepository } from '../repositories/free-tier-repository'
+import { FreeTierTracker } from '../services/payment/free-tier-tracker'
+import { UserRepository } from '../repositories/user-repository'
+import { WebSocketServerAdapter } from '../adapters/web-socket-server-adapter'
+import { createSettings } from '../factories/settings-factory'
+import { getCacheClient } from '../cache/client'
+import { getMasterDbClient, getReadReplicaDbClient } from '../database/client'
+import { createWebApp } from './web-app-factory'
+import { getDassieClient, initializeDassieClient } from './dassie-client-factory'
+import { initializeEconomicMonitor } from './economic-monitor-factory'
+import { webSocketAdapterFactory } from './websocket-adapter-factory'
 
 /* eslint-disable sort-imports */
-import { getMasterDbClient, getReadReplicaDbClient } from '../database/client'
-import { AppWorker } from '../app/worker'
-import { createSettings } from '../factories/settings-factory'
-import { createWebApp } from './web-app-factory'
-import { EventRepository } from '../repositories/event-repository'
-import { UserRepository } from '../repositories/user-repository'
-import { FreeTierRepository } from '../repositories/free-tier-repository'
-import { webSocketAdapterFactory } from './websocket-adapter-factory'
-import { WebSocketServerAdapter } from '../adapters/web-socket-server-adapter'
-import { initializeDassieClient } from './dassie-client-factory'
-import { FreeTierTracker } from '../services/payment/free-tier-tracker'
 /* eslint-enable sort-imports */
 
 export const workerFactory = (): AppWorker => {
@@ -26,13 +28,20 @@ export const workerFactory = (): AppWorker => {
   const freeTierTracker = new FreeTierTracker(freeTierRepository)
 
   const settings = createSettings()
+  const cacheClient = getCacheClient()
 
   // Initialize Dassie client connection for payment verification
   // Connection happens asynchronously in background, but client instance is ready immediately
-  initializeDassieClient().catch((error) => {
-    console.error('Failed to initialize Dassie client:', error)
-    // Continue running - payment verification will fail gracefully when client unavailable
-  })
+  initializeDassieClient()
+    .then(() => {
+      // Initialize Economic Monitor after Dassie client is connected
+      const dassieClient = getDassieClient()
+      return initializeEconomicMonitor(dassieClient, dbClient, cacheClient)
+    })
+    .catch((_error) => {
+      console.error('Failed to initialize Dassie client or Economic Monitor:', error)
+      // Continue running - payment verification and economic monitoring will fail gracefully
+    })
 
   const app = createWebApp()
 

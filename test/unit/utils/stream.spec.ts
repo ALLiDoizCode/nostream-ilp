@@ -1,7 +1,6 @@
 import * as chai from 'chai'
 import * as sinon from 'sinon'
 import sinonChai from 'sinon-chai'
-
 import { streamEach, streamEnd, streamFilter, streamMap } from '../../../src/utils/stream'
 
 chai.use(sinonChai)

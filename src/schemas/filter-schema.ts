@@ -1,5 +1,4 @@
 import Schema from 'joi'
-
 import { createdAtSchema, kindSchema, prefixSchema } from './base-schema'
 
 export const filterSchema = Schema.object({

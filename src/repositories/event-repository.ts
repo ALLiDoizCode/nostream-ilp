@@ -1,4 +1,13 @@
 import {
+import { ContextMetadataKey, EventDeduplicationMetadataKey, EventExpirationTimeMetadataKey } from '../constants/base'
+import { DBEvent, Event } from '../@types/event'
+import { DatabaseClient, EventId } from '../@types/base'
+import { IEventRepository, IQueryResult } from '../@types/repositories'
+import { SubscriptionFilter } from '../@types/subscription'
+import { createLogger } from '../factories/logger-factory'
+import { isGenericTagQuery } from '../utils/filter'
+import { toBuffer, toJSON } from '../utils/transform'
+
   __,
   always,
   applySpec,
@@ -27,15 +36,6 @@ import {
   T,
   toPairs,
 } from 'ramda'
-
-import { ContextMetadataKey, EventDeduplicationMetadataKey, EventExpirationTimeMetadataKey } from '../constants/base'
-import { DatabaseClient, EventId } from '../@types/base'
-import { DBEvent, Event } from '../@types/event'
-import { IEventRepository, IQueryResult } from '../@types/repositories'
-import { toBuffer, toJSON } from '../utils/transform'
-import { createLogger } from '../factories/logger-factory'
-import { isGenericTagQuery } from '../utils/filter'
-import { SubscriptionFilter } from '../@types/subscription'
 
 const even = pipe(modulo(__, 2), equals(0))
 

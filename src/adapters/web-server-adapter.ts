@@ -1,8 +1,7 @@
 import { Duplex, EventEmitter } from 'stream'
 import { Server } from 'http'
-
-import { createLogger } from '../factories/logger-factory'
 import { IWebServerAdapter } from '../@types/adapters'
+import { createLogger } from '../factories/logger-factory'
 
 const debug = createLogger('web-server-adapter')
 

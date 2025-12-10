@@ -1,3 +1,7 @@
+import { DegradedModeManager } from '../services/payment/degraded-mode-manager'
+import { createLogger as createDebugLogger } from './logger-factory'
+import { getDassieClient } from './dassie-client-factory'
+
 /**
  * Degraded Mode Manager Factory
  *
@@ -5,11 +9,6 @@
  *
  * @module degraded-mode-manager-factory
  */
-
-import { createLogger as createDebugLogger } from './logger-factory'
-import { getDassieClient } from './dassie-client-factory'
-
-import { DegradedModeManager } from '../services/payment/degraded-mode-manager'
 
 let degradedModeManagerInstance: DegradedModeManager | null = null
 

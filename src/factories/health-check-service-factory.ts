@@ -1,3 +1,9 @@
+import { HealthCheckService } from '../services/health/health-check-service'
+import { getCacheClient } from '../cache/client'
+import { getMasterDbClient } from '../database/client'
+import { createLogger as createDebugLogger } from './logger-factory'
+import { getDassieClient } from './dassie-client-factory'
+
 /**
  * Health Check Service Factory
  *
@@ -5,13 +11,6 @@
  *
  * @module health-check-service-factory
  */
-
-import { createLogger as createDebugLogger } from './logger-factory'
-import { getDassieClient } from './dassie-client-factory'
-
-import { getCacheClient } from '../cache/client'
-import { getMasterDbClient } from '../database/client'
-import { HealthCheckService } from '../services/health/health-check-service'
 
 let healthCheckServiceInstance: HealthCheckService | null = null
 

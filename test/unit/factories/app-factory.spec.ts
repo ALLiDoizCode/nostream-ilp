@@ -1,7 +1,6 @@
-import { expect } from 'chai'
-
 import { App } from '../../../src/app/app'
 import { appFactory } from '../../../src/factories/app-factory'
+import { expect } from 'chai'
 
 describe('appFactory', () => {
   it('returns an App', () => {

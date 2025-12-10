@@ -210,7 +210,7 @@ export function validateClaimFormat(claim: Partial<PaymentClaim>): boolean {
  *
  * @example
  * ```typescript
- * const event = {
+ * const _event = {
  *   id: 'abc123...',
  *   pubkey: 'def456...',
  *   created_at: 1700000000,

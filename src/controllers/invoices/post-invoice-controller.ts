@@ -1,17 +1,16 @@
-import { FeeSchedule, Settings } from '../../@types/settings'
-import { fromBech32, toBech32 } from '../../utils/transform'
-import { getPublicKey, getRelayPrivateKey } from '../../utils/event'
 import { Request, Response } from 'express'
-
-import { createLogger } from '../../factories/logger-factory'
-import { getRemoteAddress } from '../../utils/http'
+import { path } from 'ramda'
+import { readFileSync } from 'fs'
+import { FeeSchedule, Settings } from '../../@types/settings'
 import { IController } from '../../@types/controllers'
-import { Invoice } from '../../@types/invoice'
 import { IPaymentsService } from '../../@types/services'
 import { IRateLimiter } from '../../@types/utils'
 import { IUserRepository } from '../../@types/repositories'
-import { path } from 'ramda'
-import { readFileSync } from 'fs'
+import { Invoice } from '../../@types/invoice'
+import { createLogger } from '../../factories/logger-factory'
+import { fromBech32, toBech32 } from '../../utils/transform'
+import { getPublicKey, getRelayPrivateKey } from '../../utils/event'
+import { getRemoteAddress } from '../../utils/http'
 
 let pageCache: string
 

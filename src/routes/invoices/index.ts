@@ -1,5 +1,4 @@
 import { Router, urlencoded } from 'express'
-
 import { createGetInvoiceController } from '../../factories/controllers/get-invoice-controller-factory'
 import { createGetInvoiceStatusController } from '../../factories/controllers/get-invoice-status-controller-factory'
 import { createPostInvoiceController } from '../../factories/controllers/post-invoice-controller-factory'

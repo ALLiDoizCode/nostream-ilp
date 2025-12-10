@@ -1,3 +1,5 @@
+import type { NostrEvent } from './index.js'
+
 /**
  * ILP Node Announcement (Kind 32001)
  * Type definitions for peer discovery via Nostr events
@@ -8,8 +10,6 @@
  * Reference: docs/stories/6.1.story.md
  * Reference: docs/prd/epic-6-peer-networking.md
  */
-
-import type { NostrEvent } from './index.js'
 
 /**
  * ILP Node Announcement event kind

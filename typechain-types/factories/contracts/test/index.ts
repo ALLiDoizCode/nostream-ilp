@@ -2,3 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export { MockAKT__factory } from "./MockAKT__factory";
+export { MockCRO__factory } from "./MockCRO__factory";
+export { MockUSDC__factory } from "./MockUSDC__factory";

@@ -1,20 +1,19 @@
 import { anyPass, equals, isNil, map, propSatisfies, uniqWith } from 'ramda'
-// import { addAbortSignal } from 'stream'
 import { pipeline } from 'stream/promises'
-
-import { createEndOfStoredEventsNoticeMessage, createNoticeMessage, createOutgoingEventMessage } from '../utils/messages'
-import { IAbortable, IMessageHandler } from '../@types/message-handlers'
-import { isEventMatchingFilter, toNostrEvent } from '../utils/event'
-import { streamEach, streamEnd, streamFilter, streamMap } from '../utils/stream'
-import { SubscriptionFilter, SubscriptionId } from '../@types/subscription'
-import { createLogger } from '../factories/logger-factory'
 import { Event } from '../@types/event'
+import { IAbortable, IMessageHandler } from '../@types/message-handlers'
 import { IEventRepository } from '../@types/repositories'
 import { IWebSocketAdapter } from '../@types/adapters'
 import { Settings } from '../@types/settings'
 import { SubscribeMessage } from '../@types/messages'
+import { SubscriptionFilter, SubscriptionId } from '../@types/subscription'
 import { WebSocketAdapterEvent } from '../constants/adapter'
+import { createEndOfStoredEventsNoticeMessage, createNoticeMessage, createOutgoingEventMessage } from '../utils/messages'
+import { createLogger } from '../factories/logger-factory'
+import { isEventMatchingFilter, toNostrEvent } from '../utils/event'
+import { streamEach, streamEnd, streamFilter, streamMap } from '../utils/stream'
 
+// import { addAbortSignal } from 'stream'
 const debug = createLogger('subscribe-message-handler')
 
 export class SubscribeMessageHandler implements IMessageHandler, IAbortable {

@@ -1,3 +1,4 @@
+
 export interface IAlternative {
   test(values: Record<string, any>): string | undefined
   encode(): string

@@ -1,9 +1,8 @@
+import { FSWatcher } from 'fs'
 import { IRunnable } from '../@types/base'
 import { IWebSocketServerAdapter } from '../@types/adapters'
-
-import { createLogger } from '../factories/logger-factory'
-import { FSWatcher } from 'fs'
 import { SettingsStatic } from '../utils/settings'
+import { createLogger } from '../factories/logger-factory'
 
 const debug = createLogger('app-worker')
 export class AppWorker implements IRunnable {

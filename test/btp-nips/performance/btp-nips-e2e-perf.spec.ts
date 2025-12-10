@@ -1,3 +1,19 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { performance } from 'perf_hooks'
+import { randomBytes } from 'crypto'
+import { schnorr } from '@noble/secp256k1'
+import { EventCache } from '../../../src/btp-nips/storage/event-cache'
+import { EventRepository } from '../../../src/btp-nips/storage/event-repository'
+import { NostrMessageType } from '../../../src/btp-nips/types'
+import { SubscriptionManager } from '../../../src/btp-nips/subscription-manager'
+import { calculateEventId } from '../../../src/btp-nips/crypto'
+import { handleEventPacket } from '../../../src/btp-nips/handlers/event-handler'
+import { serializeBTPNIPsPacket, parseBTPNIPsPacket } from '../../../src/btp-nips/parser'
+
+import type {
+import type { ILPPacket } from '../../../src/btp-nips/handlers/event-handler'
+import type { NostrEvent } from '../../../src/btp-nips/types'
+
 /**
  * BTP-NIPs End-to-End Performance Benchmarks
  *
@@ -11,26 +27,9 @@
  */
 
 /* eslint-disable sort-imports */
-import { randomBytes } from 'crypto'
-import { performance } from 'perf_hooks'
-
-import { schnorr } from '@noble/secp256k1'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-
-import type { NostrEvent } from '../../../src/btp-nips/types'
-import type { ILPPacket } from '../../../src/btp-nips/handlers/event-handler'
-import type {
   Subscription,
   StreamConnection,
 } from '../../../src/btp-nips/subscription-manager'
-
-import { calculateEventId } from '../../../src/btp-nips/crypto'
-import { EventRepository } from '../../../src/btp-nips/storage/event-repository'
-import { EventCache } from '../../../src/btp-nips/storage/event-cache'
-import { SubscriptionManager } from '../../../src/btp-nips/subscription-manager'
-import { handleEventPacket } from '../../../src/btp-nips/handlers/event-handler'
-import { NostrMessageType } from '../../../src/btp-nips/types'
-import { serializeBTPNIPsPacket, parseBTPNIPsPacket } from '../../../src/btp-nips/parser'
 
 /**
  * Mock ILP STREAM Connection (minimal for performance testing)
@@ -88,7 +87,7 @@ function createEventILPPacket(event: NostrEvent): ILPPacket {
   // Use appropriate payment based on kind (kind 1 = 50 msats)
   const amount = event.kind === 1 ? '50' : '100'
 
-  const btpPacket = {
+  const _btpPacket = {
     header: {
       version: 1,
       messageType: NostrMessageType.EVENT,
@@ -174,9 +173,9 @@ describe('BTP-NIPs Performance Benchmarks', () => {
 
         // Publish as fast as possible
         await Promise.all(
-          events.map(async (event) => {
+          events.map(async (_event) => {
             const ilpPacket = createEventILPPacket(event)
-            const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+            const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
             await handleEventPacket(btpPacket, ilpPacket)
           }),
         )
@@ -210,9 +209,9 @@ describe('BTP-NIPs Performance Benchmarks', () => {
 
       // Send events one-by-one, measuring latency
       for (let i = 0; i < eventCount; i++) {
-        const event = await createSignedEvent({ content: `Latency test ${i}` })
+        const _event = await createSignedEvent({ content: `Latency test ${i}` })
         const ilpPacket = createEventILPPacket(event)
-        const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+        const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
 
         const start = performance.now()
         await handleEventPacket(btpPacket, ilpPacket)
@@ -255,7 +254,7 @@ describe('BTP-NIPs Performance Benchmarks', () => {
 
       // Create event first so we can match subscriptions to it
       const testPubkey = pubkeys[0]
-      const event = await createSignedEvent({
+      const _event = await createSignedEvent({
         kind: 1,
         pubkey: testPubkey,
         content: 'Matching test event',
@@ -338,7 +337,7 @@ describe('BTP-NIPs Performance Benchmarks', () => {
         }
 
         // Create matching event
-        const event = await createSignedEvent({
+        const _event = await createSignedEvent({
           kind: 1,
           pubkey,
           content: 'Scale test event',
@@ -415,9 +414,9 @@ describe('BTP-NIPs Performance Benchmarks', () => {
           // 70% writes
           operations.push(
             (async () => {
-              const event = await createSignedEvent({ content: `Mixed workload ${i}` })
+              const _event = await createSignedEvent({ content: `Mixed workload ${i}` })
               const ilpPacket = createEventILPPacket(event)
-              const btpPacket = parseBTPNIPsPacket(ilpPacket.data)
+              const _btpPacket = parseBTPNIPsPacket(ilpPacket.data)
               await handleEventPacket(btpPacket, ilpPacket)
             })(),
           )

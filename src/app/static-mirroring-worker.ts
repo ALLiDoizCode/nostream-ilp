@@ -1,19 +1,18 @@
-import { anyPass, map, mergeDeepRight, path } from 'ramda'
-import { RawData, WebSocket } from 'ws'
 import cluster from 'cluster'
+import { RawData, WebSocket } from 'ws'
+import { anyPass, map, mergeDeepRight, path } from 'ramda'
 import { randomUUID } from 'crypto'
-
-import { createRelayedEventMessage, createSubscriptionMessage } from '../utils/messages'
-import { EventLimits, FeeSchedule, Mirror, Settings } from '../@types/settings'
-import { getEventExpiration, getEventProofOfWork, getPubkeyProofOfWork, getPublicKey, getRelayPrivateKey, isEventIdValid, isEventKindOrRangeMatch, isEventMatchingFilter, isEventSignatureValid, isExpiredEvent } from '../utils/event'
-import { IEventRepository, IUserRepository } from '../@types/repositories'
-import { createLogger } from '../factories/logger-factory'
 import { Event } from '../@types/event'
 import { EventExpirationTimeMetadataKey } from '../constants/base'
+import { EventLimits, FeeSchedule, Mirror, Settings } from '../@types/settings'
+import { IEventRepository, IUserRepository } from '../@types/repositories'
 import { IRunnable } from '../@types/base'
 import { OutgoingEventMessage } from '../@types/messages'
 import { RelayedEvent } from '../@types/event'
 import { WebSocketServerAdapterEvent } from '../constants/adapter'
+import { createLogger } from '../factories/logger-factory'
+import { createRelayedEventMessage, createSubscriptionMessage } from '../utils/messages'
+import { getEventExpiration, getEventProofOfWork, getPubkeyProofOfWork, getPublicKey, getRelayPrivateKey, isEventIdValid, isEventKindOrRangeMatch, isEventMatchingFilter, isEventSignatureValid, isExpiredEvent } from '../utils/event'
 
 const debug = createLogger('static-mirror-worker')
 
@@ -308,7 +307,7 @@ export class StaticMirroringWorker implements IRunnable {
       return
     }
 
-    const event = message.event as RelayedEvent
+    const _event = message.event as RelayedEvent
 
     const eventToRelay = createRelayedEventMessage(event, this.config.secret)
     const outboundMessage = JSON.stringify(eventToRelay)

@@ -1,6 +1,5 @@
-import { expect } from 'chai'
 import { IncomingMessage } from 'http'
-
+import { expect } from 'chai'
 import { getRemoteAddress } from '../../../src/utils/http'
 
 describe('getRemoteAddress', () => {

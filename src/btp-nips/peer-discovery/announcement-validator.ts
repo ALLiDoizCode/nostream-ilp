@@ -1,3 +1,10 @@
+import {
+import { isAddress } from 'viem'
+import { verifyNostrSignature } from '../crypto.js'
+import { isValidIlpAddress } from './ilp-address-generator.js'
+
+import type { NostrEvent } from '../types/index.js'
+
 /**
  * ILP Node Announcement Validator
  * Validates ILP node announcements (Kind 32001)
@@ -8,10 +15,6 @@
  * Reference: docs/stories/6.1.story.md
  */
 
-import { isAddress } from 'viem'
-
-import { verifyNostrSignature } from '../crypto.js'
-import {
   extractBaseAddress,
   extractEndpoint,
   extractFeatures,
@@ -21,10 +24,6 @@ import {
   ILP_NODE_D_TAG,
   ILP_NODE_KIND,
 } from '../types/ilp-node-announcement.js'
-import type { NostrEvent } from '../types/index.js'
-
-import { isValidIlpAddress } from './ilp-address-generator.js'
-
 /**
  * Validation result with detailed errors
  */
@@ -111,7 +110,7 @@ export async function validateNodeAnnouncement(
   // Validate 'd' tag
   const dTag = event.tags.find((tag) => tag[0] === 'd')
   if (!dTag) {
-    errors.push(`Missing required 'd' tag for NIP-33 parameterized replaceable event`)
+    errors.push('Missing required \'d\' tag for NIP-33 parameterized replaceable event')
   } else if (dTag[1] !== ILP_NODE_D_TAG) {
     errors.push(
       `Invalid 'd' tag value: expected "${ILP_NODE_D_TAG}", got "${dTag[1]}"`,
@@ -225,7 +224,7 @@ export async function validateNodeAnnouncementDetailed(
   if (!dTag) {
     errors.push({
       code: ValidationErrorCode.MISSING_D_TAG,
-      message: `Missing required 'd' tag for NIP-33 parameterized replaceable event`,
+      message: 'Missing required \'d\' tag for NIP-33 parameterized replaceable event',
       field: 'd',
     })
   } else if (dTag[1] !== ILP_NODE_D_TAG) {

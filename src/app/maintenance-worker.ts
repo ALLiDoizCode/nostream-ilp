@@ -1,11 +1,10 @@
 import { mergeDeepLeft, path, pipe } from 'ramda'
+import { IPaymentsService } from '../@types/services'
 import { IRunnable } from '../@types/base'
-
+import { InvoiceStatus } from '../@types/invoice'
+import { Settings } from '../@types/settings'
 import { createLogger } from '../factories/logger-factory'
 import { delayMs } from '../utils/misc'
-import { InvoiceStatus } from '../@types/invoice'
-import { IPaymentsService } from '../@types/services'
-import { Settings } from '../@types/settings'
 
 const UPDATE_INVOICE_INTERVAL = 60000
 

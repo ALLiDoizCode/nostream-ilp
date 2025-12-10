@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-
 import { Factory } from '../../@types/base'
 import { IController } from '../../@types/controllers'
 

@@ -1,9 +1,6 @@
+import Sinon from 'sinon'
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
-import Sinon from 'sinon'
-
-chai.use(chaiAsPromised)
-
 import { DatabaseClient } from '../../../../src/@types/base'
 import { DeleteEventStrategy } from '../../../../src/handlers/event-strategies/delete-event-strategy'
 import { Event } from '../../../../src/@types/event'
@@ -14,6 +11,8 @@ import { IEventStrategy } from '../../../../src/@types/message-handlers'
 import { IWebSocketAdapter } from '../../../../src/@types/adapters'
 import { MessageType } from '../../../../src/@types/messages'
 import { WebSocketAdapterEvent } from '../../../../src/constants/adapter'
+
+chai.use(chaiAsPromised)
 
 const { expect } = chai
 

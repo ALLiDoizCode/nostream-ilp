@@ -2,3 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { MockAKT } from "./MockAKT";
+export type { MockCRO } from "./MockCRO";
+export type { MockUSDC } from "./MockUSDC";

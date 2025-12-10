@@ -1,3 +1,10 @@
+import { createHash } from 'crypto'
+import { createLogger } from '../../factories/logger-factory'
+import { getCacheClient } from '../../cache/client'
+
+import type { CacheClient } from '../../@types/cache'
+import type { NostrEvent, NostrFilter } from '../types/index.js'
+
 /**
  * BTP-NIPs Event Cache
  *
@@ -7,14 +14,7 @@
  * @module btp-nips/storage/event-cache
  */
 
-import type { CacheClient } from '../../@types/cache'
 // eslint-disable-next-line sort-imports
-import type { NostrEvent, NostrFilter } from '../types/index.js'
-
-import { createHash } from 'crypto'
-import { createLogger } from '../../factories/logger-factory'
-import { getCacheClient } from '../../cache/client'
-
 const debug = createLogger('btp-nips:event-cache')
 
 /**
@@ -141,7 +141,7 @@ export class EventCache {
    *
    * @example
    * ```typescript
-   * const event = await cache.getCachedEvent('a1b2c3...');
+   * const _event = await cache.getCachedEvent('a1b2c3...');
    * if (!event) {
    *   // Cache miss - fetch from database
    *   event = await repository.getEvent(id);
@@ -167,7 +167,7 @@ export class EventCache {
         return null
       }
 
-      const event = JSON.parse(value) as NostrEvent
+      const _event = JSON.parse(value) as NostrEvent
       this.cacheHits++
       debug('Cache hit for event %s', id)
       return event

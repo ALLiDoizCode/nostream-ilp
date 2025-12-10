@@ -1,6 +1,6 @@
 import Schema from 'joi'
-
 import {
+
   createdAtSchema,
   idSchema,
   kindSchema,

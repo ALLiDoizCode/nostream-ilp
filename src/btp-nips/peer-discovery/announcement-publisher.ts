@@ -1,3 +1,11 @@
+import {
+import { EventRepository } from '../storage/event-repository.js'
+import { getPublicKey, signEvent } from '../crypto.js'
+import { generateIlpAddress } from './ilp-address-generator.js'
+
+import type {
+import type { NostrEvent } from '../types/index.js'
+
 /**
  * ILP Node Announcement Publisher
  * Publishes and updates ILP node announcements (Kind 32001)
@@ -8,20 +16,14 @@
  * Reference: docs/stories/6.1.story.md
  */
 
-import { getPublicKey, signEvent } from '../crypto.js'
-import { EventRepository } from '../storage/event-repository.js'
-import type {
   ILPNodeAnnouncement,
   ILPNodeMetadata,
 } from '../types/ilp-node-announcement.js'
-import {
   ILP_NODE_D_TAG,
   ILP_NODE_KIND,
   ILPNodeTag,
 } from '../types/ilp-node-announcement.js'
-import type { NostrEvent } from '../types/index.js'
 
-import { generateIlpAddress } from './ilp-address-generator.js'
 
 /**
  * Configuration for node announcement publisher

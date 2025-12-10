@@ -424,3 +424,548 @@ body {
     font-size: 1rem;
   }
 }
+
+/* AKT Purchase Management Section (Story 7.3) */
+.akt-purchase {
+  grid-column: 1 / -1;
+}
+
+.purchase-recommendation,
+.record-purchase,
+.recent-purchases {
+  margin-bottom: var(--spacing-xl);
+}
+
+.purchase-recommendation h3,
+.record-purchase h3,
+.recent-purchases h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+#recommendation-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.metric-highlight {
+  padding: var(--spacing-md);
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 1px solid var(--accent-primary);
+  border-radius: var(--radius-md);
+}
+
+.button-group {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--accent-primary);
+  color: var(--text-primary);
+  text-decoration: none;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-small {
+  padding: 0.25rem 0.5rem;
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  cursor: pointer;
+  margin-left: var(--spacing-sm);
+  transition: background-color 0.2s ease;
+}
+
+.btn-small:hover {
+  background-color: var(--bg-card-hover);
+}
+
+.wallet-address {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: var(--spacing-md);
+}
+
+.wallet-address code {
+  font-family: var(--font-mono);
+  background-color: var(--bg-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  color: var(--accent-primary);
+}
+
+/* Record Purchase Form */
+#record-purchase-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+#record-purchase-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+#record-purchase-form input {
+  margin-top: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  transition: border-color 0.2s ease;
+}
+
+#record-purchase-form input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+#record-purchase-form input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Purchases Table */
+#purchases-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+#purchases-table thead {
+  background-color: var(--bg-secondary);
+}
+
+#purchases-table th {
+  padding: var(--spacing-sm);
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--border-color);
+}
+
+#purchases-table td {
+  padding: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+#purchases-table tbody tr:hover {
+  background-color: var(--bg-card-hover);
+}
+
+/* ========================================
+   Akash Escrow Styles (Story 7.4)
+   ======================================== */
+
+.akash-escrow {
+  grid-column: 1 / -1;
+}
+
+.escrow-status h3,
+.manual-deposit h3,
+.recent-deposits h3 {
+  font-size: 1.125rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-secondary);
+}
+
+.escrow-status .metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+#warning-level {
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+#warning-level.status-ok {
+  color: var(--status-healthy);
+  background-color: rgba(16, 185, 129, 0.1);
+}
+
+#warning-level.status-warning {
+  color: var(--status-degraded);
+  background-color: rgba(245, 158, 11, 0.1);
+}
+
+#warning-level.status-critical {
+  color: var(--status-unhealthy);
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.escrow-alerts {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--status-degraded);
+}
+
+.escrow-alerts.hidden {
+  display: none;
+}
+
+.escrow-alerts.warning {
+  border-left-color: var(--status-degraded);
+}
+
+.escrow-alerts.critical {
+  border-left-color: var(--status-unhealthy);
+}
+
+.escrow-alerts p {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.manual-deposit {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+.deposit-result {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+}
+
+.deposit-result.success {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--status-healthy);
+  border: 1px solid var(--status-healthy);
+}
+
+.deposit-result.error {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--status-unhealthy);
+  border: 1px solid var(--status-unhealthy);
+}
+
+.deposit-result.hidden {
+  display: none;
+}
+
+.recent-deposits {
+  margin-top: var(--spacing-lg);
+}
+
+#deposits-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--spacing-md);
+  font-size: 0.875rem;
+}
+
+#deposits-table thead {
+  background-color: var(--bg-secondary);
+}
+
+#deposits-table th {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+#deposits-table td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+#deposits-table tbody tr:hover {
+  background-color: var(--bg-card-hover);
+}
+
+#deposits-table td code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background-color: var(--bg-secondary);
+  padding: 0.125rem 0.25rem;
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  #purchases-table {
+    font-size: 0.75rem;
+  }
+
+  #purchases-table th,
+  #purchases-table td {
+    padding: var(--spacing-xs);
+  }
+}
+
+/* ========================================
+ * Economics Dashboard (Story 7.5)
+ * ======================================== */
+
+.economics-section {
+  grid-column: 1 / -1; /* Full width */
+}
+
+.economics-status-banner {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  border-radius: var(--radius-md);
+}
+
+.status-badge.status-profitable {
+  background-color: var(--status-healthy);
+  color: white;
+}
+
+.status-badge.status-break-even {
+  background-color: var(--status-degraded);
+  color: white;
+}
+
+.status-badge.status-losing-money {
+  background-color: var(--status-unhealthy);
+  color: white;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+}
+
+.metric-card h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.breakdown-section {
+  margin-bottom: 2rem;
+}
+
+.breakdown-section h3 {
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.breakdown-item label {
+  color: var(--text-secondary);
+}
+
+.breakdown-item .value {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.balance-overview {
+  margin-bottom: 2rem;
+}
+
+.balance-overview h3 {
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.balance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.balance-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.balance-item label {
+  color: var(--text-secondary);
+}
+
+.balance-item .value {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.balance-item.highlight {
+  background: var(--accent-primary);
+  color: white;
+  font-weight: bold;
+}
+
+.balance-item.highlight label {
+  color: white;
+}
+
+.balance-item.highlight .value {
+  color: white;
+}
+
+.charts-section {
+  margin-bottom: 2rem;
+}
+
+.charts-section h3 {
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.chart-canvas {
+  max-width: 100%;
+  height: 300px;
+  margin-top: 1rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+
+.profit-positive {
+  color: var(--status-healthy);
+}
+
+.profit-negative {
+  color: var(--status-unhealthy);
+}
+
+.export-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.export-section h3 {
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.export-controls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-secondary {
+  background-color: var(--text-secondary);
+  color: var(--bg-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .breakdown-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .balance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .export-controls {
+    flex-direction: column;
+  }
+
+  .chart-canvas {
+    height: 250px;
+  }
+}

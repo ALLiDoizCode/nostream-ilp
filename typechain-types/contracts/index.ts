@@ -5,3 +5,4 @@ import type * as test from "./test";
 export type { test };
 export type { BasePaymentChannel } from "./BasePaymentChannel";
 export type { CronosPaymentChannel } from "./CronosPaymentChannel";
+export type { MultiTokenPaymentChannelFactory } from "./MultiTokenPaymentChannelFactory";

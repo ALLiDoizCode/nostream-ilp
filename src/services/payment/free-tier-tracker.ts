@@ -1,3 +1,8 @@
+import { IFreeTierRepository } from '../../repositories/free-tier-repository'
+import { Pubkey } from '../../@types/base'
+import { createLogger } from '../../factories/logger-factory'
+import { pricingConfig } from './pricing-config'
+
 /**
  * Free Tier Tracker Service
  *
@@ -8,10 +13,6 @@
  */
 
 /* eslint-disable sort-imports */
-import { Pubkey } from '../../@types/base'
-import { createLogger } from '../../factories/logger-factory'
-import { IFreeTierRepository } from '../../repositories/free-tier-repository'
-import { pricingConfig } from './pricing-config'
 /* eslint-enable sort-imports */
 
 const debug = createLogger('free-tier-tracker')

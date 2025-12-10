@@ -4,3 +4,4 @@
 export * as test from "./test";
 export { BasePaymentChannel__factory } from "./BasePaymentChannel__factory";
 export { CronosPaymentChannel__factory } from "./CronosPaymentChannel__factory";
+export { MultiTokenPaymentChannelFactory__factory } from "./MultiTokenPaymentChannelFactory__factory";

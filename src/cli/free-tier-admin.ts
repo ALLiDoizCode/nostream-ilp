@@ -1,3 +1,7 @@
+import knex, { Knex } from 'knex'
+import { FreeTierRepository } from '../repositories/free-tier-repository'
+import { FreeTierTracker } from '../services/payment/free-tier-tracker'
+
 #!/usr/bin/env tsx
 
 /**
@@ -14,10 +18,6 @@
  *
  * @module cli/free-tier-admin
  */
-
-import knex, { Knex } from 'knex'
-import { FreeTierRepository } from '../repositories/free-tier-repository'
-import { FreeTierTracker } from '../services/payment/free-tier-tracker'
 
 // Load database configuration from environment
 const dbConfig = {
@@ -244,7 +244,7 @@ async function main(): Promise<void> {
 }
 
 // Run CLI
-main().catch((error) => {
+main().catch((_error) => {
   console.error('Fatal error:', error)
   process.exit(1)
 })

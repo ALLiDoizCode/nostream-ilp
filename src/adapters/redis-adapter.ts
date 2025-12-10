@@ -1,6 +1,6 @@
 import { CacheClient } from '../@types/cache'
-import { createLogger } from '../factories/logger-factory'
 import { ICacheAdapter } from '../@types/adapters'
+import { createLogger } from '../factories/logger-factory'
 
 const debug = createLogger('redis-adapter')
 
@@ -10,12 +10,12 @@ export class RedisAdapter implements ICacheAdapter {
   public constructor(private readonly client: CacheClient) {
     this.connection = client.connect()
 
-    this.connection.catch((error) => this.onClientError(error))
+    this.connection.catch((_error) => this.onClientError(error))
 
     this.client
       .on('connect', () => debug('connecting'))
       .on('ready', () => debug('connected'))
-      .on('error', (error) => this.onClientError(error))
+      .on('error', (_error) => this.onClientError(error))
       .on('reconnecting', () => {
         debug('reconnecting')
         this.connection = new Promise((resolve, reject) => {

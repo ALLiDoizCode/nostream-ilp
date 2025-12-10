@@ -1,21 +1,23 @@
-/* eslint-disable sort-imports */
 import { ContextMetadataKey, EventExpirationTimeMetadataKey } from '../constants/base'
 import { Event, ExpiringEvent  } from '../@types/event'
 import { EventRateLimit, FeeSchedule, Settings } from '../@types/settings'
-import { getEventExpiration, getEventProofOfWork, getPubkeyProofOfWork, getPublicKey, getRelayPrivateKey, isEventIdValid, isEventKindOrRangeMatch, isEventSignatureValid, isExpiredEvent } from '../utils/event'
-import { IEventStrategy, IMessageHandler } from '../@types/message-handlers'
 import { Factory } from '../@types/base'
-import { IncomingEventMessage } from '../@types/messages'
+import { IEventStrategy, IMessageHandler } from '../@types/message-handlers'
 import { IRateLimiter } from '../@types/utils'
 import { IUserRepository } from '../@types/repositories'
 import { IWebSocketAdapter } from '../@types/adapters'
+import { IncomingEventMessage } from '../@types/messages'
 import { WebSocketAdapterEvent } from '../constants/adapter'
-import { createLogger } from '../factories/logger-factory'
+import { calculateRequiredPayment as calcPrice, extractPaymentClaim } from '../services/payment'
 import { createCommandResult, createNoticeMessage } from '../utils/messages'
-import { extractPaymentClaim, calculateRequiredPayment as calcPrice } from '../services/payment'
+import { createLogger } from '../factories/logger-factory'
+import { getEventExpiration, getEventProofOfWork, getPubkeyProofOfWork, getPublicKey, getRelayPrivateKey, isEventIdValid, isEventKindOrRangeMatch, isEventSignatureValid, isExpiredEvent } from '../utils/event'
+
 import type { DassieClient } from '../services/payment/dassie-client'
-import type { FreeTierTracker } from '../services/payment/free-tier-tracker'
 import type { DegradedModeManager } from '../services/payment/degraded-mode-manager'
+import type { FreeTierTracker } from '../services/payment/free-tier-tracker'
+
+/* eslint-disable sort-imports */
 /* eslint-enable sort-imports */
 
 const debug = createLogger('event-message-handler')

@@ -1,3 +1,13 @@
+import {
+import {
+import {
+import {
+import {
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { getPublicKey, signEvent } from '../../../src/btp-nips/crypto.js'
+
+import type { NostrEvent } from '../../../src/btp-nips/types/index.js'
+
 /**
  * Unit Tests: ILP Node Announcement (Kind 32001)
  *
@@ -14,33 +24,25 @@
  * Reference: docs/stories/6.1.story.md#task-9
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest'
 
-import {
   generateIlpAddress,
-  parseIlpAddress,
   isValidIlpAddress,
+  parseIlpAddress,
   validateNodeId,
   validatePubkey,
 } from '../../../src/btp-nips/peer-discovery/ilp-address-generator.js'
-import {
   NodeAnnouncementPublisher,
 } from '../../../src/btp-nips/peer-discovery/announcement-publisher.js'
-import {
   AnnouncementQuery,
 } from '../../../src/btp-nips/peer-discovery/announcement-query.js'
-import {
   validateNodeAnnouncement,
   validateNodeAnnouncementDetailed,
   ValidationErrorCode,
 } from '../../../src/btp-nips/peer-discovery/announcement-validator.js'
-import { getPublicKey, signEvent } from '../../../src/btp-nips/crypto.js'
-import {
-  ILP_NODE_KIND,
   ILP_NODE_D_TAG,
+  ILP_NODE_KIND,
   ILPNodeTag,
 } from '../../../src/btp-nips/types/ilp-node-announcement.js'
-import type { NostrEvent } from '../../../src/btp-nips/types/index.js'
 
 // Test fixtures
 const TEST_PRIVATE_KEY = Buffer.from(

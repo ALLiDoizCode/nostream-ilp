@@ -1,3 +1,5 @@
+import { Gauge, Registry } from 'prom-client'
+
 /**
  * Prometheus Metrics for Nostream
  *
@@ -10,8 +12,6 @@
  *
  * @module metrics
  */
-
-import { Gauge, Registry } from 'prom-client'
 
 /**
  * Prometheus registry for all Nostream metrics

@@ -1,3 +1,6 @@
+import type { ConnectionState, DassieClient } from '../payment/dassie-client'
+import type { DegradedModeManager } from '../payment/degraded-mode-manager'
+
 /**
  * Connection Monitor
  *
@@ -11,9 +14,6 @@
  *
  * @module connection-monitor
  */
-
-import type { ConnectionState, DassieClient } from '../payment/dassie-client'
-import type { DegradedModeManager } from '../payment/degraded-mode-manager'
 
 /**
  * Logger interface (compatible with Pino)
