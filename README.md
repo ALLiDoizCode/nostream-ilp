@@ -97,6 +97,199 @@ For complete deployment details, gas costs, and integration guides, see [docs/de
 WARNING: Docker distributions from Snap, Brew or Debian repositories are NOT SUPPORTED and will result in errors.
 Install Docker from their [official guide](https://docs.docker.com/engine/install/) ONLY.
 
+## Docker Deployment
+
+### Prerequisites
+- Docker 24.x+
+- Docker Compose 2.x+
+
+### Quick Start
+
+1. Copy environment template:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Configure .env file (at minimum, set SECRET):
+   ```bash
+   # Generate a secret
+   openssl rand -hex 32
+   # Add to .env:
+   # SECRET=your-generated-secret-here
+   ```
+
+3. Build images:
+   ```bash
+   npm run docker:build
+   ```
+
+4. Start stack:
+   ```bash
+   npm run docker:start
+   ```
+
+5. Verify services are healthy:
+   ```bash
+   docker-compose ps
+   curl http://localhost:8008/health
+   ```
+
+6. Access relay:
+   - WebSocket: ws://localhost:8008
+   - Health Check: http://localhost:8008/health
+
+7. Stop stack:
+   ```bash
+   npm run docker:stop
+   ```
+
+### Troubleshooting
+
+**Port 8008 already in use:**
+```bash
+# Find process using port 8008
+lsof -i :8008
+
+# Kill the process or change RELAY_PORT in .env
+RELAY_PORT=8009
+```
+
+**Permission denied on volume mounts:**
+```bash
+# Fix permissions on .nostr directory
+sudo chown -R $(id -u):$(id -g) .nostr/
+
+# Or run with correct user
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose up
+```
+
+**Database won't initialize:**
+```bash
+# Check postgres logs
+docker-compose logs nostream-db
+
+# Remove and recreate database volume
+docker-compose down -v
+docker volume rm nostream-postgres-data
+docker-compose up -d
+```
+
+**Health checks timing out:**
+```bash
+# Check service logs
+docker-compose logs nostream-ilp
+
+# Verify database connectivity
+docker exec -it nostream-db psql -U nostr_ts_relay -d nostr_ts_relay -c "SELECT 1"
+
+# Verify Redis connectivity
+docker exec -it nostream-cache redis-cli -a nostr_ts_relay ping
+```
+
+**Build failures:**
+```bash
+# Clear Docker build cache
+docker builder prune -a
+
+# Rebuild with no cache
+docker-compose build --no-cache
+```
+
+## Akash Network Deployment
+
+Deploy Nostream-ILP to **Akash Network**, a decentralized cloud computing marketplace, for production-grade hosting at ~$5/month.
+
+### Why Akash?
+
+- ✅ **Decentralized**: No centralized cloud provider (AWS, GCP, Azure)
+- ✅ **Cost-effective**: ~$5/month for full stack (vs. $20-50/month on traditional clouds)
+- ✅ **Censorship-resistant**: Deployed on permissionless infrastructure
+- ✅ **Crypto-native**: Pay with AKT tokens
+- ✅ **Open marketplace**: Competitive pricing from global providers
+
+### Quick Deploy to Akash
+
+```bash
+# 1. Install Akash CLI
+curl https://raw.githubusercontent.com/akash-network/node/master/install.sh | sh
+
+# 2. Build and push Docker image
+docker build -t ghcr.io/yourorg/nostream-ilp:latest .
+docker push ghcr.io/yourorg/nostream-ilp:latest
+
+# 3. Configure environment variables
+cp akash/.env.akash akash/.env
+# Edit akash/.env with your secrets
+
+# 4. Update deploy.yaml with your image registry
+sed -i 's|ghcr.io/yourorg|ghcr.io/YOUR_ORG|g' akash/deploy.yaml
+
+# 5. Deploy to Akash testnet
+akash tx deployment create akash/deploy.yaml \
+  --from your-wallet \
+  --node https://rpc.testnet.akash.network:443 \
+  --chain-id testnet-02 \
+  --env-file akash/.env
+```
+
+### What's Included
+
+The Akash deployment (`akash/deploy.yaml`) includes:
+
+- **Nostream relay**: WebSocket server (port 443) + dashboard (port 8080)
+- **PostgreSQL 16**: Event storage with 20GB persistent volume
+- **Redis 7**: Subscription caching
+- **Resource allocation**: 0.85 CPU, 1.75GB RAM, 31GB storage
+- **Estimated cost**: ~$5/month (at $5/AKT)
+
+### Production Mainnet Deployment
+
+**Status**: ✅ Ready for production deployment (Epic 8 complete)
+
+To deploy to **Akash mainnet** for production use:
+
+```bash
+# 1. Fund your Akash wallet (minimum 5 AKT)
+# Purchase AKT from Kraken, Gate.io, or Osmosis DEX
+
+# 2. Check wallet balance
+grep "Address:" .akash-wallet.txt
+npm run akash:balance -- mainnet
+
+# 3. Deploy to mainnet using Akash CLI
+akash tx deployment create akash/deploy.yaml \
+  --from mainnet-wallet \
+  --node https://rpc.akashnet.net:443 \
+  --chain-id akashnet-2 \
+  --keyring-backend test \
+  --gas auto \
+  --gas-prices 0.025uakt \
+  --yes
+
+# 4. Monitor deployment and get public URL
+# See deployment runbook for complete step-by-step guide
+```
+
+**📖 Complete Production Deployment Guide**:
+- **[docs/deployment-runbook.md](./docs/deployment-runbook.md)** - Full mainnet deployment instructions
+- **[akash/README.md](./akash/README.md)** - Akash-specific configuration guide
+
+**Expected Results**:
+- **Cost**: ~$4.99/month (at $5/AKT rate)
+- **Startup time**: 4-8 minutes (deployment to services ready)
+- **Public endpoints**: WSS on port 443, Dashboard on port 8080
+- **TLS**: Automatic Let's Encrypt certificates from provider
+
+### Akash Documentation
+
+- Akash deployment manifest: `akash/deploy.yaml` (SDL 2.0)
+- Environment template: `akash/.env.akash`
+- Production environment: `akash/.env.mainnet` (generated, gitignored)
+- Full deployment guide: `akash/README.md`
+- **Production runbook**: `docs/deployment-runbook.md` ⭐ NEW
+- **Deployment snapshot template**: `docs/deployment-snapshot-template.json` ⭐ NEW
+- Story documentation: `docs/stories/8.2.story.md` (SDL creation), `docs/stories/8.3.story.md` (mainnet deployment)
+
 ## Full Guide
 
 - [Set up a Paid Nostr relay with Nostream and ZEBEDEE](https://docs.zebedee.io/docs/guides/nostr-relay) by [André Neves](https://primal.net/andre) (CTO & Co-Founder at [ZEBEDEE](https://zebedee.io/))

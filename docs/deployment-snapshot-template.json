@@ -1,0 +1,210 @@
+{
+  "template_version": "1.0",
+  "description": "Akash Mainnet Deployment Snapshot Template - Fill in values after deployment",
+  "deployment": {
+    "dseq": "<FILL_AFTER_DEPLOYMENT>",
+    "provider": "<FILL_AFTER_LEASE_ACCEPTED>",
+    "created_at": "<FILL_AFTER_DEPLOYMENT>",
+    "network": "mainnet",
+    "chain_id": "akashnet-2",
+    "rpc_endpoint": "https://rpc.akashnet.net:443",
+    "owner_address": "akash10ah0ah4mqx5trfcyux5ygtgayfgp3aksfeqwrc"
+  },
+  "services": {
+    "nostream": {
+      "image": "nostream-ilp:v1.0.0-mainnet",
+      "description": "Nostr relay with BTP-NIPs and ILP payment integration",
+      "ports": [443, 8080],
+      "resources": {
+        "cpu": "0.5 units",
+        "memory": "1Gi",
+        "storage": "10Gi"
+      }
+    },
+    "postgres": {
+      "image": "postgres:16-alpine",
+      "description": "PostgreSQL database for event storage",
+      "ports": [5432],
+      "resources": {
+        "cpu": "0.25 units",
+        "memory": "512Mi",
+        "storage": "20Gi"
+      }
+    },
+    "redis": {
+      "image": "redis:7-alpine",
+      "description": "Redis cache for subscription management",
+      "ports": [6379],
+      "resources": {
+        "cpu": "0.1 units",
+        "memory": "256Mi",
+        "storage": "1Gi"
+      }
+    }
+  },
+  "endpoints": {
+    "wss": {
+      "url": "<FILL_AFTER_DEPLOYMENT>",
+      "example": "wss://provider.akash.network:443",
+      "description": "WebSocket endpoint for Nostr clients"
+    },
+    "dashboard": {
+      "url": "<FILL_AFTER_DEPLOYMENT>",
+      "example": "https://provider.akash.network:8080",
+      "description": "Operator dashboard (requires authentication)"
+    },
+    "health": {
+      "url": "<FILL_AFTER_DEPLOYMENT>",
+      "example": "https://provider.akash.network:8080/health",
+      "description": "Health check endpoint (JSON response)"
+    },
+    "nip11": {
+      "url": "<FILL_AFTER_DEPLOYMENT>",
+      "example": "https://provider.akash.network",
+      "description": "NIP-11 relay information (Accept: application/nostr+json)"
+    }
+  },
+  "dns": {
+    "configured": false,
+    "domain": "relay.nostr-ilp.network",
+    "record_type": "CNAME or A",
+    "target": "<FILL_AFTER_DEPLOYMENT>",
+    "propagation_status": "pending",
+    "notes": "Update after deployment and configure DNS"
+  },
+  "resources": {
+    "total": {
+      "cpu": "0.85 units",
+      "memory": "1.75Gi",
+      "storage": "31Gi"
+    },
+    "breakdown": {
+      "nostream": "0.5 CPU, 1Gi RAM, 10Gi storage",
+      "postgres": "0.25 CPU, 512Mi RAM, 20Gi storage",
+      "redis": "0.1 CPU, 256Mi RAM, 1Gi storage"
+    }
+  },
+  "cost": {
+    "pricing": {
+      "nostream_uakt_per_block": 550,
+      "postgres_uakt_per_block": 300,
+      "redis_uakt_per_block": 100,
+      "total_uakt_per_block": 950
+    },
+    "estimated_monthly": {
+      "blocks_per_month": 1051200,
+      "akt_per_month": 0.998,
+      "usd_per_month": 4.99,
+      "akt_usd_rate": 5.0,
+      "calculation": "(950 uAKT/block × 1,051,200 blocks) / 1,000,000 = 0.998 AKT"
+    },
+    "actual_monthly": {
+      "akt_per_month": "<FILL_AFTER_1_MONTH>",
+      "usd_per_month": "<FILL_AFTER_1_MONTH>",
+      "variance_from_estimate": "<FILL_AFTER_1_MONTH>"
+    }
+  },
+  "environment": {
+    "secrets_configured": true,
+    "secrets_file": "akash/.env.mainnet",
+    "variables": {
+      "SECRET": "✓ Generated (32 bytes hex)",
+      "DB_PASSWORD": "✓ Generated (16 bytes hex)",
+      "REDIS_PASSWORD": "✓ Generated (16 bytes hex)",
+      "DASSIE_RPC_TOKEN": "✓ Generated (32 bytes hex)",
+      "DOMAIN": "relay.nostr-ilp.network (update after deployment)",
+      "DASHBOARD_USERNAME": "admin",
+      "DASHBOARD_PASSWORD": "✓ Changed from default"
+    },
+    "optional_features": {
+      "arweave_storage": false,
+      "lightning_payments": false,
+      "dassie_integration": true
+    }
+  },
+  "deployment_timeline": {
+    "preparation": {
+      "started": "2025-12-11T00:00:00Z",
+      "completed": "<FILL_IN>",
+      "duration_minutes": "<CALCULATED>"
+    },
+    "deployment_creation": {
+      "started": "<FILL_IN>",
+      "tx_hash": "<FILL_IN>",
+      "completed": "<FILL_IN>",
+      "duration_seconds": "<CALCULATED>"
+    },
+    "bid_acceptance": {
+      "first_bid_received": "<FILL_IN>",
+      "lease_accepted": "<FILL_IN>",
+      "duration_minutes": "<CALCULATED>"
+    },
+    "image_pull": {
+      "started": "<FILL_IN>",
+      "completed": "<FILL_IN>",
+      "duration_minutes": "<CALCULATED>"
+    },
+    "service_startup": {
+      "containers_started": "<FILL_IN>",
+      "health_check_passed": "<FILL_IN>",
+      "duration_minutes": "<CALCULATED>"
+    },
+    "total_time": {
+      "deployment_to_ready": "<CALCULATED_MINUTES>",
+      "expected_range": "4-13 minutes"
+    }
+  },
+  "verification": {
+    "health_check": {
+      "passed": "<FILL_IN>",
+      "timestamp": "<FILL_IN>",
+      "response": {
+        "status": "healthy",
+        "services": {
+          "nostream": "up",
+          "postgresql": "up",
+          "redis": "up"
+        }
+      }
+    },
+    "websocket_test": {
+      "passed": "<FILL_IN>",
+      "timestamp": "<FILL_IN>",
+      "notes": "wscat connection, REQ/EVENT/CLOSE messages tested"
+    },
+    "nip11_test": {
+      "passed": "<FILL_IN>",
+      "timestamp": "<FILL_IN>",
+      "relay_name": "Nostr-ILP Relay"
+    },
+    "integration_tests": {
+      "passed": "<FILL_IN>",
+      "timestamp": "<FILL_IN>",
+      "test_count": 6,
+      "passed_count": "<FILL_IN>",
+      "failed_count": "<FILL_IN>"
+    },
+    "tls_certificate": {
+      "valid": "<FILL_IN>",
+      "issuer": "Let's Encrypt",
+      "expires": "<FILL_IN>",
+      "timestamp": "<FILL_IN>"
+    }
+  },
+  "issues_encountered": {
+    "count": 0,
+    "list": []
+  },
+  "notes": [
+    "This is a template. Fill in <FILL_IN> placeholders after deployment.",
+    "Save completed snapshot as: docs/deployment-snapshot-mainnet-<DSEQ>.json",
+    "Keep this file for reference and incident response",
+    "Update monthly cost after 30 days of operation"
+  ],
+  "references": {
+    "story": "docs/stories/8.3.story.md",
+    "runbook": "docs/deployment-runbook.md",
+    "sdl": "akash/deploy.yaml",
+    "environment": "akash/.env.mainnet"
+  }
+}
