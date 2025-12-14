@@ -1,0 +1,13 @@
+FROM postgres:16-alpine
+
+LABEL org.opencontainers.image.title="Nostream PostgreSQL"
+LABEL org.opencontainers.image.description="PostgreSQL database for Nostream relay with ILP payment tracking"
+LABEL org.opencontainers.image.version="16-alpine"
+
+# Health check
+# Note: Using default values since env var expansion doesn't work in CMD array format
+# Default user/db is set via POSTGRES_USER/POSTGRES_DB env vars in docker-compose.yml
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
+  CMD pg_isready -U nostr_ts_relay -d nostr_ts_relay || exit 1
+
+EXPOSE 5432

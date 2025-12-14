@@ -1,0 +1,49 @@
+{
+  "name": "@nostream-ilp/lib-dassie-http-server",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Utilities for Node HTTP servers",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --color .",
+    "typecheck": "tsc --pretty"
+  },
+  "author": {
+    "name": "Stefan Thomas",
+    "email": "justmoon@members.fsf.org",
+    "url": "https://justmoon.com/"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@nostream-ilp/lib-dassie-oer": "workspace:^",
+    "@nostream-ilp/lib-dassie-reactive": "workspace:^",
+    "@nostream-ilp/lib-dassie-type-utils": "workspace:^",
+    "@fastify/accept-negotiator": "^1.1.0",
+    "secure-json-parse": "^2.7.0",
+    "uint8array-extras": "^1.4.0",
+    "ws": "^8.18.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.12",
+    "type-fest": "^4.26.1"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/cameri/nostream/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cameri/nostream.git",
+    "directory": "packages/lib-dassie-http-server"
+  }
+}

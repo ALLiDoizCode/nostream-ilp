@@ -34,6 +34,31 @@ Nostream is a production-ready Nostr relay written in TypeScript, supporting mos
 **License**: MIT (see LICENSE file)
 **Attribution**: All original Nostream work is credited to the Nostream contributors.
 
+## Monorepo Structure
+
+This project uses **pnpm workspaces** to manage multiple packages:
+
+```
+nostream-ilp/
+├── packages/
+│   ├── app-nostream/          # Nostr relay with BTP-NIPs
+│   ├── app-dassie/            # Dassie ILP node
+│   ├── lib-payment-types/     # Shared TypeScript types
+│   ├── lib-contracts/         # Smart contracts (Base L2)
+│   └── lib-dassie-*/         # Dassie library packages
+├── docker/                    # Docker configuration
+├── pnpm-workspace.yaml        # Workspace config
+└── package.json               # Root workspace
+```
+
+**Benefits:**
+- Atomic commits across Nostream + Dassie
+- Shared TypeScript types for type safety
+- Single build/test/deploy workflow
+- Simplified Docker builds
+
+See [MONOREPO.md](./MONOREPO.md) for development guide.
+
 ## Features
 
 NIPs with a relay-specific implementation are listed here.
@@ -57,45 +82,81 @@ NIPs with a relay-specific implementation are listed here.
 
 ## Deployed Contracts
 
-### Cronos Mainnet (Production)
+### Base L2 (Sepolia Testnet)
 
-**CronosPaymentChannel** - ERC-20 payment channel contract for AKT settlements
-- **Contract Address:** `0x9Ec2d217b14e67cAbF86F20F4E7462D6d7bc7684`
-- **AKT Token:** `0x39a65A74Dc5A778Ff93d1765Ea51F57BC49c81B3` (Official bridged AKT)
-- **Network:** Cronos Mainnet (ChainID: 25)
-- **Deployed:** November 30, 2025
-- **Explorer:** [View on CronoScan](https://cronoscan.com/address/0x9Ec2d217b14e67cAbF86F20F4E7462D6d7bc7684)
-- **Deployment Cost:** 0.3517 CRO (~$0.042 USD)
-
-### Cronos Testnet
-
-**CronosPaymentChannel** - Test deployment for development
-- **Contract Address:** `0x4b9e32389896C05A4CAfC41bE9dA6bB108a7dA72`
-- **MockAKT Token:** `0xf7e968d6f3bdFC504A434288Ea3f243e033e846F`
-- **Network:** Cronos Testnet (ChainID: 338)
-- **Deployed:** November 28, 2025
-- **Explorer:** [View on Cronos Explorer](https://cronos.org/explorer/testnet3/address/0x4b9e32389896C05A4CAfC41bE9dA6bB108a7dA72)
+**MultiTokenPaymentChannelFactory** - Payment channel factory for ERC-20 settlements on Base L2
+- **Contract Address:** TBD (deployment in progress)
+- **Network:** Base Sepolia Testnet (ChainID: 84532)
+- **Supported Tokens:** USDC, ETH, and custom ERC-20 tokens
 
 For complete deployment details, gas costs, and integration guides, see [docs/deployment.md](./docs/deployment.md).
 
 ## Requirements
 
-### Standalone setup
-- PostgreSQL 14.0
-- Redis
-- Node v18
-- Typescript
+### Monorepo Setup
+- **Node.js** v22.x LTS
+- **pnpm** v8.x (install via `corepack enable`)
+- **PostgreSQL** 14.0+
+- **Redis** 7.x
+- **TypeScript** 5.9.3 (installed via pnpm)
 
-### Docker setups
-- Docker v20.10
-- Docker Compose v2.10
+### Docker Setup
+- Docker v20.10+
+- Docker Compose v2.10+
+- Docker Desktop v4.2.0+ (for local development)
+- [mkcert](https://github.com/FiloSottile/mkcert) (for HTTPS locally)
 
-### Local Docker setup
-- Docker Desktop v4.2.0 or newer
-- [mkcert](https://github.com/FiloSottile/mkcert)
-
-WARNING: Docker distributions from Snap, Brew or Debian repositories are NOT SUPPORTED and will result in errors.
+⚠️ **WARNING**: Docker distributions from Snap, Brew or Debian repositories are NOT SUPPORTED and will result in errors.
 Install Docker from their [official guide](https://docs.docker.com/engine/install/) ONLY.
+
+## Quick Start
+
+### 1. Install Dependencies
+
+```bash
+# Enable pnpm
+corepack enable
+
+# Install all workspace dependencies
+pnpm install
+```
+
+### 2. Build All Packages
+
+```bash
+# Build all packages (payment-types, contracts, nostream, dassie)
+pnpm build
+
+# Or build specific packages
+pnpm build:nostream
+pnpm build:dassie
+pnpm build:contracts
+```
+
+### 3. Run Development Servers
+
+```bash
+# Run Nostream relay only
+pnpm dev:nostream
+
+# Run Dassie node only
+pnpm dev:dassie
+
+# Run both concurrently
+pnpm dev:all
+```
+
+### 4. Run Tests
+
+```bash
+# Run all tests
+pnpm test
+
+# Run specific package tests
+pnpm test:nostream
+pnpm test:dassie
+pnpm test:contracts
+```
 
 ## Docker Deployment
 

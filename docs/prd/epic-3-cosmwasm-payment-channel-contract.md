@@ -1,9 +1,11 @@
-# Epic 3: AKT Payment Channel Deployment (Cronos)
+# Epic 3: AKT Payment Channel Deployment (Cronos) - DEPRECATED
 
-**Updated:** 2025-11-28
-**Status:** READY FOR IMPLEMENTATION
+**Updated:** 2025-12-14
+**Status:** DEPRECATED - Cronos support removed from scope
 
-**Goal:** Deploy AKT payment channel support via Cronos EVM, enabling users to open payment channels with AKT tokens for Nostr-ILP micropayments.
+**Note:** This epic has been deprecated. The project is focusing exclusively on Base L2 for EVM-based settlement. All Cronos-specific work has been removed from the active roadmap.
+
+**Original Goal:** Deploy AKT payment channel support via Cronos EVM, enabling users to open payment channels with AKT tokens for Nostr-ILP micropayments.
 
 ---
 

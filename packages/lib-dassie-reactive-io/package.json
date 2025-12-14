@@ -1,0 +1,74 @@
+{
+  "name": "@nostream-ilp/lib-dassie-reactive-io",
+  "version": "0.0.2",
+  "description": "IO abstraction layer for Dassie",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "node": "./src/node/index.ts",
+      "import": "./src/browser/index.ts"
+    },
+    "./node": {
+      "import": "./src/node/index.ts"
+    },
+    "./browser": {
+      "import": "./src/browser/index.ts"
+    }
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/browser/index.d.ts",
+        "node": "./dist/node/index.js",
+        "import": "./dist/browser/index.js"
+      },
+      "./node": {
+        "types": "./dist/node/index.d.ts",
+        "import": "./dist/node/index.js"
+      },
+      "./browser": {
+        "types": "./dist/browser/index.d.ts",
+        "import": "./dist/browser/index.js"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint --color .",
+    "typecheck": "tsc --pretty"
+  },
+  "files": [
+    "dist/node/index.js",
+    "dist/node/index.js.map",
+    "dist/node/index.d.ts",
+    "dist/browser/index.js",
+    "dist/browser/index.js.map",
+    "dist/browser/index.d.ts"
+  ],
+  "author": {
+    "name": "Stefan Thomas",
+    "email": "justmoon@members.fsf.org",
+    "url": "https://justmoon.com/"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@nostream-ilp/lib-dassie-reactive": "workspace:^",
+    "@nostream-ilp/lib-dassie-type-utils": "workspace:^",
+    "uint8array-extras": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.5"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/cameri/nostream/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cameri/nostream.git",
+    "directory": "packages/lib-dassie-reactive-io"
+  }
+}

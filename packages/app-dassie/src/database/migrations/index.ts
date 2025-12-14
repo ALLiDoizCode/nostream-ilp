@@ -1,0 +1,16 @@
+import m1 from "./0001-create-scalar-table"
+import m2 from "./0002-create-outgoing-payment-table"
+import m3 from "./0003-create-incoming-payment-table"
+import m4 from "./0004-create-settlement-schemes-table"
+import m5 from "./0005-create-nodes-table"
+import m6 from "./0006-create-peers-table"
+import m7 from "./0007-create-acme-tokens-table"
+import m8 from "./0008-create-sessions-table"
+import m9 from "./0009-create-btp-tokens-table"
+import m10 from "./0010-add-settlement-state-column"
+import m11 from "./0011-create-accounts-table"
+import m12 from "./0012-change-payment-tables-for-open-payments"
+import m13 from "./0013-create-registrations-table"
+import m14 from "./0014-create-payment-channels-table"
+
+export default [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14]

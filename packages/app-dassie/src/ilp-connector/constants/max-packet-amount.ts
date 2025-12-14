@@ -1,0 +1,1 @@
+export const MAX_PACKET_AMOUNT = 100_000_000n

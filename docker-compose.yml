@@ -1,147 +1,148 @@
 services:
   nostream:
-    build: .
-    container_name: nostream
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.nostream
+    image: nostream-ilp:latest
+    container_name: nostream-ilp
     environment:
+      # Core
       SECRET: ${SECRET}
       RELAY_PORT: 8008
-      # Master
       NOSTR_CONFIG_DIR: /home/node/.nostr
+
+      # Database
       DB_HOST: nostream-db
       DB_PORT: 5432
       DB_USER: nostr_ts_relay
-      DB_PASSWORD: nostr_ts_relay
+      DB_PASSWORD: ${DB_PASSWORD:-nostr_ts_relay}
       DB_NAME: nostr_ts_relay
-      DB_MIN_POOL_SIZE: 16
-      DB_MAX_POOL_SIZE: 64
-      DB_ACQUIRE_CONNECTION_TIMEOUT: 60000
-      # Read Replica
-      READ_REPLICAS: 2
-      READ_REPLICA_ENABLED: 'false'
-      # Read Replica No. 1
-      RR0_DB_HOST: db
-      RR0_DB_PORT: 5432
-      RR0_DB_USER: nostr_ts_relay
-      RR0_DB_PASSWORD: nostr_ts_relay
-      RR0_DB_NAME: nostr_ts_relay
-      RR0_DB_MIN_POOL_SIZE: 16
-      RR0_DB_MAX_POOL_SIZE: 64
-      RR0_DB_ACQUIRE_CONNECTION_TIMEOUT: 10000
-      # Read Replica No. 2
-      RR1_DB_HOST: db
-      RR1_DB_PORT: 5432
-      RR1_DB_USER: nostr_ts_relay
-      RR1_DB_PASSWORD: nostr_ts_relay
-      RR1_DB_NAME: nostr_ts_relay
-      RR1_DB_MIN_POOL_SIZE: 16
-      RR1_DB_MAX_POOL_SIZE: 64
-      RR1_DB_ACQUIRE_CONNECTION_TIMEOUT: 10000
-      # Add RR2, RR3, etc. to configure more read replicas
+
       # Redis
       REDIS_HOST: nostream-cache
       REDIS_PORT: 6379
-      REDIS_USER: default
-      REDIS_PASSWORD: nostr_ts_relay
-      TOR_HOST: tor_proxy
-      TOR_CONTROL_PORT: 9051
-      TOR_PASSWORD: nostr_ts_relay
-      HIDDEN_SERVICE_PORT: 80
-      # Payments Processors
-      # Zebedee
-      ZEBEDEE_API_KEY: ${ZEBEDEE_API_KEY}
-      # Nodeless.io
-      NODELESS_API_KEY: ${NODELESS_API_KEY}
-      NODELESS_WEBHOOK_SECRET: ${NODELESS_WEBHOOK_SECRET}
-      # OpenNode
-      OPENNODE_API_KEY: ${OPENNODE_API_KEY}
-      # Lnbits
-      LNBITS_API_KEY: ${LNBITS_API_KEY}
-      # Enable DEBUG for troubleshooting. Examples:
-      # DEBUG: "primary:*"
-      # DEBUG: "worker:*"
-      # DEBUG: "knex:query"
-    user: node:node
-    volumes:
-      - ${PWD}/.nostr:/home/node/.nostr
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-nostr_ts_relay}
+
+      # BTP-NIPs
+      BTP_NIPS_ENABLED: 'true'
+
+      # Dassie RPC (NEW - service discovery)
+      DASSIE_RPC_URL: ws://dassie:7768/trpc
+      DASSIE_RPC_TOKEN: ${DASSIE_RPC_TOKEN}
     ports:
-      - 127.0.0.1:8008:8008
+      - "8008:8008"
     depends_on:
-      nostream-cache:
-        condition: service_healthy
       nostream-db:
         condition: service_healthy
-      nostream-migrate:
-        condition: service_completed_successfully
-    restart: on-failure
+      nostream-cache:
+        condition: service_healthy
+      dassie:
+        condition: service_healthy
     networks:
-      default:
+      - nostream-ilp
+
+  dassie:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dassie
+    image: dassie-node:latest
+    container_name: dassie-node
+    environment:
+      # Dassie config
+      NODE_ENV: production
+      RPC_AUTH_TOKEN: ${DASSIE_RPC_TOKEN}
+      LEDGER_DB_PATH: /app/data/ledger.db
+
+      # Settlement modules
+      SETTLEMENT_BASE_ENABLED: ${SETTLEMENT_BASE_ENABLED:-false}
+      SETTLEMENT_BASE_RPC_URL: ${SETTLEMENT_BASE_RPC_URL}
+      SETTLEMENT_BASE_FACTORY_ADDRESS: ${SETTLEMENT_BASE_FACTORY_ADDRESS}
+      SETTLEMENT_BASE_RELAY_PRIVATE_KEY: ${SETTLEMENT_BASE_RELAY_PRIVATE_KEY}
+
+      SETTLEMENT_CRONOS_ENABLED: ${SETTLEMENT_CRONOS_ENABLED:-false}
+      SETTLEMENT_CRONOS_RPC_URL: ${SETTLEMENT_CRONOS_RPC_URL}
+      SETTLEMENT_CRONOS_FACTORY_ADDRESS: ${SETTLEMENT_CRONOS_FACTORY_ADDRESS}
+      SETTLEMENT_CRONOS_RELAY_PRIVATE_KEY: ${SETTLEMENT_CRONOS_RELAY_PRIVATE_KEY}
+    ports:
+      - "7768:7768"
+    volumes:
+      - dassie-data:/app/data
+    networks:
+      - nostream-ilp
 
   nostream-db:
-    image: postgres
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.postgres
+    image: nostream-postgres:latest
     container_name: nostream-db
     environment:
       POSTGRES_DB: nostr_ts_relay
       POSTGRES_USER: nostr_ts_relay
-      POSTGRES_PASSWORD: nostr_ts_relay
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-nostr_ts_relay}
     volumes:
-      - ${PWD}/.nostr/data:/var/lib/postgresql/data
-      - ${PWD}/.nostr/db-logs:/var/log/postgresql
-      - ${PWD}/postgresql.conf:/postgresql.conf
-    networks:
-      default:
-    command: postgres -c 'config_file=/postgresql.conf'
-    restart: always
+      - postgres-data:/var/lib/postgresql/data
+      - postgres-logs:/var/log/postgresql
+    ports:
+      - "5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U nostr_ts_relay"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 360s
-
-  nostream-cache:
-    image: redis:7.0.5-alpine3.16
-    container_name: nostream-cache
-    volumes:
-      - cache:/data
-    command: redis-server --loglevel warning --requirepass nostr_ts_relay
+      start_period: 60s
+    restart: unless-stopped
     networks:
-      default:
-    restart: always
-    healthcheck:
-      test: [ "CMD", "redis-cli", "ping", "|", "grep", "PONG" ]
-      interval: 1s
-      timeout: 5s
-      retries: 5
+      - nostream-ilp
 
   nostream-migrate:
-    image: node:18-alpine3.16
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.nostream
+    image: nostream-ilp:latest
     container_name: nostream-migrate
     environment:
       DB_HOST: nostream-db
       DB_PORT: 5432
       DB_USER: nostr_ts_relay
-      DB_PASSWORD: nostr_ts_relay
+      DB_PASSWORD: ${DB_PASSWORD:-nostr_ts_relay}
       DB_NAME: nostr_ts_relay
-    entrypoint:
-      - sh
-      - -c
-      - 'cd code && npm install --no-save --quiet knex@2.4.0 pg@8.8.0 && npx knex migrate:latest'
-    volumes:
-      - ./migrations:/code/migrations
-      - ./knexfile.js:/code/knexfile.js
+    command: sh -c "cd /app && pnpm run db:migrate"
     depends_on:
       nostream-db:
         condition: service_healthy
     networks:
-      default:
+      - nostream-ilp
+
+  nostream-cache:
+    image: redis:7-alpine
+    container_name: nostream-cache
+    volumes:
+      - cache:/data
+    command: redis-server --loglevel warning --requirepass ${REDIS_PASSWORD:-nostr_ts_relay}
+    networks:
+      - nostream-ilp
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
-  default:
-    name: nostream
+  nostream-ilp:
+    name: nostream-ilp
+    driver: bridge
     ipam:
       driver: default
       config:
         - subnet: 10.10.10.0/24
 
 volumes:
+  postgres-data:
+    name: nostream-postgres-data
+  postgres-logs:
+    name: nostream-postgres-logs
   cache:
+    name: nostream-redis-cache
+  dassie-data:

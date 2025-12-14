@@ -1,6 +1,8 @@
 # Epic 2: Dassie Multi-Blockchain Settlement Modules
 
-**Goal:** Enable RPC token authentication, implement settlement modules for Bitcoin (Lightning), Base L2, Cosmos/Akash (CosmWasm), and XRP Ledger in Dassie node, and add RPC endpoints for economic monitoring. This epic enables the relay to accept payments in 4 different cryptocurrencies via ILP routing and provides APIs for Nostream integration.
+**Goal:** Enable RPC token authentication, implement settlement modules for Base L2 in Dassie node, and add RPC endpoints for economic monitoring. This epic enables the relay to accept payments in ETH/ERC-20 tokens on Base L2 via ILP routing and provides APIs for Nostream integration.
+
+**Note:** Focus is on Base L2 only. Bitcoin Lightning, Cosmos/Akash, and XRP Ledger support has been deferred to future epics.
 
 **Status:** In Progress (Stories 2.10-2.13 added for monorepo integration and deployment)
 
@@ -150,22 +152,15 @@
 8. Uses Base Sepolia testnet for MVP
 9. Integration test: Open channel, verify claims, close channel
 
-## Story 2.7: Implement Cosmos/Akash Settlement Module in Dassie
+## Story 2.7: DEFERRED - Cosmos/Akash Settlement Module
+
+**Status:** DEFERRED (Focus on BASE L2 only for now)
 
 **As a** developer,
 **I want** a Cosmos settlement module in Dassie,
 **so that** the relay can accept AKT payments natively.
 
-**Acceptance Criteria:**
-1. Module created: `packages/app-dassie/src/settlement/cosmos/`
-2. Implements Dassie's SettlementSchemeModule interface
-3. Integrates with Akash RPC via CosmJS (@cosmjs/stargate)
-4. Interacts with deployed CosmWasm payment channel contract
-5. Opens channels: Executes contract's OpenChannel message
-6. Verifies claims: Off-chain signature verification (Cosmos secp256k1)
-7. Settles: Executes contract's CloseChannel with final claim
-8. Uses Akash testnet for development, mainnet for production
-9. Integration test: Open channel on testnet, verify claim, close channel
+**Note:** This story has been deferred to focus on Base L2 settlement only. CosmWasm integration may be revisited in future epics.
 
 ## Story 2.8: Implement XRP Ledger Settlement Module in Dassie
 
@@ -255,31 +250,30 @@
 
 ---
 
-## Story 2.11: Integrate MultiTokenPaymentChannelFactory with Dassie
+## Story 2.11: Integrate MultiTokenPaymentChannelFactory with Dassie (BASE L2 Only)
 
 **As a** developer,
-**I want** Dassie to use MultiTokenPaymentChannelFactory for Base/Cronos settlements,
-**so that** users can pay the relay with multiple ERC-20 tokens on different L2 chains.
+**I want** Dassie to use MultiTokenPaymentChannelFactory for Base L2 settlements,
+**so that** users can pay the relay with multiple ERC-20 tokens on Base L2.
 
 **Acceptance Criteria:**
-1. Dassie Cosmos settlement module integrated with MultiTokenPaymentChannelFactory contract
-2. Support for Base L2 (Sepolia testnet and mainnet)
-3. Support for Cronos (testnet and mainnet)
-4. Contract interaction via viem library
-5. Open channel function: Creates channel with ERC-20 token or native ETH
-6. Verify claim function: Validates off-chain signed payment claims
-7. Close channel function: Settles final claim on-chain
-8. RPC endpoint added: `verifyPaymentClaim` accepts claims for BASE/CRONOS
-9. Integration tests with deployed MultiTokenPaymentChannelFactory
-10. Documentation: How to configure Base/Cronos settlement
+1. Dassie Base settlement module integrated with MultiTokenPaymentChannelFactory contract
+2. Support for Base L2 (Sepolia testnet and mainnet) - **BASE ONLY**
+3. Contract interaction via viem library
+4. Open channel function: Creates channel with ERC-20 token or native ETH
+5. Verify claim function: Validates off-chain signed payment claims
+6. Close channel function: Settles final claim on-chain
+7. RPC endpoint added: `verifyPaymentClaim` accepts claims for BASE
+8. Integration tests with deployed MultiTokenPaymentChannelFactory
+9. Documentation: How to configure Base L2 settlement
+
+**Note:** Cronos support has been removed from scope. Focus is on Base L2 only.
 
 **Priority:** HIGH (Critical for payment functionality)
 
 **Story File:** `docs/stories/2.11-integrate-multitokenpaymentchannel.md`
 
 **Contract Addresses:**
-- Cronos Mainnet: `0x9Ec2d217b14e67cAbF86F20F4E7462D6d7bc7684`
-- Cronos Testnet: `0x4b9e32389896C05A4CAfC41bE9dA6bB108a7dA72`
 - Base Sepolia: TBD (requires deployment)
 - Base Mainnet: TBD (requires deployment)
 
@@ -333,7 +327,7 @@
 
 **Cost Breakdown:**
 - Nostream: 550 uAKT/block
-- Dassie: 200 uAKT/block (NEW)
+- Dassie: 200 uAKT/block
 - PostgreSQL: 300 uAKT/block
 - Redis: 100 uAKT/block
 - **Total**: 1,150 uAKT/block = **$6.04/month** (at $5/AKT)

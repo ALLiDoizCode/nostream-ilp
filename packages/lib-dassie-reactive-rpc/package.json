@@ -1,0 +1,66 @@
+{
+  "name": "@nostream-ilp/lib-dassie-reactive-rpc",
+  "type": "module",
+  "version": "0.0.2",
+  "description": "Read and subscribe to reactive values remotely via TRPC",
+  "exports": {
+    "./server": "./src/server/index.ts",
+    "./client": "./src/client/index.ts"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "exports": {
+      "./server": {
+        "types": "./dist/server/index.d.ts",
+        "default": "./dist/server/index.js"
+      },
+      "./client": {
+        "types": "./dist/client/index.d.ts",
+        "default": "./dist/client/index.js"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint --color .",
+    "typecheck": "tsc --pretty"
+  },
+  "files": [
+    "dist/server/index.js",
+    "dist/server/index.js.map",
+    "dist/server/index.d.ts",
+    "dist/client/index.js",
+    "dist/client/index.js.map",
+    "dist/client/index.d.ts"
+  ],
+  "author": {
+    "name": "Stefan Thomas",
+    "email": "justmoon@members.fsf.org",
+    "url": "https://justmoon.com/"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/react": "^18.3.8",
+    "react": "^18.3.1",
+    "type-fest": "^4.26.1"
+  },
+  "dependencies": {
+    "@nostream-ilp/lib-dassie-reactive": "workspace:^",
+    "@nostream-ilp/lib-dassie-rpc": "workspace:^",
+    "@tanstack/react-query": "^5.56.2"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/cameri/nostream/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cameri/nostream.git",
+    "directory": "packages/lib-dassie-reactive-rpc"
+  }
+}

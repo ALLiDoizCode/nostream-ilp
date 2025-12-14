@@ -1,0 +1,40 @@
+{
+  "name": "@nostream-ilp/lib-dassie-format-utils",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Collection of pretty-format plugins",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --color .",
+    "typecheck": "tsc --pretty"
+  },
+  "author": {
+    "name": "Stefan Thomas",
+    "email": "justmoon@members.fsf.org",
+    "url": "https://justmoon.com/"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+  },
+  "dependencies": {
+    "pretty-format": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/cameri/nostream/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cameri/nostream.git",
+    "directory": "packages/lib-dassie-format-utils"
+  }
+}

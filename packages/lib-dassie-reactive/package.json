@@ -1,0 +1,49 @@
+{
+  "name": "@nostream-ilp/lib-dassie-reactive",
+  "version": "0.0.1",
+  "description": "Simple reactive programming tools",
+  "type": "module",
+  "exports": "./src/index.ts",
+  "sideEffects": false,
+  "publishConfig": {
+    "exports": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint --color .",
+    "typecheck": "tsc --pretty"
+  },
+  "files": [
+    "dist/index.js",
+    "dist/index.js.map",
+    "dist/index.d.ts"
+  ],
+  "author": {
+    "name": "Stefan Thomas",
+    "email": "justmoon@members.fsf.org",
+    "url": "https://justmoon.com/"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@nostream-ilp/lib-dassie-type-utils": "workspace:^",
+    "type-fest": "^4.26.1"
+  },
+  "devDependencies": {
+    "immer": "^10.1.1",
+    "uint8array-extras": "^1.4.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/cameri/nostream/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cameri/nostream.git",
+    "directory": "packages/lib-dassie-reactive"
+  }
+}

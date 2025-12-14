@@ -1,0 +1,75 @@
+{
+  "name": "@nostream-ilp/lib-dassie-logger",
+  "version": "0.0.0",
+  "description": "Logging library for the Dassie ILP project",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "node": "./src/node.ts",
+      "import": "./src/browser.ts"
+    },
+    "./node": {
+      "import": "./src/node.ts"
+    },
+    "./browser": {
+      "import": "./src/browser.ts"
+    }
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/browser.d.ts",
+        "node": "./dist/node.js",
+        "import": "./dist/browser.js"
+      },
+      "./node": {
+        "types": "./dist/node.d.ts",
+        "import": "./dist/node.js"
+      },
+      "./browser": {
+        "types": "./dist/browser.d.ts",
+        "import": "./dist/browser.js"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint --color .",
+    "typecheck": "tsc --pretty"
+  },
+  "files": [
+    "dist/node.js",
+    "dist/node.js.map",
+    "dist/node.d.ts",
+    "dist/browser.js",
+    "dist/browser.js.map",
+    "dist/browser.d.ts"
+  ],
+  "author": {
+    "name": "Stefan Thomas",
+    "email": "justmoon@members.fsf.org",
+    "url": "https://justmoon.com/"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@nostream-ilp/lib-dassie-type-utils": "workspace:^",
+    "ansi-escapes": "^7.0.0",
+    "chalk": "^5.3.0",
+    "string-width": "^7.2.0"
+  },
+  "devDependencies": {
+    "@types/is-generator-function": "^1.0.3"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/cameri/nostream/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cameri/nostream.git",
+    "directory": "packages/lib-dassie-logger"
+  }
+}

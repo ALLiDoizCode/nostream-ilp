@@ -1,0 +1,48 @@
+{
+  "name": "@nostream-ilp/lib-dassie-sqlite",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Framework for using SQLite synchronously with strong typing",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --color .",
+    "typecheck": "tsc --pretty"
+  },
+  "author": {
+    "name": "Stefan Thomas",
+    "email": "justmoon@members.fsf.org",
+    "url": "https://justmoon.com/"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "better-sqlite3": "^11.3.0",
+    "kysely": "^0.27.4"
+  },
+  "devDependencies": {
+    "@nostream-ilp/lib-dassie-logger": "workspace:^",
+    "@types/node": "^22.5.5",
+    "type-fest": "^4.26.1"
+  },
+  "peerDependencies": {
+    "@nostream-ilp/lib-dassie-logger": "workspace:^0.0.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/cameri/nostream/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cameri/nostream.git",
+    "directory": "packages/lib-dassie-sqlite"
+  }
+}

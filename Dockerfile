@@ -1,32 +1,65 @@
-FROM node:18-alpine3.16 AS build
+FROM node:22-alpine AS build
 
 WORKDIR /build
 
-COPY ["package.json", "package-lock.json", "./"]
+# Enable pnpm
+RUN corepack enable
 
-RUN npm install --quiet
+COPY ["package.json", "pnpm-lock.yaml", "./"]
+
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN npm run build
+RUN pnpm run build
 
-FROM node:18-alpine3.16
+FROM node:22-alpine
 
-LABEL org.opencontainers.image.title="Nostream"
+LABEL org.opencontainers.image.title="Nostream ILP"
 LABEL org.opencontainers.image.source=https://github.com/cameri/nostream
-LABEL org.opencontainers.image.description="nostream"
+LABEL org.opencontainers.image.description="Nostream relay with ILP payment integration and BTP-NIPs"
 LABEL org.opencontainers.image.authors="Ricardo Arturo Cabral Mejía"
 LABEL org.opencontainers.image.licenses=MIT
 
 WORKDIR /app
-RUN apk add --no-cache --update git
+
+# Install system dependencies including Akash CLI dependencies
+RUN apk add --no-cache --update \
+    git \
+    bash \
+    curl \
+    jq \
+    ca-certificates
+
+# Install Akash CLI
+RUN curl -sSfL https://raw.githubusercontent.com/akash-network/node/master/install.sh | sh && \
+    mv ./bin/akash /usr/local/bin/akash && \
+    chmod +x /usr/local/bin/akash && \
+    rm -rf ./bin
+
+# Verify Akash CLI installation
+RUN akash version
+
+# Enable pnpm
+RUN corepack enable
+
+# Environment variables for BTP-NIPs configuration
+ENV BTP_NIPS_ENABLED=true
+ENV RELAY_PORT=8008
+ENV DASSIE_RPC_URL=ws://dassie:5000/trpc
 
 ADD resources /app/resources
 
 COPY --from=build /build/dist .
-
-RUN npm install --omit=dev --quiet
+COPY --from=build /build/node_modules ./node_modules
+COPY --from=build /build/package.json .
+COPY --from=build /build/knexfile.js .
+COPY --from=build /build/migrations ./migrations
 
 USER node:node
+
+# Health check endpoint
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:' + (process.env.RELAY_PORT || 8008) + '/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 CMD ["node", "src/index.js"]

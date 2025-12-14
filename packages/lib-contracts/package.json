@@ -1,0 +1,46 @@
+{
+  "name": "@nostream-ilp/lib-contracts",
+  "version": "0.1.0",
+  "description": "Smart contracts for payment channels (Base L2, Cronos)",
+  "main": "./typechain-types/index.ts",
+  "types": "./typechain-types/index.ts",
+  "scripts": {
+    "build": "hardhat compile",
+    "test": "hardhat test",
+    "coverage": "hardhat coverage",
+    "deploy:base-sepolia": "hardhat run scripts/deploy-base.ts --network base-sepolia",
+    "deploy:cronos-testnet": "hardhat run scripts/deploy-cronos.ts --network cronos-testnet",
+    "verify:base": "hardhat verify --network base-sepolia",
+    "verify:cronos": "hardhat verify --network cronos-testnet"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.4.0",
+    "viem": "^2.41.2"
+  },
+  "devDependencies": {
+    "@cronos-labs/hardhat-cronoscan": "^0.0.5",
+    "@nomicfoundation/hardhat-chai-matchers": "^2.1.0",
+    "@nomicfoundation/hardhat-ethers": "^3.1.2",
+    "@nomicfoundation/hardhat-network-helpers": "^1.1.2",
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.1.3",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.1.0",
+    "@types/chai": "^4.3.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.19.1",
+    "chai": "^4.5.0",
+    "ethers": "^6.15.0",
+    "hardhat": "^2.19.0",
+    "hardhat-gas-reporter": "^1.0.10",
+    "solidity-coverage": "^0.8.16",
+    "typechain": "^8.3.2",
+    "typescript": "5.9.3"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cameri/nostream.git",
+    "directory": "packages/lib-contracts"
+  }
+}

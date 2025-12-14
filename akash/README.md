@@ -4,6 +4,7 @@ This guide covers deploying the Nostream-ILP peer node to Akash Network, a decen
 
 ## Table of Contents
 
+- [Deployment Architecture](#deployment-architecture)
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
 - [Programmatic Deployment (SDK)](#programmatic-deployment-sdk)
@@ -13,6 +14,59 @@ This guide covers deploying the Nostream-ILP peer node to Akash Network, a decen
 - [Accessing Deployed Services](#accessing-deployed-services)
 - [Troubleshooting](#troubleshooting)
 - [Updating Deployments](#updating-deployments)
+
+---
+
+## Deployment Architecture
+
+The Nostream-ILP deployment consists of **4 services** working together to provide a full-featured Nostr relay with ILP payment capabilities:
+
+```
+┌─────────────────────────────────────────┐
+│         Akash Provider                  │
+│                                         │
+│  ┌──────────────┐    ┌──────────────┐  │
+│  │   Nostream   │───▶│    Dassie    │  │
+│  │   (Relay)    │    │  (ILP Node)  │  │
+│  │   :443,:8080 │    │    :7768     │  │
+│  └──────────────┘    └──────────────┘  │
+│         │ │                  │          │
+│         │ └────────┬─────────┘          │
+│         │          │                    │
+│  ┌──────▼────┐  ┌──▼──────┐            │
+│  │ PostgreSQL│  │  Redis  │            │
+│  │   :5432   │  │  :6379  │            │
+│  └───────────┘  └─────────┘            │
+│                                         │
+│  Exposed Ports (Global):                │
+│  - 443: HTTPS/WSS (Nostr clients)      │
+│  - 8080: Dashboard                      │
+└─────────────────────────────────────────┘
+```
+
+### Services
+
+1. **Nostream** - Nostr relay server
+   - Handles Nostr protocol (WebSocket)
+   - Event validation and storage
+   - Payment claim verification
+   - Operator dashboard
+
+2. **Dassie** - ILP node for payments (NEW)
+   - Interledger payment verification
+   - Multi-blockchain settlement
+   - Internal RPC server (port 7768)
+   - Only accessible from Nostream
+
+3. **PostgreSQL** - Event database
+   - Stores all Nostr events
+   - Subscription filtering
+   - Internal-only access
+
+4. **Redis** - Caching layer
+   - WebSocket subscription management
+   - Event broadcasting
+   - Internal-only access
 
 ---
 
@@ -524,6 +578,21 @@ akash provider service-logs \
 | `ZEBEDEE_API_KEY` | ZEBEDEE payment processor | - |
 | `NODELESS_API_KEY` | Nodeless payment processor | - |
 
+### Dassie Settlement Configuration (Optional)
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `SETTLEMENT_BASE_ENABLED` | Enable Base L2 settlement | `false` |
+| `SETTLEMENT_BASE_RPC_URL` | Base L2 RPC endpoint | `https://mainnet.base.org` |
+| `SETTLEMENT_BASE_FACTORY_ADDRESS` | Payment channel factory | `0x...` |
+| `SETTLEMENT_BASE_RELAY_PRIVATE_KEY` | Relay signing key | `0x...` |
+| `SETTLEMENT_CRONOS_ENABLED` | Enable Cronos settlement | `true` |
+| `SETTLEMENT_CRONOS_RPC_URL` | Cronos RPC endpoint | `https://evm.cronos.org` |
+| `SETTLEMENT_CRONOS_FACTORY_ADDRESS` | Payment channel factory | `0x9Ec2d217b14e67cAbF86F20F4E7462D6d7bc7684` |
+| `SETTLEMENT_CRONOS_RELAY_PRIVATE_KEY` | Relay signing key | `0x...` |
+
+**Note:** Settlement modules are optional. Dassie will operate in verification-only mode if no settlement is configured.
+
 ### Environment Variable Injection
 
 Environment variables are injected at deployment time in two ways:
@@ -553,24 +622,26 @@ akash tx deployment create akash/deploy.yaml \
 
 | Service | CPU | Memory | Storage | % of Budget |
 |---------|-----|--------|---------|-------------|
-| Nostream | 0.5 cores | 1 GiB | 10 GiB | 58% |
-| PostgreSQL | 0.25 cores | 512 MiB | 20 GiB | 32% |
-| Redis | 0.1 cores | 256 MiB | 1 GiB | 10% |
-| **Total** | **0.85 cores** | **1.75 GiB** | **31 GiB** | **100%** |
+| Nostream | 0.5 cores | 1 GiB | 10 GiB | 48% |
+| Dassie | 0.35 cores | 512 MiB | 5 GiB | 17% |
+| PostgreSQL | 0.25 cores | 512 MiB | 20 GiB | 26% |
+| Redis | 0.1 cores | 256 MiB | 1 GiB | 9% |
+| **Total** | **1.2 cores** | **2.25 GiB** | **36 GiB** | **100%** |
 
 ### Pricing Breakdown
 
 ```
 Pricing Configuration (deploy.yaml):
 - nostream:  550 uAKT/block
+- dassie:    200 uAKT/block
 - postgres:  300 uAKT/block
 - redis:     100 uAKT/block
-- Total:     950 uAKT/block
+- Total:    1150 uAKT/block
 
 Monthly Cost Calculation:
-- Blocks per month: ~1,051,200 (5-second blocks × 30 days)
-- Monthly cost: 950 × 1,051,200 / 1,000,000 = 0.998 AKT/month
-- USD cost: ~$4.99/month (at $5/AKT)
+- Blocks per month: ~1,051,200 (6-second blocks × 30 days)
+- Monthly cost: 1150 × 1,051,200 / 1,000,000 = 1.209 AKT/month
+- USD cost: ~$6.04/month (at $5/AKT)
 ```
 
 **Note:** Actual costs may be lower as providers compete on price. The amounts in `deploy.yaml` are maximum bids.

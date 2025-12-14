@@ -1,0 +1,99 @@
+================================================
+AKASH SANDBOX WALLET - KEEP THIS FILE SECURE!
+================================================
+
+⚠️  WARNING: This file contains your wallet mnemonic phrase.
+⚠️  Anyone with this mnemonic has FULL ACCESS to your funds.
+⚠️  DO NOT share this file or commit it to version control.
+
+Generated: 2025-12-11
+Funded: 2025-12-11 (TX: 5D2D34781C1EE0CA6DC50F2354E1D165BC21C5DF2588C993A3128A3884F9FC5A)
+
+Network: Akash Sandbox-2
+Address: akash10ah0ah4mqx5trfcyux5ygtgayfgp3aksfeqwrc
+
+Mnemonic Phrase (12 words):
+---------------------------
+main action web grab please fold weapon claw zebra need crumble sea
+
+
+Usage Instructions:
+-------------------
+
+1. Fund this wallet (if needed):
+   Visit: https://faucet.sandbox-2.aksh.pw/faucet
+   Enter address: akash10ah0ah4mqx5trfcyux5ygtgayfgp3aksfeqwrc
+   ✅ ALREADY FUNDED - You received tokens!
+
+2. Check balance and list deployments (no setup needed!):
+   npm run akash:list
+
+3. Deploy to sandbox:
+   npm run akash:deploy:sandbox
+
+   ✅ TESTED AND WORKING!
+   - Deployment DSEQ: 1001245 created successfully
+   - Balance: 25 AKT → 14.9 AKT (2 deployments created)
+
+4. Check bids for a deployment:
+   npm run akash:bids -- DSEQ_NUMBER
+   Example: npm run akash:bids -- 1001245
+
+5. Close a deployment:
+   npm run akash:close -- DSEQ_NUMBER
+
+Note: The scripts automatically read the mnemonic from this file.
+      No need to export AKASH_MNEMONIC environment variable!
+
+
+Network Information:
+--------------------
+
+**Sandbox-2** (Current Wallet):
+- RPC: https://rpc.sandbox-2.aksh.pw:443
+- gRPC: https://grpc.sandbox-2.aksh.pw:443
+- Chain ID: sandbox-2
+- Faucet: https://faucet.sandbox-2.aksh.pw/faucet
+- Perfect for development and testing
+- Limited resources (smaller CPU/memory/storage)
+- Fewer providers available
+- Free tokens from faucet
+
+**Testnet**:
+- More providers and resources than sandbox
+- Still free tokens from faucet
+- Generate new wallet if you need testnet
+
+**Mainnet** (Production):
+- NEVER use this wallet for mainnet!
+- Real AKT tokens required (purchase from exchanges)
+- Generate NEW wallet with hardware security
+
+
+Security Notes:
+---------------
+- This wallet is for SANDBOX/TESTING ONLY (no real value)
+- For mainnet, generate a NEW wallet and fund it securely
+- Store mainnet mnemonics in hardware wallets or encrypted vaults
+- Never share your mnemonic with anyone
+- This file is in .gitignore and will NOT be committed to git
+
+
+Quick Test:
+-----------
+# Check if wallet is funded and SDK is working
+npm run akash:list
+
+# Expected output:
+# 📄 Using mnemonic from .akash-wallet.txt
+# 🔐 Initializing Akash wallet...
+# ✅ Wallet initialized: akash10ah0ah4mqx5trfcyux5ygtgayfgp3aksfeqwrc
+# 🚀 Initializing Akash Chain SDK...
+# ✅ SDK initialized for sandbox
+# 💰 Checking wallet balance...
+# ✅ Balance: X.X AKT
+# 📋 Listing deployments...
+# Found 0 deployment(s) (or list of existing deployments)
+
+
+================================================

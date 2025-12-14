@@ -1,0 +1,88 @@
+# Quality Gate: Story 2.11
+schema: 1
+story: "2.11"
+story_title: "Integrate MultiTokenPaymentChannelFactory with Dassie"
+gate: CONCERNS
+status_reason: "Implementation is solid with minimal changes. Concerns raised for missing integration tests (TECH-001) and lack of rate limiting on RPC endpoint (SEC-003). Both should be addressed before production usage."
+reviewer: "Quinn (Test Architect)"
+updated: "2025-12-14T00:00:00Z"
+
+waiver: { active: false }
+
+top_issues:
+  - id: "TECH-001"
+    severity: high
+    finding: "Integration tests deferred - no E2E validation with deployed Base testnet contract"
+    suggested_action: "Deploy MultiTokenPaymentChannelFactory to Base Sepolia and run full integration test suite before production usage"
+    suggested_owner: dev
+  - id: "SEC-003"
+    severity: medium
+    finding: "No rate limiting on verifyPaymentClaim RPC endpoint - vulnerable to DoS attacks"
+    suggested_action: "Add rate limiter middleware to RPC server (e.g., 100 requests/minute per IP)"
+    suggested_owner: dev
+  - id: "DATA-001"
+    severity: medium
+    finding: "No chain reorganization handling - ledger could desync if transactions are reverted"
+    suggested_action: "Increase confirmation blocks to 3-5 and add reconciliation job for ledger vs on-chain state"
+    suggested_owner: dev
+
+risk_summary:
+  totals:
+    critical: 0
+    high: 1
+    medium: 2
+    low: 3
+  highest:
+    id: TECH-001
+    score: 6
+    title: "Integration tests deferred"
+  recommendations:
+    must_fix:
+      - "Run integration tests against Base Sepolia testnet before production deployment"
+      - "Add rate limiting to RPC verifyPaymentClaim endpoint"
+    monitor:
+      - "RPC request rate per IP/user (alert on >100 req/min)"
+      - "Channel open/close success rate (alert on <95%)"
+      - "Invalid signature rate (alert on >10% of claims)"
+
+quality_score: 78
+expires: "2025-12-28T00:00:00Z"
+
+evidence:
+  tests_reviewed: 6
+  risks_identified: 6
+  trace:
+    ac_covered: [1, 2, 3, 4, 5, 6, 7, 9]
+    ac_gaps: [8]
+
+nfr_validation:
+  security:
+    status: CONCERNS
+    notes: "No rate limiting on RPC endpoint (SEC-003). Private key security documented but requires secrets manager for production."
+  performance:
+    status: PASS
+    notes: "Settlement strategy efficiently handles threshold/time-based batching. Gas costs within acceptable range."
+  reliability:
+    status: CONCERNS
+    notes: "No chain reorg handling (DATA-001). Acceptable for MVP with monitoring, but should be addressed post-launch."
+  maintainability:
+    status: PASS
+    notes: "Clean code structure, excellent documentation (BASE-SETTLEMENT-CONFIG.md). Minimal changes demonstrate good architecture."
+
+recommendations:
+  immediate:
+    - action: "Add rate limiting middleware to RPC server"
+      refs: ["packages/app-dassie/src/rpc-server/routers/payment.ts"]
+    - action: "Deploy MultiTokenPaymentChannelFactory to Base Sepolia"
+      refs: ["packages/app-dassie/src/ledgers/modules/base/base-integration.test.ts"]
+    - action: "Run integration tests with deployed testnet contract"
+      refs: ["packages/app-dassie/src/ledgers/modules/base/base-integration.test.ts"]
+  future:
+    - action: "Increase confirmation blocks from 1 to 3-5 to reduce reorg risk"
+      refs: ["packages/app-dassie/src/ledgers/modules/base/functions/channel-operations.ts:72-75"]
+    - action: "Implement chain reorg detection and ledger reconciliation job"
+      refs: ["packages/app-dassie/src/ledgers/modules/base/"]
+    - action: "Add secrets manager integration for private key management"
+      refs: ["packages/app-dassie/src/ledgers/modules/base/config.ts"]
+    - action: "Deploy Base Sepolia testnet for ongoing developer testing"
+      refs: []

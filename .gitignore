@@ -37,6 +37,9 @@ dist
 # Wallet security files (DO NOT COMMIT)
 .wallet-seed.txt
 *.seed.txt
+.akash-wallet.txt
+.akash-deployment.json
+*.wallet.txt
 
 # Nostr data folder
 .nostr
@@ -52,3 +55,12 @@ coverage.json
 
 # Cronos verification
 cronos-verification-input.json
+
+# Monorepo patterns
+packages/*/dist
+packages/*/node_modules
+packages/*/.nyc_output
+packages/*/.test-reports
+packages/*/.coverage
+packages/*/*.tsbuildinfo
+packages/*/.dassie-dev

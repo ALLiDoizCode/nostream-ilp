@@ -1,0 +1,54 @@
+{
+  "name": "@nostream-ilp/lib-dassie-protocol-stream",
+  "version": "0.0.1",
+  "description": "Implementation of the STREAM transport protocol",
+  "type": "module",
+  "exports": "./src/index.ts",
+  "sideEffects": false,
+  "publishConfig": {
+    "exports": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint --color .",
+    "typecheck": "tsc --pretty"
+  },
+  "files": [
+    "dist/index.js",
+    "dist/index.js.map",
+    "dist/index.d.ts"
+  ],
+  "author": {
+    "name": "Stefan Thomas",
+    "email": "justmoon@members.fsf.org",
+    "url": "https://justmoon.com/"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "ilp-protocol-stream": "2.7.2-alpha.2"
+  },
+  "dependencies": {
+    "@nostream-ilp/lib-dassie-logger": "workspace:^",
+    "@nostream-ilp/lib-dassie-oer": "workspace:^",
+    "@nostream-ilp/lib-dassie-protocol-ildcp": "workspace:^",
+    "@nostream-ilp/lib-dassie-protocol-ilp": "workspace:^",
+    "@nostream-ilp/lib-dassie-reactive": "workspace:^",
+    "@nostream-ilp/lib-dassie-reactive-io": "workspace:^",
+    "@nostream-ilp/lib-dassie-type-utils": "workspace:^",
+    "uint8array-extras": "^1.4.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/cameri/nostream/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cameri/nostream.git",
+    "directory": "packages/lib-dassie-protocol-stream"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "name": "@nostream-ilp/lib-dassie-rpc",
+  "version": "0.0.2",
+  "description": "RPC library for communicating between TypeScript processes",
+  "type": "module",
+  "exports": {
+    "./server": "./src/server/index.ts",
+    "./client": "./src/client/index.ts"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "exports": {
+      "./server": {
+        "types": "./dist/server/index.d.ts",
+        "default": "./dist/server/index.js"
+      },
+      "./client": {
+        "types": "./dist/client/index.d.ts",
+        "default": "./dist/client/index.js"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint --color .",
+    "typecheck": "tsc --pretty"
+  },
+  "files": [
+    "dist/server/index.js",
+    "dist/server/index.js.map",
+    "dist/server/index.d.ts",
+    "dist/client/index.js",
+    "dist/client/index.js.map",
+    "dist/client/index.d.ts"
+  ],
+  "author": {
+    "name": "Stefan Thomas",
+    "email": "justmoon@members.fsf.org",
+    "url": "https://justmoon.com/"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "type-fest": "^4.26.1"
+  },
+  "dependencies": {
+    "@nostream-ilp/lib-dassie-reactive": "workspace:^",
+    "@nostream-ilp/lib-dassie-type-utils": "workspace:^",
+    "zod": "^3.23.8"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/cameri/nostream/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cameri/nostream.git",
+    "directory": "packages/lib-dassie-rpc"
+  }
+}

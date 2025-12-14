@@ -1,0 +1,81 @@
+{
+  "name": "@nostream-ilp/app-dassie",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Dassie ILP node for Nostream-ILP integration",
+  "main": "./src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "node --loader ts-node/esm src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --color .",
+    "typecheck": "tsc --pretty"
+  },
+  "author": {
+    "name": "Stefan Thomas",
+    "email": "justmoon@members.fsf.org",
+    "url": "https://justmoon.com/"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@asoltys/clightning-client": "^0.1.10",
+    "@nostream-ilp/lib-dassie-format-utils": "workspace:^",
+    "@nostream-ilp/lib-dassie-http-server": "workspace:^",
+    "@nostream-ilp/lib-dassie-logger": "workspace:^",
+    "@nostream-ilp/lib-dassie-oer": "workspace:^",
+    "@nostream-ilp/lib-dassie-protocol-ildcp": "workspace:^",
+    "@nostream-ilp/lib-dassie-protocol-ilp": "workspace:^",
+    "@nostream-ilp/lib-dassie-protocol-utils": "workspace:^",
+    "@nostream-ilp/lib-dassie-reactive": "workspace:^",
+    "@nostream-ilp/lib-dassie-reactive-io": "workspace:^",
+    "@nostream-ilp/lib-dassie-reactive-rpc": "workspace:^",
+    "@nostream-ilp/lib-dassie-rpc": "workspace:^",
+    "@nostream-ilp/lib-dassie-sqlite": "workspace:^",
+    "@nostream-ilp/lib-dassie-type-utils": "workspace:^",
+    "@cosmjs/amino": "^0.32.0",
+    "@cosmjs/cosmwasm-stargate": "^0.32.0",
+    "@cosmjs/crypto": "^0.32.0",
+    "@cosmjs/proto-signing": "^0.32.0",
+    "@cosmjs/stargate": "^0.32.0",
+    "@noble/curves": "^1.5.0",
+    "@noble/ed25519": "^2.0.0",
+    "acme-client": "^5.4.0",
+    "cmd-ts": "^0.13.0",
+    "cookie": "^0.6.0",
+    "denque": "^2.1.0",
+    "env-paths": "^3.0.0",
+    "execa": "^9.4.0",
+    "ilp-protocol-stream": "2.7.2-alpha.2",
+    "immer": "^10.1.1",
+    "nanoid": "^5.0.7",
+    "p-map": "^7.0.2",
+    "pretty-format": "^29.7.0",
+    "react": "^18.3.1",
+    "superjson": "^2.2.1",
+    "uint8array-extras": "^1.4.0",
+    "viem": "^2.0.0",
+    "xrpl": "^3.1.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/cookie": "^0.6.0",
+    "@types/node": "^22.5.5",
+    "@types/react": "^18.3.8",
+    "type-fest": "^4.26.1",
+    "vite": "^5.4.7",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/cameri/nostream/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cameri/nostream.git",
+    "directory": "packages/app-dassie"
+  }
+}

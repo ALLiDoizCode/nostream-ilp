@@ -45,7 +45,7 @@
 
 **Acceptance Criteria:**
 1. Create deploy.yaml (Akash SDL)
-2. Two services: dassie, postgres
+2. Services: nostream, postgres, redis (Note: Dassie integration deferred to later epic)
 3. Expose ports: 443 (HTTPS), 8080 (UI)
 4. Resource allocation: 1 CPU, 2GB RAM, 10GB storage
 5. Estimated cost: <$5/month

@@ -45,6 +45,7 @@
 
 3. **Docker Images**
    - Nostream image published to registry (e.g., `ghcr.io/yourorg/nostream-ilp:v1.0.0`)
+   - Dassie image published to registry (e.g., `ghcr.io/yourorg/dassie-node:v1.0.0`)
    - PostgreSQL image: `postgres:16-alpine`
    - Redis image: `redis:7-alpine`
 
@@ -96,6 +97,7 @@ Balance: 5.123456 AKT
 ```bash
 # Check if images are accessible
 docker pull nostream-ilp:v1.0.0-mainnet || echo "Image needs to be built/pushed"
+docker pull dassie-node:v1.0.0-mainnet || echo "Image needs to be built/pushed"
 docker pull postgres:16-alpine
 docker pull redis:7-alpine
 ```
@@ -103,12 +105,15 @@ docker pull redis:7-alpine
 If images don't exist:
 
 ```bash
-# Build and tag mainnet image
-docker build -t nostream-ilp:v1.0.0-mainnet -f Dockerfile .
+# Build and tag mainnet images
+docker build -t nostream-ilp:v1.0.0-mainnet -f docker/Dockerfile.nostream .
+docker build -t dassie-node:v1.0.0-mainnet -f docker/Dockerfile.dassie .
 
 # Optionally push to registry (if using ghcr.io)
 # docker tag nostream-ilp:v1.0.0-mainnet ghcr.io/yourorg/nostream-ilp:v1.0.0
 # docker push ghcr.io/yourorg/nostream-ilp:v1.0.0
+# docker tag dassie-node:v1.0.0-mainnet ghcr.io/yourorg/dassie-node:v1.0.0
+# docker push ghcr.io/yourorg/dassie-node:v1.0.0
 ```
 
 ✅ **Checkpoint**: All Docker images are available
@@ -148,20 +153,23 @@ cat akash/deploy.yaml
 
 **Verify image tags:**
 - `nostream` service: Image should be `nostream-ilp:v1.0.0-mainnet` (not `:latest`)
+- `dassie` service: Image should be `dassie-node:v1.0.0-mainnet` (not `:latest`)
 - `postgres` service: Image should be `postgres:16-alpine` (not `:latest`)
 - `redis` service: Image should be `redis:7-alpine` (not `:latest`)
 
 **Verify pricing (current configuration):**
 - Nostream: 550 uAKT/block
+- Dassie: 200 uAKT/block
 - PostgreSQL: 300 uAKT/block
 - Redis: 100 uAKT/block
-- **Total**: 950 uAKT/block (~$4.99/month at $5/AKT)
+- **Total**: 1,150 uAKT/block (~$6.04/month at $5/AKT)
 
 **Verify resource allocation:**
 - Nostream: 0.5 CPU, 1Gi RAM, 10Gi storage
+- Dassie: 0.35 CPU, 512Mi RAM, 5Gi storage
 - PostgreSQL: 0.25 CPU, 512Mi RAM, 20Gi storage
 - Redis: 0.1 CPU, 256Mi RAM, 1Gi storage
-- **Total**: 0.85 CPU, 1.75Gi RAM, 31Gi storage
+- **Total**: 1.2 CPU, 2.25Gi RAM, 36Gi storage
 
 ✅ **Checkpoint**: SDL configuration is production-ready
 
@@ -415,7 +423,7 @@ nslookup relay.nostr-ilp.network
 curl https://$SERVICE_URI:8080/health
 
 # Expected response:
-# {"status":"healthy","services":{"nostream":"up","postgresql":"up","redis":"up"}}
+# {"status":"healthy","services":{"nostream":"up","dassie":"up","postgresql":"up","redis":"up"}}
 ```
 
 If using domain:

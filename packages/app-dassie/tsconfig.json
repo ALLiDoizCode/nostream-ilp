@@ -1,0 +1,35 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "module": "ESNext",
+    "target": "ES2022",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "references": [
+    { "path": "../lib-dassie-format-utils" },
+    { "path": "../lib-dassie-http-server" },
+    { "path": "../lib-dassie-logger" },
+    { "path": "../lib-dassie-oer" },
+    { "path": "../lib-dassie-protocol-ildcp" },
+    { "path": "../lib-dassie-protocol-ilp" },
+    { "path": "../lib-dassie-protocol-utils" },
+    { "path": "../lib-dassie-reactive" },
+    { "path": "../lib-dassie-reactive-io" },
+    { "path": "../lib-dassie-reactive-rpc" },
+    { "path": "../lib-dassie-rpc" },
+    { "path": "../lib-dassie-sqlite" },
+    { "path": "../lib-dassie-type-utils" }
+  ],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
+}
