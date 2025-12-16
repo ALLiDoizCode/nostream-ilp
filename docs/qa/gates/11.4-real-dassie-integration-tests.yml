@@ -1,0 +1,163 @@
+# Quality Gate: Story 11.4 - Real Dassie Integration Tests
+# Updated by Quinn (Test Architect) - 2025-12-16 (Second Review)
+
+schema: 1
+story: "11.4"
+story_title: "Real Dassie Integration Tests"
+gate: PASS
+status_reason: "All QA concerns addressed! AC 7 & 8 fully implemented, comprehensive error handling added to RPC client. Infrastructure is production-ready. Only AC 4 blocked by dependencies (expected)."
+reviewer: "Quinn (Test Architect)"
+updated: "2025-12-16T12:00:00Z"
+
+waiver: { active: false }
+
+# Top Issues (Severity: low | medium | high)
+top_issues:
+  - id: "TYPE-001"
+    severity: low
+    finding: "Extensive use of 'any' for tRPC response types reduces type safety"
+    refs:
+      - "packages/app-nostream/test/btp-nips/n-peer/test-node.ts:310"
+      - "packages/app-nostream/test/btp-nips/n-peer/test-node.ts:339"
+      - "packages/app-nostream/test/btp-nips/n-peer/test-node.ts:373"
+      - "packages/app-nostream/test/btp-nips/n-peer/test-node.ts:407"
+      - "packages/app-nostream/test/btp-nips/n-peer/test-node.ts:455"
+    suggested_action: "Define TypeScript interfaces for Dassie tRPC API responses (future improvement)"
+    suggested_owner: dev
+
+# Risk Summary
+risk_summary:
+  totals:
+    critical: 0
+    high: 0
+    medium: 0
+    low: 1
+  recommendations:
+    must_fix: []
+    monitor:
+      - "Type safety can be improved incrementally when Dassie API stabilizes"
+      - "Consider exponential backoff in polling loops for efficiency"
+
+# Quality Score
+quality_score: 95
+# Calculation: 100 - (5 × 1 low priority type safety concern) = 95
+# Previous score: 75 (deductions for incomplete ACs and error handling - now resolved)
+
+# Evidence
+evidence:
+  tests_reviewed: 23
+  files_reviewed: 13
+  risks_identified: 1
+  trace:
+    ac_covered: [1, 2, 3, 5, 6, 7, 8, 9, 10]
+    ac_gaps: []
+    ac_blocked: [4]
+
+# NFR Validation
+nfr_validation:
+  security:
+    status: PASS
+    notes: "No security issues; test-only hardcoded secrets acceptable"
+  performance:
+    status: PASS
+    notes: "Latency targets realistic (500ms p95 local, 2000ms CI); resource limits enforced"
+  reliability:
+    status: PASS
+    notes: "Comprehensive error handling with timeouts, validation, and retry logic implemented"
+  maintainability:
+    status: PASS
+    notes: "Excellent documentation; clean architecture; clear separation of concerns"
+
+# Recommendations
+recommendations:
+  immediate: []
+
+  future:
+    - action: "Define TypeScript interfaces for Dassie tRPC API responses"
+      refs: ["packages/app-nostream/test/btp-nips/n-peer/test-node.ts"]
+      estimated_effort: "1 hour"
+    - action: "Implement exponential backoff in waitForFulfillment polling"
+      refs: ["packages/app-nostream/test/btp-nips/n-peer/test-node.ts:384-428"]
+      estimated_effort: "15 minutes"
+    - action: "Add circuit breaker pattern for Dassie RPC failures"
+      refs: ["packages/app-nostream/test/btp-nips/n-peer/test-node.ts"]
+      estimated_effort: "1 hour"
+
+# Blockers (Expected)
+blockers:
+  - id: "DEPENDENCY-001"
+    description: "AC 4 (BTP-NIPs Integration) tests are placeholders awaiting Story 5.9 (Dassie tRPC Endpoints)"
+    blocking_story: "5.9"
+    status: expected
+  - id: "DEPENDENCY-002"
+    description: "AC 4 (BTP-NIPs Integration) tests are placeholders awaiting Story 5.10 (Dassie BTP-NIPs Reception)"
+    blocking_story: "5.10"
+    status: expected
+
+# Architecture Assessment
+architecture:
+  strengths:
+    - "Clean separation between mock and real Dassie connections via union types"
+    - "Type-safe StreamConnection abstraction enables flexible testing"
+    - "Docker Compose stack properly configured with health checks, static IPs, resource limits"
+    - "Test framework extensible for both in-process and Docker execution modes"
+    - "Comprehensive error handling with timeouts and validation"
+  concerns: []
+  patterns_used:
+    - "Factory pattern for connection creation (createMockStreamConnection, createRealDassieConnection)"
+    - "Strategy pattern for execution mode (in-process vs Docker)"
+    - "Repository pattern for event storage"
+    - "Timeout pattern using AbortController for network resilience"
+
+# Test Architecture
+test_architecture:
+  coverage: "90% (9/10 ACs complete, 1 blocked by dependencies)"
+  quality: "Excellent - comprehensive test scenarios, timing validation, resource constraints, failover tests, CI/CD integration"
+  gaps: []
+  strengths:
+    - "Excellent separation of test utilities (framework.ts, test-node.ts, config.ts)"
+    - "Proper use of beforeAll/afterAll for Docker lifecycle management"
+    - "Adaptive timeouts for CI vs local environments"
+    - "Docker stats parsing for resource monitoring (AC 7)"
+    - "Container restart orchestration for failover testing (AC 8)"
+    - "Comprehensive error handling with timeouts and validation"
+
+# Documentation Quality
+documentation:
+  quality: "Excellent"
+  completeness: "95%"
+  highlights:
+    - "Outstanding test/docker/README.md with quickstart and troubleshooting"
+    - "Comprehensive Dev Notes explaining prerequisites, blockers, configuration"
+    - "Complete change log tracking all implementation phases"
+    - "Clear inline comments explaining error handling strategies"
+  gaps:
+    - "No inline JSDoc comments on complex functions (minor)"
+
+# Fixes Implemented Since Last Review
+fixes_implemented:
+  - id: "FIX-001"
+    issue: "AC 7 (Resource Monitoring) placeholder test"
+    solution: "Implemented docker stats parsing with memory limit validation"
+    location: "packages/app-nostream/test/btp-nips/integration/dassie-integration.spec.ts:368-400"
+  - id: "FIX-002"
+    issue: "AC 8 (Failover/Reconnection) placeholder test"
+    solution: "Implemented container restart orchestration and reconnection verification"
+    location: "packages/app-nostream/test/btp-nips/integration/dassie-integration.spec.ts:420-479"
+  - id: "FIX-003"
+    issue: "RPC error handling gaps"
+    solution: "Added try-catch blocks, 5s timeouts (AbortController), HTTP status validation, response format validation"
+    location: "packages/app-nostream/test/btp-nips/n-peer/test-node.ts:258-466"
+
+# Change History (Append-only audit trail)
+history:
+  - at: "2025-12-16T00:00:00Z"
+    gate: CONCERNS
+    note: "Initial review - Excellent infrastructure work, but 2 ACs incomplete (AC 7, AC 8) and error handling gaps in RPC client. Blocked by Stories 5.9 & 5.10 (expected)."
+    reviewer: "Quinn (Test Architect)"
+    quality_score: 75
+  - at: "2025-12-16T12:00:00Z"
+    gate: PASS
+    note: "Second review - ALL concerns addressed! AC 7 & 8 fully implemented, comprehensive error handling added. Production-ready infrastructure. Quality score: 75 → 95."
+    reviewer: "Quinn (Test Architect)"
+    quality_score: 95
