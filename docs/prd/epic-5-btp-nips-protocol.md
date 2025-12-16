@@ -334,10 +334,65 @@
 
 ---
 
+## Story 5.9: Dassie tRPC Endpoints for Test Integration
+
+**As a** QA Engineer,
+**I want** Dassie to expose tRPC endpoints for test framework integration,
+**so that** Story 11.4 real Dassie integration tests can query peer status, send payments, and inspect internal ledger state.
+
+**Acceptance Criteria:**
+1. Implement tRPC endpoint - `peers.list` (returns peer information)
+2. Implement tRPC endpoint - `peers.count` (returns active peer count)
+3. Implement tRPC endpoint - `ilp.sendPayment` (initiates ILP payment)
+4. Implement tRPC endpoint - `ilp.getPaymentStatus` (queries payment status)
+5. Implement tRPC endpoint - `ledger.getState` (returns internal ledger state)
+6. Add authentication & authorization (Bearer token validation)
+7. Add error handling (structured error responses)
+
+**Dependencies:**
+- Story 2.10 (Dassie Monorepo Integration)
+
+**Outputs:**
+- Dassie tRPC router with test endpoints
+- Authentication middleware
+- Integration tests for all endpoints
+- Documentation and usage examples
+
+---
+
+## Story 5.10: Dassie Configuration & BTP-NIPs Reception
+
+**As a** Dassie node operator,
+**I want** Dassie to load configuration from config.json and receive BTP-NIPs packets via ILP STREAM,
+**so that** Dassie nodes can participate in the BTP-NIPs network and handle Nostr events over ILP.
+
+**Acceptance Criteria:**
+1. Load configuration from config.json file (with validation)
+2. Receive BTP-NIPs packets via ILP STREAM (detect packet type)
+3. Deserialize and validate BTP-NIPs packet format
+4. Route packets to appropriate handlers (EVENT, REQ, CLOSE)
+5. Send ILP fulfillment/rejection based on packet processing
+6. Implement EVENT handler (verify, store, propagate)
+7. Implement REQ/CLOSE handlers (subscription lifecycle)
+8. Add error handling & logging
+
+**Dependencies:**
+- Story 5.9 (Dassie tRPC Endpoints)
+
+**Outputs:**
+- Configuration loading system
+- BTP-NIPs packet detection and deserialization
+- Handler registry and packet routing
+- EVENT, REQ, CLOSE handlers
+- ILP fulfillment/rejection logic
+- Integration tests
+
+---
+
 ## Epic 5 Summary
 
-**Stories:** 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8 (8 stories)
-**Timeline:** 5-6 weeks (adjusted for story split)
+**Stories:** 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 5.10 (10 stories)
+**Timeline:** 6-7 weeks (adjusted for Dassie integration stories)
 **Output:** Complete BTP-NIPs protocol implementation, ready for peer-to-peer network
 
 **Story Sequence:**
@@ -346,9 +401,11 @@
 3. **5.3** - REQ/CLOSE Subscription Handler ✅
 4. **5.4** - Redis Caching & Tag Filtering ✅
 5. **5.5** - Subscription Manager (in progress)
-6. **5.6** - Event Lifecycle Management (NIP-09/40) (new)
-7. **5.7** - Storage Statistics & Dashboard Integration (new)
-8. **5.8** - BTP-NIPs Integration Tests (renumbered from 5.6)
+6. **5.6** - Event Lifecycle Management (NIP-09/40)
+7. **5.7** - Storage Statistics & Dashboard Integration
+8. **5.8** - BTP-NIPs Integration Tests
+9. **5.9** - Dassie tRPC Endpoints for Test Integration (blocker for 11.4)
+10. **5.10** - Dassie Configuration & BTP-NIPs Reception (blocker for 11.4)
 
 **Key Deliverables:**
 - Nostr events embedded in ILP packets ✅
@@ -359,5 +416,7 @@
 - Storage statistics and monitoring
 - Subscription management with indexing
 - End-to-end integration tests
+- Dassie tRPC test endpoints (for Story 11.4)
+- Dassie BTP-NIPs packet reception (for Story 11.4)
 
 ---
