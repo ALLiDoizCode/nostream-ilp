@@ -1,0 +1,273 @@
+# Quality Gate Decision - Story 11.5
+# Network Resilience & Failure Tests
+# Quinn (Test Architect) - Second Review
+
+schema: 1
+story: "11.5"
+story_title: "Network Resilience & Failure Tests"
+gate: FAIL
+status_reason: "All 10 ACs now implemented with 95 tests total across 11 test files. Code quality is excellent. CRITICAL BLOCKER: Vitest configuration files (vitest.config.ts, vitest.config.mts) exist but are untracked/uncommitted, causing ERR_REQUIRE_ESM preventing test execution. Cannot verify tests pass until build is fixed."
+reviewer: "Quinn (Test Architect)"
+updated: "2025-12-17T22:30:00Z"
+
+waiver: { active: false }
+
+top_issues:
+  - id: "BUILD-001"
+    severity: high
+    finding: "Vitest configuration files exist but are untracked/uncommitted causing build failure"
+    suggested_action: "Remove vitest.config.ts (causes ESM errors), commit vitest.config.mts, verify all 95 tests pass"
+    suggested_owner: dev
+    refs:
+      - "packages/app-nostream/vitest.config.ts (DELETE THIS)"
+      - "packages/app-nostream/vitest.config.mts (COMMIT THIS)"
+
+  - id: "TEST-001"
+    severity: high
+    finding: "Cannot verify test execution - vitest fails with ERR_REQUIRE_ESM error code"
+    suggested_action: "Fix vitest config, run 'pnpm --filter @nostream-ilp/app-nostream test', capture results showing 95+ tests passing"
+    suggested_owner: dev
+    refs:
+      - "Error: require() of ES Module not supported - vitest needs .mts config"
+
+  - id: "META-001"
+    severity: medium
+    finding: "File List in Dev Agent Record lists vitest.config.mts as 'Created/Modified' but file is untracked in git"
+    suggested_action: "Add vitest.config.mts to git, remove vitest.config.ts, update File List to reflect committed files only"
+    suggested_owner: dev
+    refs:
+      - "docs/stories/11.5.story.md:781-799 (File List section)"
+
+risk_summary:
+  totals: { critical: 0, high: 2, medium: 1, low: 0 }
+  highest: high
+  recommendations:
+    must_fix:
+      - "Fix vitest configuration (remove .ts, commit .mts)"
+      - "Verify all 95 tests execute and pass"
+      - "Commit configuration files to git"
+    monitor:
+      - "Watch for timing-based test flakiness in CI/CD (setTimeout-based fault injection)"
+      - "Monitor memory usage for 20-node cascading failure tests"
+
+quality_score: 40
+# Calculation: 100 - (20*2 high-severity FAILs) - (10*1 medium CONCERN) = 50, adjusted to 40 for untestability
+
+evidence:
+  tests_reviewed: 95
+  # Breakdown per file:
+  # - fault-injector.spec.ts: 23 unit tests
+  # - n-peer-node-crash.spec.ts: 5 tests (AC 1)
+  # - n-peer-partition-healing.spec.ts: 10 tests (AC 2)
+  # - n-peer-reconnection.spec.ts: 11 tests (AC 3)
+  # - n-peer-degraded-mode.spec.ts: 12 tests (AC 4)
+  # - n-peer-byzantine-faults.spec.ts: 13 tests (AC 5)
+  # - n-peer-database-recovery.spec.ts: 5 tests (AC 6)
+  # - n-peer-redis-failure.spec.ts: 5 tests (AC 7)
+  # - n-peer-concurrent-failures.spec.ts: 4 tests (AC 8)
+  # - n-peer-payment-rollback.spec.ts: 3 tests (AC 9)
+  # - n-peer-cascading-failure.spec.ts: 4 tests (AC 10)
+
+  tests_passing: "UNKNOWN - cannot execute due to vitest config issue"
+  tests_failing: "UNKNOWN - cannot execute due to vitest config issue"
+  tests_blocked: 95
+
+  risks_identified: 3
+
+  trace:
+    ac_covered: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  # All 10 ACs have complete test implementations
+    ac_gaps: []  # No gaps in implementation
+
+  files_reviewed:
+    implementation:
+      - "packages/app-nostream/test/btp-nips/n-peer/fault-injector.ts (540 lines, 8 fault types)"
+      - "packages/app-nostream/test/btp-nips/n-peer/fault-injector.spec.ts (23 unit tests)"
+      - "packages/app-nostream/test/btp-nips/integration/n-peer-node-crash.spec.ts (5 tests, AC 1)"
+      - "packages/app-nostream/test/btp-nips/integration/n-peer-partition-healing.spec.ts (10 tests, AC 2)"
+      - "packages/app-nostream/test/btp-nips/integration/n-peer-reconnection.spec.ts (11 tests, AC 3)"
+      - "packages/app-nostream/test/btp-nips/integration/n-peer-degraded-mode.spec.ts (12 tests, AC 4)"
+      - "packages/app-nostream/test/btp-nips/integration/n-peer-byzantine-faults.spec.ts (13 tests, AC 5)"
+      - "packages/app-nostream/test/btp-nips/integration/n-peer-database-recovery.spec.ts (5 tests, AC 6)"
+      - "packages/app-nostream/test/btp-nips/integration/n-peer-redis-failure.spec.ts (5 tests, AC 7)"
+      - "packages/app-nostream/test/btp-nips/integration/n-peer-concurrent-failures.spec.ts (4 tests, AC 8)"
+      - "packages/app-nostream/test/btp-nips/integration/n-peer-payment-rollback.spec.ts (3 tests, AC 9)"
+      - "packages/app-nostream/test/btp-nips/integration/n-peer-cascading-failure.spec.ts (4 tests, AC 10)"
+
+    documentation:
+      - "docs/NETWORK_RESILIENCE_RUNBOOK.md (operational runbook, 10KB, 300+ lines)"
+      - "packages/app-nostream/test/btp-nips/integration/RESILIENCE_TEST_IMPLEMENTATION_GUIDE.md (implementation guide, 11KB)"
+
+    config_issues:
+      - "packages/app-nostream/vitest.config.ts (UNTRACKED - causes ERR_REQUIRE_ESM)"
+      - "packages/app-nostream/vitest.config.mts (UNTRACKED - correct config format)"
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: "Byzantine fault tolerance well-designed with signature verification, rate limiting simulation, event modification detection, and forged signature rejection. Malicious node behavior properly isolated to test scope. No security vulnerabilities identified."
+
+  performance:
+    status: CONCERNS
+    notes: "Cannot verify performance targets without running tests. Potential issues: setTimeout-based fault injection could be flaky in CI/CD, 20-node cascading failure test may have high memory usage. Recommend vi.useFakeTimers() for deterministic timing."
+
+  reliability:
+    status: FAIL
+    notes: "Cannot assess reliability until tests execute successfully. Build system is broken preventing test execution. This is a critical reliability failure of the development environment."
+
+  maintainability:
+    status: PASS
+    notes: "Excellent code organization with clear file structure, comprehensive JSDoc documentation, consistent TypeScript patterns, well-named variables/functions, and reusable fault injection framework. Test files follow established patterns from Stories 11.1/11.2."
+
+recommendations:
+  immediate:  # MUST fix before marking Done (P0)
+    - action: "Delete packages/app-nostream/vitest.config.ts (causes ERR_REQUIRE_ESM)"
+      refs: ["packages/app-nostream/vitest.config.ts"]
+      priority: P0
+      estimated_time: "1 minute"
+
+    - action: "Add and commit packages/app-nostream/vitest.config.mts to git"
+      refs: ["packages/app-nostream/vitest.config.mts"]
+      priority: P0
+      estimated_time: "1 minute"
+
+    - action: "Run full test suite: pnpm --filter @nostream-ilp/app-nostream test"
+      refs: ["All test files in packages/app-nostream/test/btp-nips/"]
+      priority: P0
+      estimated_time: "5 minutes (including test execution)"
+
+    - action: "Update QA Results section with test execution results (pass/fail counts, timing)"
+      refs: ["docs/stories/11.5.story.md:567+ (QA Results section)"]
+      priority: P0
+      estimated_time: "5 minutes"
+
+  future:  # Improvements for later (P2-P3)
+    - action: "Replace setTimeout with vi.useFakeTimers() for deterministic fault injection timing"
+      refs: ["packages/app-nostream/test/btp-nips/n-peer/fault-injector.ts"]
+      priority: P2
+      estimated_time: "2 hours"
+
+    - action: "Implement actual network isolation in disconnectNodes() (currently just logs)"
+      refs: ["packages/app-nostream/test/btp-nips/n-peer/fault-injector.ts:140-154"]
+      priority: P2
+      estimated_time: "1 hour"
+
+    - action: "Add visual network topology diagrams to documentation"
+      refs: ["docs/NETWORK_RESILIENCE_RUNBOOK.md"]
+      priority: P3
+      estimated_time: "3 hours"
+
+    - action: "Profile memory usage for 20-node cascading failure tests"
+      refs: ["packages/app-nostream/test/btp-nips/integration/n-peer-cascading-failure.spec.ts"]
+      priority: P3
+      estimated_time: "1 hour"
+
+    - action: "Add automated leak detection in ResourceTracker"
+      refs: ["packages/app-nostream/test/btp-nips/n-peer/cleanup.ts (expected from Story 11.1)"]
+      priority: P3
+      estimated_time: "2 hours"
+
+code_quality_strengths:
+  - "Comprehensive fault injection framework with 8 distinct fault types: crash, partition, disconnect, database failure, Redis failure, malicious behavior (3 types), and overload simulation"
+  - "Excellent type safety with TypeScript interfaces, strict typing, and comprehensive JSDoc comments"
+  - "Clear error handling with descriptive error messages (e.g., 'Node node-X is already crashed', 'Partition already exists')"
+  - "Well-structured test organization with describe blocks, clear test names, and logical grouping"
+  - "Exceptional documentation quality: 10KB operational runbook with failure catalog, recovery procedures, and troubleshooting guide"
+  - "Proper use of mock nodes for isolated fault injection testing (no external dependencies)"
+  - "Comprehensive coverage of Byzantine fault scenarios: event modification, forged signatures, and event flooding attacks"
+  - "Realistic failure simulation timing: 30s heartbeat timeout, exponential backoff (1s, 2s, 4s, 8s, 16s) for reconnection"
+  - "Clean separation of concerns: FaultInjector is independent, reusable, and well-encapsulated"
+  - "Consistent code patterns across all 11 test files (easy to maintain and extend)"
+
+code_quality_concerns:
+  - "Vitest config files untracked preventing test execution (critical blocker)"
+  - "setTimeout-based fault injection could introduce timing flakiness in CI/CD environments"
+  - "Some methods are simulation stubs (disconnectNodes only logs, doesn't actually prevent communication)"
+  - "No automated leak detection yet (manual cleanup in afterEach)"
+  - "Database and Redis failure simulation relies on timing rather than actual connection state"
+
+history:
+  - at: "2025-12-17T09:28:00Z"
+    gate: CONCERNS
+    reviewer: "Quinn (Test Architect)"
+    quality_score: 70
+    note: "First review - found only 1/10 ACs implemented (AC 1 complete with 5 tests passing). Fault injection framework excellent (23/23 tests passing). Documentation exceptional. Requested completion of AC 2-10."
+    top_issues_count: 3
+    recommendation: "Complete AC 2-10 implementations following excellent patterns established in AC 1 and implementation guide."
+
+  - at: "2025-12-17T22:30:00Z"
+    gate: FAIL
+    reviewer: "Quinn (Test Architect)"
+    quality_score: 40
+    note: "Second review - all 10 ACs now fully implemented with 95 tests across 11 files. Code quality excellent. CRITICAL BLOCKER: vitest config files untracked causing ERR_REQUIRE_ESM. Cannot verify tests pass until build fixed."
+    top_issues_count: 3
+    recommendation: "Fix vitest configuration (1-2 hours), run tests, verify all pass. Implementation appears complete and high-quality but gate must FAIL until tests execute successfully."
+
+# Task Completion Status (Updated)
+task_status:
+  completed:
+    - "Task 1: Fault Injection Framework (100% - 540 lines, 23 tests, 8 fault types)"
+    - "Task 2: AC 1 - Node Crash Mid-Propagation Test (100% - 5 tests)"
+    - "Task 3: AC 2 - Network Partition and Healing Test (100% - 10 tests)"
+    - "Task 4: AC 3 - Reconnection and Subscription Renewal Test (100% - 11 tests)"
+    - "Task 5: AC 4 - Graceful Degradation Test (100% - 12 tests)"
+    - "Task 6: AC 5 - Byzantine Fault Tolerance Test (100% - 13 tests)"
+    - "Task 7: AC 6 - Database Failure Recovery Test (100% - 5 tests)"
+    - "Task 8: AC 7 - Redis Cache Failure Test (100% - 5 tests)"
+    - "Task 9: AC 8 - Concurrent Node Failures Test (100% - 4 tests)"
+    - "Task 10: AC 9 - Payment Failure Rollback Test (100% - 3 tests)"
+    - "Task 11: AC 10 - Cascading Failure Stress Test (100% - 4 tests)"
+    - "Task 12: Documentation (100% - Runbook 10KB + Implementation Guide 11KB)"
+
+  blocked:
+    - "ALL TASKS BLOCKED: Cannot verify completion until vitest config fixed and tests execute"
+
+# Standards Compliance (Updated)
+standards_compliance:
+  coding_standards: "✓ PASS - TypeScript best practices, consistent formatting, clear naming, comprehensive JSDoc"
+  project_structure: "✓ PASS - Files organized correctly in test/btp-nips/ hierarchy per monorepo structure"
+  testing_strategy: "✗ FAIL - Test code quality excellent but cannot execute due to config issues"
+  all_acs_met: "⚠ UNKNOWN - All 10 ACs have test implementations but cannot verify they pass until tests run"
+
+# Next Steps (Updated)
+next_steps:
+  immediate:
+    - "Developer: rm packages/app-nostream/vitest.config.ts"
+    - "Developer: git add packages/app-nostream/vitest.config.mts && git commit -m 'Fix vitest config for ESM'"
+    - "Developer: pnpm --filter @nostream-ilp/app-nostream test (verify 95+ tests pass)"
+    - "Developer: Update story QA Results section with test execution results"
+    - "QA: Re-review after config fix (expected gate: PASS if tests pass, quality score 95/100)"
+
+  estimated_resolution_time: "1-2 hours total (15 minutes fix + 5 minutes test run + 30 minutes results documentation)"
+
+# Overall Assessment
+assessment: |
+  **Implementation Quality: Excellent (95/100)**
+  The code demonstrates exceptional engineering quality across all dimensions:
+  - Comprehensive fault injection with 8 fault types
+  - 95 tests across 11 files covering all 10 acceptance criteria
+  - Outstanding documentation (operational runbook + implementation guide)
+  - Clean architecture with proper separation of concerns
+  - Strong type safety and error handling
+  - Consistent patterns making code maintainable
+
+  **Blockers: Critical (0/100 Testability)**
+  Cannot verify ANY tests pass due to vitest configuration issue.
+  Build system is broken - ERR_REQUIRE_ESM prevents test execution.
+  This is a **critical blocker** that must be fixed before story can proceed to Done.
+
+  **Gate Decision: FAIL**
+  Despite excellent implementation quality, the gate must FAIL because:
+  1. Tests cannot execute (reliability NFR failure)
+  2. Cannot verify acceptance criteria are met (unknown if tests pass)
+  3. Build system broken (critical production risk)
+
+  **Resolution Path: Quick Fix (1-2 hours)**
+  The fix is straightforward:
+  - Delete vitest.config.ts (1 min)
+  - Commit vitest.config.mts (1 min)
+  - Run tests (5 min)
+  - Document results (30 min)
+
+  **Expected Outcome After Fix:**
+  If tests pass as expected, story should receive PASS gate with quality score 95/100.
+  The implementation appears complete and production-ready pending test verification.
