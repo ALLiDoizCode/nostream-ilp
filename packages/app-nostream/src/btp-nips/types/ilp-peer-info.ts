@@ -1,9 +1,9 @@
 import {
   parseAnnouncementMetadata,
   parseAnnouncementTags,
-} from './ilp-node-announcement.js'
+} from './ilp-node-announcement'
 
-import type { ILPNodeAnnouncement, ILPNodeMetadata } from './ilp-node-announcement.js'
+import type { ILPNodeAnnouncement, ILPNodeMetadata } from './ilp-node-announcement'
 
 /**
  * ILP Peer Information Type

@@ -1,15 +1,15 @@
-import type { Simplify } from "type-fest"
+import type { Simplify } from 'type-fest'
 
-import { isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
 import {
   type AnyOerType,
   type Infer,
   type InferSerialize,
   OerType,
-} from "./base-type"
-import { ParseFailure, SerializeFailure } from "./utils/failures"
-import type { ParseContext, SerializeContext } from "./utils/parse"
+} from './base-type'
+import { ParseFailure, SerializeFailure } from './utils/failures'
+import type { ParseContext, SerializeContext } from './utils/parse'
 import {
   TAG_MARKER_CONTEXT,
   type TagMarker,
@@ -17,7 +17,7 @@ import {
   predictTagLength,
   serializeTag,
   tagMarkerClassMap,
-} from "./utils/tag"
+} from './utils/tag'
 
 export type OptionsShape = Record<string, AnyOerType>
 
@@ -101,7 +101,7 @@ export class OerChoice<TOptions extends OptionsShape> extends OerType<
 
     this.setHint = Object.entries(this.keyToTagMap)
       .map(([key, tag]) => `${key}(${String(tag)})`)
-      .join(",")
+      .join(',')
   }
 
   clone() {

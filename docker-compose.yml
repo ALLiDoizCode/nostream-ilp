@@ -119,7 +119,9 @@ services:
     container_name: nostream-cache
     volumes:
       - cache:/data
-    command: redis-server --loglevel warning --requirepass ${REDIS_PASSWORD:-nostr_ts_relay}
+    command: redis-server --loglevel warning
+    ports:
+      - "6379:6379"
     networks:
       - nostream-ilp
     restart: unless-stopped

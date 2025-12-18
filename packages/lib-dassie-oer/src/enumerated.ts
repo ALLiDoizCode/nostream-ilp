@@ -1,9 +1,9 @@
-import { isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
-import { OerType } from "./base-type"
-import { ParseFailure, SerializeFailure } from "./utils/failures"
-import { parseLengthPrefix } from "./utils/length-prefix"
-import type { ParseContext, SerializeContext } from "./utils/parse"
+import { OerType } from './base-type'
+import { ParseFailure, SerializeFailure } from './utils/failures'
+import { parseLengthPrefix } from './utils/length-prefix'
+import type { ParseContext, SerializeContext } from './utils/parse'
 
 export class OerEnumerated<
   TEnumeration extends Record<string, number>,
@@ -23,7 +23,7 @@ export class OerEnumerated<
 
     this.setHint = Object.entries(enumeration)
       .map(([key, value]) => `${key}(${value})`)
-      .join(",")
+      .join(',')
   }
 
   clone() {
@@ -35,7 +35,7 @@ export class OerEnumerated<
     const firstByte = uint8Array[offset]
     if (firstByte === undefined) {
       return new ParseFailure(
-        "unable to read enumerated value - end of buffer",
+        'unable to read enumerated value - end of buffer',
         uint8Array,
         offset,
       )

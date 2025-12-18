@@ -48,19 +48,29 @@ RUN pnpm install --frozen-lockfile --filter @nostream-ilp/app-dassie... --prod
 
 # Stage 4: Production runtime
 FROM node:22-alpine
-RUN apk add --no-cache curl sqlite
+RUN apk add --no-cache curl sqlite iproute2 su-exec
 WORKDIR /app
 
 # Copy ONLY production dependencies
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=builder /app/packages/app-dassie/dist ./dist
 
+# Copy network simulation scripts
+COPY packages/app-nostream/test/docker/scripts/apply-network-sim.sh /usr/local/bin/apply-network-sim.sh
+RUN chmod +x /usr/local/bin/apply-network-sim.sh
+
+# Copy entrypoint script
+COPY docker/scripts/dassie-entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 # Create data directory for Dassie ledger
 RUN mkdir -p /app/data && chown -R node:node /app/data
 
-USER node
+# Note: Running as root initially to allow network simulation (tc command)
+# Entrypoint script will drop to 'node' user after applying network config
 EXPOSE 7768
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=60s \
   CMD curl -f http://localhost:7768/health || exit 1
 
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["node", "dist/index.js"]

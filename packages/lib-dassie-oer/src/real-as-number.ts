@@ -1,7 +1,7 @@
-import { OerType } from "./base-type"
-import { ParseFailure } from "./utils/failures"
-import type { ParseContext, SerializeContext } from "./utils/parse"
-import { type Range, parseRange } from "./utils/range"
+import { OerType } from './base-type'
+import { ParseFailure } from './utils/failures'
+import type { ParseContext, SerializeContext } from './utils/parse'
+import { type Range, parseRange } from './utils/range'
 
 interface RealAsNumberOptions {
   mantissa?: Range<number>
@@ -98,7 +98,7 @@ export const realAsNumber = ({
   const [minimumBase, maximumBase] = parseRange(base)
 
   if (minimumBase !== 2 || maximumBase !== 2) {
-    throw new Error(`base must be 2`)
+    throw new Error('base must be 2')
   }
 
   const [minimumExponent, maximumExponent] = parseRange(exponent)

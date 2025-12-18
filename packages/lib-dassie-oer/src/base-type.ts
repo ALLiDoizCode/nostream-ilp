@@ -1,10 +1,10 @@
-import { isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
-import { ensureUint8Array } from "./utils/ensure-uint8array"
-import { ParseError, SerializeError } from "./utils/errors"
-import { ParseFailure, SerializeFailure } from "./utils/failures"
-import type { ParseContext, SerializeContext } from "./utils/parse"
-import { type TagClass, type TagMarker, tagClassMarkerMap } from "./utils/tag"
+import { ensureUint8Array } from './utils/ensure-uint8array'
+import { ParseError, SerializeError } from './utils/errors'
+import { ParseFailure, SerializeFailure } from './utils/failures'
+import type { ParseContext, SerializeContext } from './utils/parse'
+import { type TagClass, type TagMarker, tagClassMarkerMap } from './utils/tag'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyOerType = OerType<any>
@@ -62,7 +62,7 @@ export abstract class OerType<TParseValue, TSerializeValue = TParseValue> {
 
     if (!context.allowNoncanonical && result[1] !== input.byteLength - offset) {
       return new ParseFailure(
-        "non-canonical encoding - additional bytes present after the expected end of data",
+        'non-canonical encoding - additional bytes present after the expected end of data',
         input,
         result[1],
       )
@@ -110,7 +110,7 @@ export abstract class OerType<TParseValue, TSerializeValue = TParseValue> {
     return result
   }
 
-  tag(tagValue: number, tagClass: Exclude<TagClass, "universal"> = "context") {
+  tag(tagValue: number, tagClass: Exclude<TagClass, 'universal'> = 'context') {
     const copy = this.clone()
     copy._tag = [tagValue, tagClassMarkerMap[tagClass]] as const
     return copy
@@ -260,7 +260,7 @@ export class OerConstant<TParseValue, TSerializeValue> extends OerType<
   ): ParseFailure | readonly [TParseValue, number] {
     if (context.uint8Array.length < offset + this.serializedValue.length) {
       return new ParseFailure(
-        `unable to read constant value - end of buffer`,
+        'unable to read constant value - end of buffer',
         context.uint8Array,
         context.uint8Array.length,
       )
@@ -269,7 +269,7 @@ export class OerConstant<TParseValue, TSerializeValue> extends OerType<
     for (let index = 0; index < this.serializedValue.length; index++) {
       if (context.uint8Array[offset + index] !== this.serializedValue[index]) {
         return new ParseFailure(
-          `expected constant value did not match data while parsing`,
+          'expected constant value did not match data while parsing',
           context.uint8Array,
           offset + index,
         )
@@ -320,7 +320,7 @@ export class OerRefined<
 
     if (!this.predicate(value)) {
       return new ParseFailure(
-        `refinement predicate failed`,
+        'refinement predicate failed',
         context.uint8Array,
         offset,
       )

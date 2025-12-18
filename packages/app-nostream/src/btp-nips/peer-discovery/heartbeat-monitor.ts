@@ -1,8 +1,8 @@
-import { ConnectionConfig, PeerConnectionState } from '../types/peer-connection.js'
-import { createLogger } from '../../factories/logger-factory.js'
+import { ConnectionConfig, PeerConnectionState } from '../types/peer-connection'
+import { createLogger } from '../../factories/logger-factory'
 
-import type { DassieClient } from '../../services/payment/dassie-client.js'
-import type { ConnectionStore } from './connection-store.js'
+import type { DassieClient } from '../../services/payment/dassie-client'
+import type { ConnectionStore } from './connection-store'
 
 /**
  * Heartbeat Monitor

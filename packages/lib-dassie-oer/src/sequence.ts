@@ -1,6 +1,6 @@
-import type { ConditionalExcept, ConditionalPick } from "type-fest"
+import type { ConditionalExcept, ConditionalPick } from 'type-fest'
 
-import { isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
 import {
   type AnyOerType,
@@ -10,28 +10,28 @@ import {
   OerOptional,
   OerType,
   type Serializer,
-} from "./base-type"
+} from './base-type'
 import type {
   AnyObjectSetField,
   InformationObjectSetStateMap,
-} from "./information-object/object-set"
+} from './information-object/object-set'
 import type {
   InferInformationObjectParseShape,
   InferInformationObjectSerializeShape,
-} from "./information-object/sequence"
-import { ParseFailure } from "./utils/failures"
+} from './information-object/sequence'
+import { ParseFailure } from './utils/failures'
 import {
   parseLengthPrefix,
   predictLengthPrefixLength,
   serializeLengthPrefix,
-} from "./utils/length-prefix"
-import type { ParseContext, SerializeContext } from "./utils/parse"
+} from './utils/length-prefix'
+import type { ParseContext, SerializeContext } from './utils/parse'
 
 export type ObjectShape = Record<string, AnyOerType>
 
 export type SequenceShape = Record<string, AnyOerType | AnyObjectSetField>
 
-export const extensions = Symbol("extensions")
+export const extensions = Symbol('extensions')
 export type extensions = typeof extensions
 
 // Takes the type
@@ -163,7 +163,7 @@ export class OerSequence<TShape extends ExtendedSequenceShape> extends OerType<
       const firstByte = uint8Array[offset]
       if (firstByte == undefined) {
         return new ParseFailure(
-          "unable to read sequence preamble - end of buffer",
+          'unable to read sequence preamble - end of buffer',
           uint8Array,
           offset,
         )
@@ -175,7 +175,7 @@ export class OerSequence<TShape extends ExtendedSequenceShape> extends OerType<
 
       if (uint8Array.length < offset + preambleByteLength) {
         return new ParseFailure(
-          `unable to read sequence preamble - end of buffer`,
+          'unable to read sequence preamble - end of buffer',
           uint8Array,
           uint8Array.length,
         )
@@ -201,7 +201,7 @@ export class OerSequence<TShape extends ExtendedSequenceShape> extends OerType<
         0
       ) {
         return new ParseFailure(
-          "invalid sequence preamble - unused bits must be zero",
+          'invalid sequence preamble - unused bits must be zero',
           uint8Array,
           offset + preambleByteLength - 1,
         )
@@ -251,7 +251,7 @@ export class OerSequence<TShape extends ExtendedSequenceShape> extends OerType<
 
       if (extensionPresenceLength < 2) {
         return new ParseFailure(
-          "invalid extension presence bitmap - expected at least two bytes",
+          'invalid extension presence bitmap - expected at least two bytes',
           uint8Array,
           offset + cursor,
         )
@@ -261,7 +261,7 @@ export class OerSequence<TShape extends ExtendedSequenceShape> extends OerType<
 
       if (unusedBits > 7) {
         return new ParseFailure(
-          "invalid extension presence bitmap - unused bits value cannot be greater than 7",
+          'invalid extension presence bitmap - unused bits value cannot be greater than 7',
           uint8Array,
           offset + cursor,
         )
@@ -319,7 +319,7 @@ export class OerSequence<TShape extends ExtendedSequenceShape> extends OerType<
 
         if (extensionParseResult[1] > extensionLength) {
           return new ParseFailure(
-            "extension value extends beyond extension length",
+            'extension value extends beyond extension length',
             uint8Array,
             offset + cursor + extensionLength,
           )
@@ -327,13 +327,13 @@ export class OerSequence<TShape extends ExtendedSequenceShape> extends OerType<
 
         if (!allowNoncanonical && extensionLength > extensionParseResult[1]) {
           return new ParseFailure(
-            "extra bytes inside of extension",
+            'extra bytes inside of extension',
             uint8Array,
             offset + cursor,
           )
         }
       } else {
-        throw new TypeError("Unreachable")
+        throw new TypeError('Unreachable')
       }
 
       cursor += extensionLength

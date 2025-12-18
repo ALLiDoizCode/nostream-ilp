@@ -1,19 +1,19 @@
-import { isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
-import { OerType } from "./base-type"
+import { OerType } from './base-type'
 import {
   isUnsignedBigint,
   signedBigintByteLength,
   unsignedBigintByteLength,
-} from "./utils/bigint"
-import { ParseFailure, SerializeFailure } from "./utils/failures"
+} from './utils/bigint'
+import { ParseFailure, SerializeFailure } from './utils/failures'
 import {
   parseLengthPrefix,
   predictLengthPrefixLength,
   serializeLengthPrefix,
-} from "./utils/length-prefix"
-import type { ParseContext, SerializeContext } from "./utils/parse"
-import { type Range, parseRange } from "./utils/range"
+} from './utils/length-prefix'
+import type { ParseContext, SerializeContext } from './utils/parse'
+import { type Range, parseRange } from './utils/range'
 
 interface IntegerOptions {
   minimumValue?: bigint
@@ -23,7 +23,7 @@ interface IntegerOptions {
 export interface FixedIntegerOptions extends IntegerOptions {
   minimumValue: bigint
   maximumValue: bigint
-  type: "Uint" | "Int"
+  type: 'Uint' | 'Int'
   size: 8 | 16 | 32 | 64
 }
 
@@ -132,7 +132,7 @@ export class OerVariableUnsignedInteger extends OerIntegerBigint {
 
     if (length === 0) {
       return new ParseFailure(
-        `unable to read variable length integer - length must not be 0`,
+        'unable to read variable length integer - length must not be 0',
         uint8Array,
         offset,
       )
@@ -206,7 +206,7 @@ export class OerVariableSignedInteger extends OerType<bigint> {
 
     if (length === 0) {
       return new ParseFailure(
-        `unable to read variable length integer - length must not be 0`,
+        'unable to read variable length integer - length must not be 0',
         uint8Array,
         offset,
       )
@@ -280,25 +280,25 @@ export const integerAsBigint = (range?: Range<bigint>) => {
       if (maximumValue <= UINT8_MAX) {
         return new OerFixedIntegerBigint({
           ...fixedOptions,
-          type: "Uint",
+          type: 'Uint',
           size: 8,
         })
       } else if (maximumValue <= UINT16_MAX) {
         return new OerFixedIntegerBigint({
           ...fixedOptions,
-          type: "Uint",
+          type: 'Uint',
           size: 16,
         })
       } else if (maximumValue <= UINT32_MAX) {
         return new OerFixedIntegerBigint({
           ...fixedOptions,
-          type: "Uint",
+          type: 'Uint',
           size: 32,
         })
       } else if (maximumValue <= UINT64_MAX) {
         return new OerFixedIntegerBigint({
           ...fixedOptions,
-          type: "Uint",
+          type: 'Uint',
           size: 64,
         })
       }
@@ -306,25 +306,25 @@ export const integerAsBigint = (range?: Range<bigint>) => {
       if (minimumValue <= INT8_MIN && maximumValue <= INT8_MAX) {
         return new OerFixedIntegerBigint({
           ...fixedOptions,
-          type: "Int",
+          type: 'Int',
           size: 8,
         })
       } else if (minimumValue <= INT16_MIN && maximumValue <= INT16_MAX) {
         return new OerFixedIntegerBigint({
           ...fixedOptions,
-          type: "Int",
+          type: 'Int',
           size: 16,
         })
       } else if (minimumValue <= INT32_MIN && maximumValue <= INT32_MAX) {
         return new OerFixedIntegerBigint({
           ...fixedOptions,
-          type: "Int",
+          type: 'Int',
           size: 32,
         })
       } else if (minimumValue <= INT64_MIN && maximumValue <= INT64_MAX) {
         return new OerFixedIntegerBigint({
           ...fixedOptions,
-          type: "Int",
+          type: 'Int',
           size: 64,
         })
       }

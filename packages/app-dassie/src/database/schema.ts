@@ -5,6 +5,7 @@ import { ACME_DATABASE_SCALARS } from "../acme-certificate-manager/schemas/datab
 import { acmeTokensTable } from "../acme-certificate-manager/tables/acme-tokens"
 import { btpTokensTable } from "../api-keys/database-tables/btp-tokens"
 import { sessionsTable } from "../authentication/database-tables/sessions"
+import { nostrEventsTable } from "../btp-nips/database-tables/nostr-events"
 import { CONFIG_DATABASE_SCALARS } from "../config/schemas/database-scalars"
 import { settlementSchemesTable } from "../ledgers/database-tables/settlement-schemes"
 import { incomingPaymentTable } from "../open-payments/tables/incoming-payment"
@@ -38,6 +39,7 @@ export const DASSIE_DATABASE_SCHEMA = {
     sessions: sessionsTable,
     btpTokens: btpTokensTable,
     paymentChannels: paymentChannelsTable,
+    nostrEvents: nostrEventsTable,
   },
   scalars: {
     ...CONFIG_DATABASE_SCALARS,

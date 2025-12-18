@@ -203,11 +203,11 @@ export interface BTPNIPsPacket {
 }
 
 // Export ILP node announcement types
-export * from './ilp-node-announcement.js'
+export * from './ilp-node-announcement'
 
 // Export ILP peer info types (Story 6.2)
-export type { ILPPeerInfo } from './ilp-peer-info.js'
-export { parseNodeAnnouncement } from './ilp-peer-info.js'
+export type { ILPPeerInfo } from './ilp-peer-info'
+export { parseNodeAnnouncement } from './ilp-peer-info'
 
 // Export peer connection types (Story 6.5)
 export type {
@@ -216,9 +216,9 @@ export type {
   PriorityContext,
   ConnectionStateChangeEvent,
   ChannelNeededEvent,
-} from './peer-connection.js'
+} from './peer-connection'
 export {
   PeerConnectionState,
   DEFAULT_CONNECTION_CONFIG,
   VALID_STATE_TRANSITIONS,
-} from './peer-connection.js'
+} from './peer-connection'

@@ -1,14 +1,14 @@
-import { isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
-import type { AnyOerType, Infer, OerType, Serializer } from "../base-type"
-import { octetString } from "../octet-string"
-import { ParseFailure, SerializeFailure } from "../utils/failures"
-import type { ParseContext } from "../utils/parse"
+import type { AnyOerType, Infer, OerType, Serializer } from '../base-type'
+import { octetString } from '../octet-string'
+import { ParseFailure, SerializeFailure } from '../utils/failures'
+import type { ParseContext } from '../utils/parse'
 import {
   type ClassDefinitionShape,
   type InformationObjectClass,
   openType,
-} from "./class"
+} from './class'
 
 export type InformationObjectShape<
   TClassDefinition extends ClassDefinitionShape,
@@ -113,7 +113,7 @@ const defineObjectSetField = <
 
         if (state === undefined) {
           return new ParseFailure(
-            "Cannot parse open type unless an identifier field appears before it in the same sequence",
+            'Cannot parse open type unless an identifier field appears before it in the same sequence',
             context.uint8Array,
             offset,
           )
@@ -138,7 +138,7 @@ const defineObjectSetField = <
           innerValue[1] < wrapperParseResult[0].byteLength
         ) {
           return new ParseFailure(
-            "extra bytes inside of open type",
+            'extra bytes inside of open type',
             context.uint8Array,
             offset + lengthOfLength + innerValue[1],
           )
@@ -151,7 +151,7 @@ const defineObjectSetField = <
 
         if (state === undefined) {
           return new SerializeFailure(
-            "Cannot serialize open type unless an identifier field appears before it in the same sequence",
+            'Cannot serialize open type unless an identifier field appears before it in the same sequence',
           )
         }
 
@@ -203,7 +203,7 @@ const defineObjectSetField = <
 
       if (index === -1) {
         return new ParseFailure(
-          `Unknown value in identifier field`,
+          'Unknown value in identifier field',
           context.uint8Array,
           offset,
         )

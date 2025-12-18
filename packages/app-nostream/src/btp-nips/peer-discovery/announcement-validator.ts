@@ -9,11 +9,11 @@ import {
   extractVersion,
   ILP_NODE_D_TAG,
   ILP_NODE_KIND,
-} from '../types/ilp-node-announcement.js'
-import { verifyNostrSignature } from '../crypto.js'
-import { isValidIlpAddress } from './ilp-address-generator.js'
+} from '../types/ilp-node-announcement'
+import { verifyNostrSignature } from '../crypto'
+import { isValidIlpAddress } from './ilp-address-generator'
 
-import type { NostrEvent } from '../types/index.js'
+import type { NostrEvent } from '../types/index'
 
 /**
  * ILP Node Announcement Validator

@@ -21,6 +21,14 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@asoltys/clightning-client": "^0.1.10",
+    "@cosmjs/amino": "^0.32.0",
+    "@cosmjs/cosmwasm-stargate": "^0.32.0",
+    "@cosmjs/crypto": "^0.32.0",
+    "@cosmjs/proto-signing": "^0.32.0",
+    "@cosmjs/stargate": "^0.32.0",
+    "@noble/curves": "^1.5.0",
+    "@noble/ed25519": "^2.0.0",
+    "@noble/hashes": "^2.0.1",
     "@nostream-ilp/lib-dassie-format-utils": "workspace:^",
     "@nostream-ilp/lib-dassie-http-server": "workspace:^",
     "@nostream-ilp/lib-dassie-logger": "workspace:^",
@@ -34,13 +42,6 @@
     "@nostream-ilp/lib-dassie-rpc": "workspace:^",
     "@nostream-ilp/lib-dassie-sqlite": "workspace:^",
     "@nostream-ilp/lib-dassie-type-utils": "workspace:^",
-    "@cosmjs/amino": "^0.32.0",
-    "@cosmjs/cosmwasm-stargate": "^0.32.0",
-    "@cosmjs/crypto": "^0.32.0",
-    "@cosmjs/proto-signing": "^0.32.0",
-    "@cosmjs/stargate": "^0.32.0",
-    "@noble/curves": "^1.5.0",
-    "@noble/ed25519": "^2.0.0",
     "acme-client": "^5.4.0",
     "cmd-ts": "^0.13.0",
     "cookie": "^0.6.0",
@@ -64,8 +65,8 @@
     "@types/node": "^22.5.5",
     "@types/react": "^18.3.8",
     "type-fest": "^4.26.1",
-    "vite": "^5.4.7",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vite": "^5.4.7"
   },
   "engines": {
     "node": ">=22.0.0"

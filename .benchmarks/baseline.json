@@ -1,0 +1,75 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2025-12-17T00:00:00Z",
+  "commitHash": "initial",
+  "baselines": {
+    "10-node": {
+      "latency": {
+        "p50": 150,
+        "p95": 400,
+        "p99": 800,
+        "max": 1200
+      },
+      "throughput": {
+        "eventsPerSec": 120,
+        "bytesPerSec": 524288
+      },
+      "resources": {
+        "memoryMB": 384,
+        "cpuPercent": 35,
+        "connections": 9
+      }
+    },
+    "25-node": {
+      "latency": {
+        "p50": 300,
+        "p95": 850,
+        "p99": 1500,
+        "max": 2500
+      },
+      "throughput": {
+        "eventsPerSec": 280,
+        "bytesPerSec": 1310720
+      },
+      "resources": {
+        "memoryMB": 640,
+        "cpuPercent": 45,
+        "connections": 24
+      }
+    },
+    "50-node": {
+      "latency": {
+        "p50": 500,
+        "p95": 1800,
+        "p99": 3000,
+        "max": 5000
+      },
+      "throughput": {
+        "eventsPerSec": 550,
+        "bytesPerSec": 2621440
+      },
+      "resources": {
+        "memoryMB": 896,
+        "cpuPercent": 60,
+        "connections": 49
+      }
+    },
+    "100-node": {
+      "latency": {
+        "p50": 1200,
+        "p95": 4500,
+        "p99": 7000,
+        "max": 10000
+      },
+      "throughput": {
+        "eventsPerSec": 800,
+        "bytesPerSec": 3932160
+      },
+      "resources": {
+        "memoryMB": 1792,
+        "cpuPercent": 75,
+        "connections": 99
+      }
+    }
+  }
+}

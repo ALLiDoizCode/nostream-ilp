@@ -1,5 +1,5 @@
 import { getMasterDbClient, getReadReplicaDbClient } from '../../database/client'
-import { EventCache, getEventCache } from './event-cache.js'
+import { EventCache, getEventCache } from './event-cache'
 import { createLogger } from '../../factories/logger-factory'
 
 import type { Knex } from 'knex'

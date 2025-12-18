@@ -64,21 +64,29 @@
 **Type:** Brownfield Enhancement (Separate Repository)
 **Timeline:** 2-3 weeks (can be done in parallel with MVP work)
 
-### Epic 11: Autonomous Agents
+### Epic 11: BTP-NIPs N-Peer Network Verification
+**Status:** Planned (High Priority - Deployment Blocker)
+**Goal:** Verify BTP-NIPs protocol functions correctly in multi-node mesh networks (5-10+ peers) through comprehensive integration testing, economic flow validation, and resilience testing.
+**Stories:** 11.1, 11.2, 11.3, 11.4, 11.5, 11.6
+**Timeline:** 2-3 weeks
+**Dependencies:** Epic 5 (BTP-NIPs Core Protocol)
+**Blocks:** Epic 8 (Deployment) - Cannot deploy without N-peer verification
+
+### Epic 12: Autonomous Agents
 **Status:** Research Complete, Implementation Deferred
 **Goal:** Add AI decision layer on top of BTP-NIPs foundation for autonomous network operation.
 **Research:** [docs/research/autonomous-agent-relays/](../research/autonomous-agent-relays/)
 **Timeline:** 8-12 months after Epic 9
 
-### Epic 12: Arweave Permanent Storage
+### Epic 13: Arweave Permanent Storage
 **Status:** Deferred
 **Goal:** Integrate Arweave for large content and event backups.
 
-### Epic 13: Multi-Chain Expansion
+### Epic 14: Multi-Chain Expansion
 **Status:** Deferred
 **Goal:** Add support for additional EVM chains (Arbitrum, Optimism) and non-EVM chains (Cosmos, XRP).
 
-### Epic 14: Privacy Layer
+### Epic 15: Privacy Layer
 **Status:** Future Research
 **Goal:** Onion routing, Tor integration, zk-SNARKs for metadata privacy.
 
@@ -106,6 +114,7 @@ MVP Complete: Week 13 (3 months)
 | 2025-01-24 | 1.0 | Initial epic list (traditional architecture) |
 | 2025-12-05 | 2.0 | Revised for BTP-NIPs P2P network architecture |
 | 2025-12-08 | 2.1 | Added Epic 10 (Interactive Protocol Visualization Landing Page), renumbered future epics |
+| 2025-12-16 | 2.2 | Added Epic 11 (BTP-NIPs N-Peer Network Verification) as deployment blocker, renumbered future epics 11→12, 12→13, 13→14, 14→15 |
 
 ---
 

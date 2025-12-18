@@ -1,10 +1,10 @@
-import { createLogger } from '../../factories/logger-factory.js'
+import { createLogger } from '../../factories/logger-factory'
 
-import type { EventRepository } from '../storage/event-repository.js'
-import type { NostrEvent } from '../types/index.js'
-import type { AddressResolver } from './address-resolver.js'
-import type { ConnectionLifecycleManager } from './connection-lifecycle.js'
-import type { FollowListStore } from './follow-list-store.js'
+import type { EventRepository } from '../storage/event-repository'
+import type { NostrEvent } from '../types/index'
+import type { AddressResolver } from './address-resolver'
+import type { ConnectionLifecycleManager } from './connection-lifecycle'
+import type { FollowListStore } from './follow-list-store'
 
 /**
  * Follow List Monitor Module

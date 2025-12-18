@@ -10,11 +10,13 @@ import { registrationClientRouter } from "../registration-client/rpc-router/regi
 import { debugRouter } from "./routers/debug"
 import { generalRouter } from "./routers/general"
 import { paymentRouter } from "./routers/payment"
+import { testRouter } from "./routers/test"
 
 export const appRouter = createRouter({
   general: generalRouter,
   payment: paymentRouter,
   debug: debugRouter,
+  test: testRouter,
   acme: acmeRouter,
   tls: tlsAdminRouter,
   config: configAdminRouter,

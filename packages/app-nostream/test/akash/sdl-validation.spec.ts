@@ -63,7 +63,7 @@ describe('Akash SDL Validation', () => {
       expect(exposed).toEqual(
         expect.arrayContaining([
           expect.objectContaining({ port: 443, to: [{ global: true }] }),
-          expect.objectContaining({ port: 8080, to: [{ global: true }] })
+          expect.objectContaining({ port: 8080, to: [{ global: true }] }),
         ])
       )
     })
@@ -73,7 +73,7 @@ describe('Akash SDL Validation', () => {
       expect(exposed).toHaveLength(1)
       expect(exposed[0]).toEqual({
         port: 7768,
-        to: [{ service: 'nostream' }]
+        to: [{ service: 'nostream' }],
       })
       expect(exposed[0].to).not.toContainEqual({ global: true })
     })

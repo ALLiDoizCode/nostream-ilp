@@ -1,8 +1,8 @@
 import { degradedModeActive, degradedModeQueueSize } from '../metrics'
 
 import type { DassieClient } from './dassie-client'
-import type { Event } from '@/@types/event'
-import type { PaymentClaim } from '@/@types/payment-claim'
+import type { Event } from '../../@types/event'
+import type { PaymentClaim } from '../../@types/payment-claim'
 
 /**
  * Degraded Mode Manager

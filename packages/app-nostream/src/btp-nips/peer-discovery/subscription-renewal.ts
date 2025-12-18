@@ -1,9 +1,9 @@
-import { createLogger } from '../../factories/logger-factory.js'
-import { sendReqPacket } from '../utils/packet-sender.js'
+import { createLogger } from '../../factories/logger-factory'
+import { sendReqPacket } from '../utils/packet-sender'
 
-import type { Subscription, SubscriptionManager } from '../subscription-manager.js'
-import type { PaymentChannelManager } from './payment-channel-manager.js'
-import type { SubscriptionPreferencesManager } from './subscription-preferences.js'
+import type { Subscription, SubscriptionManager } from '../subscription-manager'
+import type { PaymentChannelManager } from './payment-channel-manager'
+import type { SubscriptionPreferencesManager } from './subscription-preferences'
 
 /**
  * Subscription Renewal Background Job

@@ -1,4 +1,4 @@
-import type { NostrEvent, NostrFilter } from '../types/index.js'
+import type { NostrEvent, NostrFilter } from '../types/index'
 
 /**
  * Filter Matcher Utility

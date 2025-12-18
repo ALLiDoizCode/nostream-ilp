@@ -1,12 +1,12 @@
-import { isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
 import {
   parseBase128,
   predictBase128Length,
   serializeBase128,
-} from "./base-128"
-import { ParseFailure, SerializeFailure } from "./failures"
-import { type ParseContext, isSafeUnsignedInteger } from "./parse"
+} from './base-128'
+import { ParseFailure, SerializeFailure } from './failures'
+import { type ParseContext, isSafeUnsignedInteger } from './parse'
 
 export const TAG_MARKER_UNIVERSAL = 0b00
 export const TAG_MARKER_APPLICATION = 0b01
@@ -21,10 +21,10 @@ export const tagClassMarkerMap = {
 } as const
 
 export const tagMarkerClassMap = [
-  "universal",
-  "application",
-  "context",
-  "private",
+  'universal',
+  'application',
+  'context',
+  'private',
 ] as const
 
 export type TagClass = keyof typeof tagClassMarkerMap
@@ -41,7 +41,7 @@ export const parseTag = (
 
   if (tag == undefined) {
     return new ParseFailure(
-      "unable to read tag - end of buffer",
+      'unable to read tag - end of buffer',
       uint8Array,
       uint8Array.byteLength,
     )
@@ -80,7 +80,7 @@ export const serializeTag = (
 ) => {
   if (!isSafeUnsignedInteger(value)) {
     return new SerializeFailure(
-      "unable to serialize tag - value is out of bounds",
+      'unable to serialize tag - value is out of bounds',
     )
   }
 
@@ -97,7 +97,7 @@ export const serializeTag = (
 export const predictTagLength = (value: number) => {
   if (!isSafeUnsignedInteger(value)) {
     return new SerializeFailure(
-      "unable to serialize tag - value is out of bounds",
+      'unable to serialize tag - value is out of bounds',
     )
   }
 

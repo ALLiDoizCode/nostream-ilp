@@ -1,7 +1,7 @@
-import { isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
-import { ParseFailure, SerializeFailure } from "./failures"
-import type { ParseContext } from "./parse"
+import { ParseFailure, SerializeFailure } from './failures'
+import type { ParseContext } from './parse'
 
 export const parseBase128 = (
   context: ParseContext,
@@ -12,7 +12,7 @@ export const parseBase128 = (
 
   if (uint8Array[offset] == 0x80) {
     return new ParseFailure(
-      "invalid base-128 value - must not contain unnecessary padding",
+      'invalid base-128 value - must not contain unnecessary padding',
       uint8Array,
       offset,
     )
@@ -25,7 +25,7 @@ export const parseBase128 = (
   do {
     if (offset + lengthOfEncoding >= endOffset) {
       return new ParseFailure(
-        "unable to read base-128 value - value is longer than expected based on context",
+        'unable to read base-128 value - value is longer than expected based on context',
         uint8Array,
         offset + lengthOfEncoding,
       )
@@ -70,7 +70,7 @@ export const predictBase128Length = (
 ): SerializeFailure | number => {
   if (value < 0n) {
     return new SerializeFailure(
-      "unable to serialize base-128 - negative integers are not permitted",
+      'unable to serialize base-128 - negative integers are not permitted',
     )
   }
 

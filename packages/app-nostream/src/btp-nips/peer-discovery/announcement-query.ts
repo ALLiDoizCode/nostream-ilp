@@ -1,12 +1,12 @@
-import { EventCache } from '../storage/event-cache.js'
-import { EventRepository } from '../storage/event-repository.js'
+import { EventCache } from '../storage/event-cache'
+import { EventRepository } from '../storage/event-repository'
 import {
   ILP_NODE_D_TAG,
   ILP_NODE_KIND,
-} from '../types/ilp-node-announcement.js'
+} from '../types/ilp-node-announcement'
 import {
   ILPNodeAnnouncement,
-} from '../types/ilp-node-announcement.js'
+} from '../types/ilp-node-announcement'
 
 /**
  * ILP Node Announcement Query Module

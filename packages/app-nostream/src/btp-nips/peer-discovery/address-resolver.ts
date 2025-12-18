@@ -1,8 +1,8 @@
-import { parseNodeAnnouncement } from '../types/ilp-peer-info.js'
+import { parseNodeAnnouncement } from '../types/ilp-peer-info'
 import pino from 'pino'
 
-import type { ILPPeerInfo } from '../types/ilp-peer-info.js'
-import type { AnnouncementQuery } from './announcement-query.js'
+import type { ILPPeerInfo } from '../types/ilp-peer-info'
+import type { AnnouncementQuery } from './announcement-query'
 
 /**
  * ILP Address Resolver Module

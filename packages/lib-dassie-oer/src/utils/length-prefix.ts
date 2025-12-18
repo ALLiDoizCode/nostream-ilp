@@ -1,5 +1,5 @@
-import { ParseFailure, SerializeFailure } from "./failures"
-import { type ParseContext, byteLength, isSafeUnsignedInteger } from "./parse"
+import { ParseFailure, SerializeFailure } from './failures'
+import { type ParseContext, byteLength, isSafeUnsignedInteger } from './parse'
 
 export const parseLengthPrefix = (
   { uint8Array, allowNoncanonical }: ParseContext,
@@ -10,7 +10,7 @@ export const parseLengthPrefix = (
 
   if (lengthByte === undefined) {
     return new ParseFailure(
-      "unable to read length prefix - end of buffer",
+      'unable to read length prefix - end of buffer',
       uint8Array,
       uint8Array.byteLength,
     )
@@ -21,7 +21,7 @@ export const parseLengthPrefix = (
 
     if (offset + lengthOfLength + 1 > uint8Array.length) {
       return new ParseFailure(
-        "unable to read length prefix - end of buffer",
+        'unable to read length prefix - end of buffer',
         uint8Array,
         uint8Array.byteLength,
       )
@@ -29,7 +29,7 @@ export const parseLengthPrefix = (
 
     if (lengthOfLength > 6) {
       return new ParseFailure(
-        "unable to read length prefix - length too long",
+        'unable to read length prefix - length too long',
         uint8Array,
         offset,
       )
@@ -43,7 +43,7 @@ export const parseLengthPrefix = (
 
     if (length + offset + lengthOfLength + 1 > uint8Array.length) {
       return new ParseFailure(
-        "unable to read value after length prefix - end of buffer",
+        'unable to read value after length prefix - end of buffer',
         uint8Array,
         uint8Array.byteLength,
       )
@@ -53,7 +53,7 @@ export const parseLengthPrefix = (
     if (!allowNoncanonical) {
       if (!isEnumerationMode && length <= 0x7f) {
         return new ParseFailure(
-          "non-canonical encoding - length prefix is not minimal (length <= 0x7f but not encoded as a single byte)",
+          'non-canonical encoding - length prefix is not minimal (length <= 0x7f but not encoded as a single byte)',
           uint8Array,
           offset,
         )
@@ -61,7 +61,7 @@ export const parseLengthPrefix = (
 
       if (length < 2 ** ((lengthOfLength - 1) * 8) - 1) {
         return new ParseFailure(
-          "non-canonical encoding - length prefix is not minimal (could be encoded in fewer bytes)",
+          'non-canonical encoding - length prefix is not minimal (could be encoded in fewer bytes)',
           uint8Array,
           offset,
         )
@@ -75,7 +75,7 @@ export const parseLengthPrefix = (
 
   if (offset + length + 1 > uint8Array.length) {
     return new ParseFailure(
-      "unable to read length prefix - end of buffer",
+      'unable to read length prefix - end of buffer',
       uint8Array,
       uint8Array.length,
     )
@@ -92,7 +92,7 @@ export const serializeLengthPrefix = (
   if (length > 0x7f) {
     if (!isSafeUnsignedInteger(length)) {
       return new SerializeFailure(
-        "unable to serialize length prefix - length is too large",
+        'unable to serialize length prefix - length is too large',
       )
     }
     const lengthOfLength = byteLength(length)
@@ -100,7 +100,7 @@ export const serializeLengthPrefix = (
     // TODO: Could implement support for serializing variable octet strings larger than 4 GB
     if (lengthOfLength > 4) {
       return new SerializeFailure(
-        "unable to serialize length prefix - length is too large",
+        'unable to serialize length prefix - length is too large',
       )
     }
 
@@ -121,7 +121,7 @@ export const serializeLengthPrefix = (
 export const predictLengthPrefixLength = (length: number) => {
   if (!isSafeUnsignedInteger(length)) {
     return new SerializeFailure(
-      "unable to serialize variable length field - value is out of bounds",
+      'unable to serialize variable length field - value is out of bounds',
     )
   }
   return 1 + (length > 127 ? byteLength(length) : 0)

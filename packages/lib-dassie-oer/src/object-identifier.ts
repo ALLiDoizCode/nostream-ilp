@@ -1,18 +1,18 @@
-import { assertDefined, isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { assertDefined, isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
-import { OerType } from "./base-type"
+import { OerType } from './base-type'
 import {
   parseBase128,
   predictBase128Length,
   serializeBase128,
-} from "./utils/base-128"
-import { ParseFailure, SerializeFailure } from "./utils/failures"
+} from './utils/base-128'
+import { ParseFailure, SerializeFailure } from './utils/failures'
 import {
   parseLengthPrefix,
   predictLengthPrefixLength,
   serializeLengthPrefix,
-} from "./utils/length-prefix"
-import type { ParseContext, SerializeContext } from "./utils/parse"
+} from './utils/length-prefix'
+import type { ParseContext, SerializeContext } from './utils/parse'
 
 export class OerObjectIdentifier extends OerType<string> {
   clone() {
@@ -29,7 +29,7 @@ export class OerObjectIdentifier extends OerType<string> {
 
     if (length === 0) {
       return new ParseFailure(
-        "object identifier of length zero is invalid",
+        'object identifier of length zero is invalid',
         uint8Array,
         offset,
       )
@@ -58,23 +58,23 @@ export class OerObjectIdentifier extends OerType<string> {
       : ([subidentifiers[0] / 40n, subidentifiers[0] % 40n] as const)
 
     return [
-      [...firstTwo, ...subidentifiers.slice(1)].join("."),
+      [...firstTwo, ...subidentifiers.slice(1)].join('.'),
       nextOffset - offset,
     ] as const
   }
 
   serializeWithContext(input: string) {
-    const objectIdentifierComponents = input.split(".").map(BigInt)
+    const objectIdentifierComponents = input.split('.').map(BigInt)
 
     if (objectIdentifierComponents.some((x) => x < 0n)) {
       return new SerializeFailure(
-        "object identifier components must be non-negative",
+        'object identifier components must be non-negative',
       )
     }
 
     if (objectIdentifierComponents.length < 2) {
       return new SerializeFailure(
-        "object identifier must have at least two components",
+        'object identifier must have at least two components',
       )
     }
 
@@ -83,7 +83,7 @@ export class OerObjectIdentifier extends OerType<string> {
       objectIdentifierComponents[0]! < 0
     ) {
       return new SerializeFailure(
-        "object identifier first component must be in the range of 0..2",
+        'object identifier first component must be in the range of 0..2',
       )
     }
 
@@ -92,7 +92,7 @@ export class OerObjectIdentifier extends OerType<string> {
       objectIdentifierComponents[1]! >= 40
     ) {
       return new SerializeFailure(
-        "object identifier second component must be in the range of 0..39 when first component is 0 or 1",
+        'object identifier second component must be in the range of 0..39 when first component is 0 or 1',
       )
     }
 
@@ -124,7 +124,7 @@ export class OerObjectIdentifier extends OerType<string> {
       )
 
       if (isFailure(lengthPrefixSerializeResult))
-        return lengthPrefixSerializeResult
+        {return lengthPrefixSerializeResult}
 
       let currentOffset = (offset = lengthOfLengthPrefix)
       for (const subidentifier of subidentifiers) {
@@ -135,7 +135,7 @@ export class OerObjectIdentifier extends OerType<string> {
         )
 
         if (isFailure(subidentifierSerializeResult))
-          return subidentifierSerializeResult
+          {return subidentifierSerializeResult}
 
         currentOffset += subidentifierSerializeResult
       }

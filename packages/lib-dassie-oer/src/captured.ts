@@ -1,7 +1,7 @@
-import { isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
-import { OerType } from "./base-type"
-import type { ParseContext, SerializeContext } from "./utils/parse"
+import { OerType } from './base-type'
+import type { ParseContext, SerializeContext } from './utils/parse'
 
 export class OerCaptured<TParseValue, TSerializeValue> extends OerType<
   { value: TParseValue; bytes: Uint8Array },
@@ -37,7 +37,7 @@ export class OerCaptured<TParseValue, TSerializeValue> extends OerType<
   serializeWithContext(
     input: { value: TSerializeValue } | { bytes: Uint8Array },
   ) {
-    if ("value" in input) {
+    if ('value' in input) {
       return this.subType.serializeWithContext(input.value)
     } else {
       const serializer = (context: SerializeContext, offset: number) => {

@@ -1,6 +1,6 @@
 import createDebug from 'debug'
 
-import type { PacketMetadata } from './utils/ttl-manager.js'
+import type { PacketMetadata } from './utils/ttl-manager'
 
 const debug = createDebug('btp-nips:peer-tracker')
 

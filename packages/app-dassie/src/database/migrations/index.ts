@@ -12,5 +12,24 @@ import m11 from "./0011-create-accounts-table"
 import m12 from "./0012-change-payment-tables-for-open-payments"
 import m13 from "./0013-create-registrations-table"
 import m14 from "./0014-create-payment-channels-table"
+import m15 from "./0015-add-payment-status"
+import m16 from "./0016-create-nostr-events-table"
 
-export default [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14]
+export default [
+  m1,
+  m2,
+  m3,
+  m4,
+  m5,
+  m6,
+  m7,
+  m8,
+  m9,
+  m10,
+  m11,
+  m12,
+  m13,
+  m14,
+  m15,
+  m16,
+]

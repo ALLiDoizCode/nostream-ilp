@@ -1,22 +1,22 @@
-import { SubscriptionManager } from '../subscription-manager.js'
+import { SubscriptionManager } from '../subscription-manager'
 import {
   StreamConnection,
   Subscription,
-} from '../subscription-manager.js'
+} from '../subscription-manager'
 import {
   calculateSubscriptionCost,
   getSubscriptionPricingConfig,
   validateSubscriptionTTL,
-} from '../subscription-pricing.js'
+} from '../subscription-pricing'
 import { createLogger } from '../../factories/logger-factory'
-import { getEventRepository } from '../storage/event-repository.js'
+import { getEventRepository } from '../storage/event-repository'
 import {
   sendEosePacket,
   sendEventPacket,
   sendNoticePacket,
-} from '../utils/packet-sender.js'
+} from '../utils/packet-sender'
 
-import type { BTPNIPsPacket, NostrReq } from '../types/index.js'
+import type { BTPNIPsPacket, NostrReq } from '../types/index'
 
 /**
  * REQ Handler

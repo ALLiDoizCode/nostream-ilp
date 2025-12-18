@@ -1,4 +1,4 @@
-import { createHmac } from "node:crypto"
+import { createHmac } from 'node:crypto'
 
 export const sampleBuffer = initializeSampleBuffer()
 
@@ -8,7 +8,7 @@ function initializeSampleBuffer() {
   for (let index = 0; index < buffer.byteLength / 512; index++) {
     const offset = index * 64
 
-    const seededPseudoRandom = createHmac("sha512", "xen-test-seed")
+    const seededPseudoRandom = createHmac('sha512', 'xen-test-seed')
     seededPseudoRandom.update(String(index))
     buffer.set(seededPseudoRandom.digest(), offset)
   }

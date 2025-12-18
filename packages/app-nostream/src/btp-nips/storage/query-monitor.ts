@@ -1,4 +1,4 @@
-import { getStorageStats, StorageStats } from './storage-stats.js'
+import { getStorageStats, StorageStats } from './storage-stats'
 import { createLogger } from '../../factories/logger-factory'
 import { performance } from 'perf_hooks'
 

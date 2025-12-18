@@ -1,6 +1,6 @@
 import { createLogger } from '../factories/logger-factory'
 
-import type { NostrEvent, NostrFilter } from './types/index.js'
+import type { NostrEvent, NostrFilter } from './types/index'
 
 /**
  * Subscription Index Module

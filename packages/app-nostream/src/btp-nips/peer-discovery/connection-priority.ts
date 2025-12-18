@@ -1,4 +1,4 @@
-import { PriorityContext } from '../types/peer-connection.js'
+import { PriorityContext } from '../types/peer-connection'
 
 /**
  * Connection Priority Calculator

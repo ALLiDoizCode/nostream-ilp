@@ -118,6 +118,16 @@ export interface AdmissionCheckLimits {
   ipWhitelist?: string[]
 }
 
+export interface PeerPublishLimits {
+  rateLimits?: RateLimit[]
+  ipWhitelist?: string[]
+}
+
+export interface PeerEventFeedLimits {
+  rateLimits?: RateLimit
+  ipWhitelist?: string[]
+}
+
 export interface Limits {
   invoice?: InvoiceLimits
   admissionCheck?: AdmissionCheckLimits
@@ -125,6 +135,8 @@ export interface Limits {
   client?: ClientLimits
   event?: EventLimits
   message?: MessageLimits
+  peerPublish?: PeerPublishLimits
+  peerEventFeed?: PeerEventFeedLimits
 }
 
 export interface Worker {

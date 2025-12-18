@@ -1,11 +1,11 @@
-import { Failure } from "@nostream-ilp/lib-dassie-type-utils"
+import { Failure } from '@nostream-ilp/lib-dassie-type-utils'
 
-import { uint8ArrayToHex } from "./hex"
+import { uint8ArrayToHex } from './hex'
 
 const PARSE_ERROR_CONTEXT_BYTES = 20
 
 export class ParseFailure extends Failure {
-  readonly name = "ParseFailure"
+  readonly name = 'ParseFailure'
   readonly message: string
 
   constructor(
@@ -23,10 +23,10 @@ export class ParseFailure extends Failure {
     )
 
     const formattedMessage = `${message}\n\n  ${
-      hexExcerptRange[0] === 0 ? " " : "…"
+      hexExcerptRange[0] === 0 ? ' ' : '…'
     } ${hexExcerpt} ${
-      hexExcerptRange[1] === data.length ? " " : "…"
-    }\n    ${"".padEnd((offset - hexExcerptRange[0]) * 3, " ")}^^`
+      hexExcerptRange[1] === data.length ? ' ' : '…'
+    }\n    ${''.padEnd((offset - hexExcerptRange[0]) * 3, ' ')}^^`
 
     super()
 
@@ -35,7 +35,7 @@ export class ParseFailure extends Failure {
 }
 
 export class SerializeFailure extends Failure {
-  readonly name = "SerializeFailure"
+  readonly name = 'SerializeFailure'
 
   constructor(readonly message: string) {
     super()

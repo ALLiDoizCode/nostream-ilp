@@ -1,21 +1,21 @@
-import { isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
-import { OerType, type Serializer } from "./base-type"
-import { ParseFailure, SerializeFailure } from "./utils/failures"
-import { isSerializer } from "./utils/is-serializer"
-import { isUint8Array } from "./utils/is-uint8array"
+import { OerType, type Serializer } from './base-type'
+import { ParseFailure, SerializeFailure } from './utils/failures'
+import { isSerializer } from './utils/is-serializer'
+import { isUint8Array } from './utils/is-uint8array'
 import {
   parseLengthPrefix,
   predictLengthPrefixLength,
   serializeLengthPrefix,
-} from "./utils/length-prefix"
+} from './utils/length-prefix'
 import {
   type ParseContext,
   type SafeUnsignedInteger,
   type SerializeContext,
   isSafeUnsignedInteger,
-} from "./utils/parse"
-import { type NormalizedRange, type Range, parseRange } from "./utils/range"
+} from './utils/parse'
+import { type NormalizedRange, type Range, parseRange } from './utils/range'
 
 export class OerFixedOctetString extends OerType<
   Uint8Array,
@@ -202,10 +202,10 @@ export class OerOctetStringContaining<
 export const octetString = (length?: Range<number>) => {
   const [minimumLength, maximumLength] = parseRange(length)
   if (minimumLength != undefined && !isSafeUnsignedInteger(minimumLength)) {
-    throw new TypeError("minimumLength must be a safe unsigned integer")
+    throw new TypeError('minimumLength must be a safe unsigned integer')
   }
   if (maximumLength != undefined && !isSafeUnsignedInteger(maximumLength)) {
-    throw new TypeError("maximumLength must be a safe unsigned integer")
+    throw new TypeError('maximumLength must be a safe unsigned integer')
   }
 
   if (
@@ -222,7 +222,7 @@ export const octetString = (length?: Range<number>) => {
     minimumLength > maximumLength
   ) {
     throw new TypeError(
-      "minimumLength must be less than or equal to maximumLength",
+      'minimumLength must be less than or equal to maximumLength',
     )
   }
 

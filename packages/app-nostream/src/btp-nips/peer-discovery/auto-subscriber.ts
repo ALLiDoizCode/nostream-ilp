@@ -1,11 +1,11 @@
-import { sendClosedPacket, sendReqPacket } from '../utils/packet-sender.js'
-import { createLogger } from '../../factories/logger-factory.js'
-import { getSubscriptionPreferencesManager } from './subscription-preferences.js'
+import { sendClosedPacket, sendReqPacket } from '../utils/packet-sender'
+import { createLogger } from '../../factories/logger-factory'
+import { getSubscriptionPreferencesManager } from './subscription-preferences'
 
-import type { StreamConnection, Subscription, SubscriptionManager } from '../subscription-manager.js'
-import type { ILPPeerInfo } from '../types/ilp-peer-info.js'
-import type { AddressResolver } from './address-resolver.js'
-import type { PaymentChannelManager } from './payment-channel-manager.js'
+import type { StreamConnection, Subscription, SubscriptionManager } from '../subscription-manager'
+import type { ILPPeerInfo } from '../types/ilp-peer-info'
+import type { AddressResolver } from './address-resolver'
+import type { PaymentChannelManager } from './payment-channel-manager'
 
 /**
  * Auto-Subscriber Module

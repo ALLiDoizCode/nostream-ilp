@@ -1,0 +1,93 @@
+# Quality Gate: Story 9.6 - Peer Discovery UI
+schema: 1
+story: "9.6"
+story_title: "Peer Discovery UI"
+gate: CONCERNS
+status_reason: "Implementation is functional and well-architected, but contains intentional placeholders for connection status, reputation metrics, and connect workflow that affect data completeness. Ready for MVP release with documented limitations."
+reviewer: "Quinn (Test Architect)"
+updated: "2025-12-15T12:58:00Z"
+
+waiver: { active: false }
+
+# Key Issues Identified
+top_issues:
+  - id: "DATA-001"
+    severity: medium
+    finding: "Connection status returns placeholder data (lines 391-397 in peer-discovery.ts)"
+    suggested_action: "Implement actual queries to subscriptions and channels tables to determine hasSubscription/hasChannel/lastContact"
+    suggested_owner: dev
+
+  - id: "DATA-002"
+    severity: medium
+    finding: "Reputation metrics use simplified calculation without historical data (lines 399-407 in peer-discovery.ts)"
+    suggested_action: "Query payment claims, subscription events, and response times from database to calculate accurate totalPayments, failedPayments, averageResponseTime"
+    suggested_owner: dev
+
+  - id: "FUNC-001"
+    severity: low
+    finding: "Connect endpoint returns 501 Not Implemented (lines 517-546 in peer-discovery.ts)"
+    suggested_action: "Integrate with Subscription Manager (Story 9.3) and Channel Manager (Story 9.4) to enable actual connection creation"
+    suggested_owner: dev
+
+  - id: "PERF-001"
+    severity: low
+    finding: "Search queries load all announcements into memory for fuzzy matching (lines 277-300 in peer-discovery.ts)"
+    suggested_action: "Optimize with PostgreSQL ILIKE queries for operator name/nodeId fuzzy search to reduce memory usage"
+    suggested_owner: dev
+
+# Risk Summary
+risk_summary:
+  totals: { critical: 0, high: 0, medium: 2, low: 2 }
+  recommendations:
+    must_fix:
+      - "DATA-001 and DATA-002 should be resolved before relying on connection status or reputation metrics for critical decisions"
+    monitor:
+      - "PERF-001: Monitor memory usage with large announcement datasets (>1000 peers)"
+      - "FUNC-001: Track when actual connection integration becomes available"
+
+# Quality Score
+quality_score: 80
+expires: "2025-12-29T00:00:00Z"
+
+# Evidence
+evidence:
+  tests_reviewed: 3
+  files_reviewed: 9
+  risks_identified: 4
+  trace:
+    ac_covered: [1, 2, 3, 4]
+    ac_gaps: []
+
+# NFR Validation
+nfr_validation:
+  security:
+    status: PASS
+    notes: "HTTP Basic Auth, rate limiting, input validation, XSS prevention, no SQL injection risk"
+
+  performance:
+    status: PASS
+    notes: "Caching, pagination, debouncing, lazy loading implemented; fuzzy search acceptable for MVP"
+
+  reliability:
+    status: CONCERNS
+    notes: "Placeholder data affects accuracy (connection status, reputation); limited integration test coverage"
+
+  maintainability:
+    status: PASS
+    notes: "Clear code structure, documentation, TODO comments, consistent patterns, test coverage exists"
+
+# Recommendations
+recommendations:
+  immediate:
+    - action: "Implement connection status queries from subscriptions/channels tables"
+      refs: ["packages/app-nostream/src/peer-ui/routes/peer-discovery.ts:391-397"]
+    - action: "Implement reputation metrics calculation from historical payment/subscription data"
+      refs: ["packages/app-nostream/src/peer-ui/routes/peer-discovery.ts:399-407"]
+
+  future:
+    - action: "Integrate connect endpoint with Subscription Manager and Channel Manager"
+      refs: ["packages/app-nostream/src/peer-ui/routes/peer-discovery.ts:517-546"]
+    - action: "Optimize fuzzy search with PostgreSQL ILIKE"
+      refs: ["packages/app-nostream/src/peer-ui/routes/peer-discovery.ts:277-300"]
+    - action: "Add end-to-end test for complete user flow"
+      refs: ["packages/app-nostream/test/integration/peer-ui/"]

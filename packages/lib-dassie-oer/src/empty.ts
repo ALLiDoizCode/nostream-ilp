@@ -1,4 +1,4 @@
-import { OerType } from "./base-type"
+import { OerType } from './base-type'
 
 const serializer = () => {
   // no-op

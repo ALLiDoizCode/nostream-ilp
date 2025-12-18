@@ -16,7 +16,7 @@ export type FixedRange<T extends number | bigint> = readonly [
 export const parseRange = <T extends number | bigint>(
   range: Range<T>,
 ): NormalizedRange<T> => {
-  if (typeof range === "number" || typeof range === "bigint") {
+  if (typeof range === 'number' || typeof range === 'bigint') {
     return [range, range]
   }
 
@@ -25,7 +25,7 @@ export const parseRange = <T extends number | bigint>(
   }
 
   if (range[0] != undefined && range[1] != undefined && range[0] > range[1]) {
-    throw new Error(`minimum value must be less than or equal to maximum value`)
+    throw new Error('minimum value must be less than or equal to maximum value')
   }
 
   return [range[0], range[1]]

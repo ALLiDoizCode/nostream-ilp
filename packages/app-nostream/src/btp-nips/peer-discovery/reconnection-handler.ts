@@ -1,8 +1,8 @@
-import { ConnectionConfig, PeerConnectionState } from '../types/peer-connection.js'
-import { createLogger } from '../../factories/logger-factory.js'
+import { ConnectionConfig, PeerConnectionState } from '../types/peer-connection'
+import { createLogger } from '../../factories/logger-factory'
 
-import type { ConnectionLifecycleManager } from './connection-lifecycle.js'
-import type { ConnectionStore } from './connection-store.js'
+import type { ConnectionLifecycleManager } from './connection-lifecycle'
+import type { ConnectionStore } from './connection-store'
 
 /**
  * Reconnection Handler

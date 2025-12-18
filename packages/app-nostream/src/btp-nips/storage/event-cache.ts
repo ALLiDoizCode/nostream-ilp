@@ -3,7 +3,7 @@ import { createLogger } from '../../factories/logger-factory'
 import { createHash } from 'crypto'
 
 import type { CacheClient } from '../../@types/cache'
-import type { NostrEvent, NostrFilter } from '../types/index.js'
+import type { NostrEvent, NostrFilter } from '../types/index'
 
 /**
  * BTP-NIPs Event Cache

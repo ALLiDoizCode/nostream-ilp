@@ -1,0 +1,262 @@
+version: '3.8'
+
+services:
+  # PostgreSQL shared by all nodes
+  postgres:
+    image: postgres:16-alpine
+    container_name: dassie-test-postgres
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: dassie
+    networks:
+      - n-peer-test
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test -d dassie"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - ./scripts/init-postgres.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  # Redis shared by all nodes
+  redis:
+    image: redis:7-alpine
+    container_name: dassie-test-redis
+    networks:
+      - n-peer-test
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  # Dassie Node 0 (Bootstrap node)
+  dassie-node-0:
+    build:
+      context: ../../../..
+      dockerfile: docker/Dockerfile.dassie
+    container_name: dassie-node-0
+    environment:
+      NODE_ID: "0"
+      ILP_ADDRESS: g.dassie.node0
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: dassie_node0
+      DB_USER: test
+      DB_PASSWORD: test
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      RPC_PORT: "7768"
+      RPC_AUTH_TOKEN: test-token-node0
+      SETTLEMENT_SCHEME: mock
+      SETTLEMENT_AUTO_SETTLE: "true"
+      SETTLEMENT_THRESHOLD: "10000"
+      LOG_LEVEL: debug
+    networks:
+      n-peer-test:
+        ipv4_address: 172.20.0.10
+    ports:
+      - "7768:7768"
+    volumes:
+      - ./config/node-0.json:/app/config.json:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7768/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Dassie Node 1
+  dassie-node-1:
+    build:
+      context: ../../../..
+      dockerfile: docker/Dockerfile.dassie
+    container_name: dassie-node-1
+    environment:
+      NODE_ID: "1"
+      ILP_ADDRESS: g.dassie.node1
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: dassie_node1
+      DB_USER: test
+      DB_PASSWORD: test
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      RPC_PORT: "7769"
+      RPC_AUTH_TOKEN: test-token-node1
+      SETTLEMENT_SCHEME: mock
+      SETTLEMENT_AUTO_SETTLE: "true"
+      SETTLEMENT_THRESHOLD: "10000"
+      LOG_LEVEL: debug
+      BOOTSTRAP_NODE: http://dassie-node-0:7768
+    networks:
+      n-peer-test:
+        ipv4_address: 172.20.0.11
+    ports:
+      - "7769:7769"
+    volumes:
+      - ./config/node-1.json:/app/config.json:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7769/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      dassie-node-0:
+        condition: service_healthy
+
+  # Dassie Node 2
+  dassie-node-2:
+    build:
+      context: ../../../..
+      dockerfile: docker/Dockerfile.dassie
+    container_name: dassie-node-2
+    environment:
+      NODE_ID: "2"
+      ILP_ADDRESS: g.dassie.node2
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: dassie_node2
+      DB_USER: test
+      DB_PASSWORD: test
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      RPC_PORT: "7770"
+      RPC_AUTH_TOKEN: test-token-node2
+      SETTLEMENT_SCHEME: mock
+      SETTLEMENT_AUTO_SETTLE: "true"
+      SETTLEMENT_THRESHOLD: "10000"
+      LOG_LEVEL: debug
+      BOOTSTRAP_NODE: http://dassie-node-0:7768
+    networks:
+      n-peer-test:
+        ipv4_address: 172.20.0.12
+    ports:
+      - "7770:7770"
+    volumes:
+      - ./config/node-2.json:/app/config.json:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7770/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      dassie-node-0:
+        condition: service_healthy
+
+  # Dassie Node 3
+  dassie-node-3:
+    build:
+      context: ../../../..
+      dockerfile: docker/Dockerfile.dassie
+    container_name: dassie-node-3
+    environment:
+      NODE_ID: "3"
+      ILP_ADDRESS: g.dassie.node3
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: dassie_node3
+      DB_USER: test
+      DB_PASSWORD: test
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      RPC_PORT: "7771"
+      RPC_AUTH_TOKEN: test-token-node3
+      SETTLEMENT_SCHEME: mock
+      SETTLEMENT_AUTO_SETTLE: "true"
+      SETTLEMENT_THRESHOLD: "10000"
+      LOG_LEVEL: debug
+      BOOTSTRAP_NODE: http://dassie-node-0:7768
+    networks:
+      n-peer-test:
+        ipv4_address: 172.20.0.13
+    ports:
+      - "7771:7771"
+    volumes:
+      - ./config/node-3.json:/app/config.json:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7771/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      dassie-node-0:
+        condition: service_healthy
+
+  # Dassie Node 4
+  dassie-node-4:
+    build:
+      context: ../../../..
+      dockerfile: docker/Dockerfile.dassie
+    container_name: dassie-node-4
+    environment:
+      NODE_ID: "4"
+      ILP_ADDRESS: g.dassie.node4
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: dassie_node4
+      DB_USER: test
+      DB_PASSWORD: test
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      RPC_PORT: "7772"
+      RPC_AUTH_TOKEN: test-token-node4
+      SETTLEMENT_SCHEME: mock
+      SETTLEMENT_AUTO_SETTLE: "true"
+      SETTLEMENT_THRESHOLD: "10000"
+      LOG_LEVEL: debug
+      BOOTSTRAP_NODE: http://dassie-node-0:7768
+    networks:
+      n-peer-test:
+        ipv4_address: 172.20.0.14
+    ports:
+      - "7772:7772"
+    volumes:
+      - ./config/node-4.json:/app/config.json:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7772/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      dassie-node-0:
+        condition: service_healthy
+
+networks:
+  n-peer-test:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-dassie-test
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/24
+          gateway: 172.20.0.1

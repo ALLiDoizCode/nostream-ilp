@@ -28,5 +28,5 @@ export { calculateRequiredPayment } from './pricing-calculator'
 export { FreeTierTracker, type FreeTierStatus } from './free-tier-tracker'
 
 // Type exports
-export type { PaymentClaim, PaymentCurrency, ILPPaymentClaim } from '@/@types/payment-claim'
-export { SUPPORTED_CURRENCIES } from '@/@types/payment-claim'
+export type { PaymentClaim, PaymentCurrency, ILPPaymentClaim } from '../../@types/payment-claim'
+export { SUPPORTED_CURRENCIES } from '../../@types/payment-claim'

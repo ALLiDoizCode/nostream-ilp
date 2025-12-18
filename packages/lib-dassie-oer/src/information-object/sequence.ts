@@ -1,8 +1,8 @@
-import type { ConditionalPick } from "type-fest"
+import type { ConditionalPick } from 'type-fest'
 
-import type { AnyOerType, Infer, InferSerialize } from "../base-type"
-import type { SequenceShape } from "../sequence"
-import type { AnyObjectSetField, ObjectSetField } from "./object-set"
+import type { AnyOerType, Infer, InferSerialize } from '../base-type'
+import type { SequenceShape } from '../sequence'
+import type { AnyObjectSetField, ObjectSetField } from './object-set'
 
 export type InferInformationObjectParseShape<TShape extends SequenceShape> =
   TShape[keyof ConditionalPick<
@@ -16,9 +16,9 @@ export type InferInformationObjectParseShape<TShape extends SequenceShape> =
           TShape,
           AnyObjectSetField
         >]: TShape[TKey] extends AnyObjectSetField ?
-          TObjectSet[TElement][TShape[TKey]["_field"]] extends AnyOerType ?
-            Infer<TObjectSet[TElement][TShape[TKey]["_field"]]>
-          : TObjectSet[TElement][TShape[TKey]["_field"]]
+          TObjectSet[TElement][TShape[TKey]['_field']] extends AnyOerType ?
+            Infer<TObjectSet[TElement][TShape[TKey]['_field']]>
+          : TObjectSet[TElement][TShape[TKey]['_field']]
         : never
       }
     }[number]
@@ -36,9 +36,9 @@ export type InferInformationObjectSerializeShape<TShape extends SequenceShape> =
           TShape,
           AnyObjectSetField
         >]: TShape[TKey] extends AnyObjectSetField ?
-          TObjectSet[TElement][TShape[TKey]["_field"]] extends AnyOerType ?
-            InferSerialize<TObjectSet[TElement][TShape[TKey]["_field"]]>
-          : TObjectSet[TElement][TShape[TKey]["_field"]]
+          TObjectSet[TElement][TShape[TKey]['_field']] extends AnyOerType ?
+            InferSerialize<TObjectSet[TElement][TShape[TKey]['_field']]>
+          : TObjectSet[TElement][TShape[TKey]['_field']]
         : never
       }
     }[number]

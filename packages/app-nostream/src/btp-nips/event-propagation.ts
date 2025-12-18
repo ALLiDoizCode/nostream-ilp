@@ -1,13 +1,13 @@
-import { decrementTTL, shouldDrop } from './utils/ttl-manager.js'
-import { createLogger } from '../factories/logger-factory.js'
-import { EventDeduplicationCache } from './event-deduplication.js'
-import { PeerEventTracker } from './peer-event-tracker.js'
-import { RateLimiter } from './rate-limiter.js'
-import { sendEventPacket } from './utils/packet-sender.js'
+import { decrementTTL, shouldDrop } from './utils/ttl-manager'
+import { createLogger } from '../factories/logger-factory'
+import { EventDeduplicationCache } from './event-deduplication'
+import { PeerEventTracker } from './peer-event-tracker'
+import { RateLimiter } from './rate-limiter'
+import { sendEventPacket } from './utils/packet-sender'
 
-import type { SubscriptionManager } from './subscription-manager.js'
-import type { NostrEvent } from './types/index.js'
-import type { PacketMetadata } from './utils/ttl-manager.js'
+import type { SubscriptionManager } from './subscription-manager'
+import type { NostrEvent } from './types/index'
+import type { PacketMetadata } from './utils/ttl-manager'
 
 /**
  * Event Propagation Service

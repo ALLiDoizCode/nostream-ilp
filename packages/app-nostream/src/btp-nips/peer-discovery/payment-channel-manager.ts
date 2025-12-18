@@ -1,8 +1,8 @@
-import { createLogger } from '../../factories/logger-factory.js'
-import { getDassieClient } from '../../factories/dassie-client-factory.js'
+import { createLogger } from '../../factories/logger-factory'
+import { getDassieClient } from '../../factories/dassie-client-factory'
 
-import type { DassieClient } from '../../services/payment/dassie-client.js'
-import type { ILPPeerInfo } from '../types/ilp-peer-info.js'
+import type { DassieClient } from '../../services/payment/dassie-client'
+import type { ILPPeerInfo } from '../types/ilp-peer-info'
 
 /**
  * Payment Channel Manager

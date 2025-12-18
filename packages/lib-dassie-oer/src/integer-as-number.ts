@@ -1,11 +1,11 @@
-import { OerType } from "./base-type"
-import { ParseFailure, SerializeFailure } from "./utils/failures"
-import type { ParseContext, SerializeContext } from "./utils/parse"
-import { type FixedRange, type Range, parseRange } from "./utils/range"
+import { OerType } from './base-type'
+import { ParseFailure, SerializeFailure } from './utils/failures'
+import type { ParseContext, SerializeContext } from './utils/parse'
+import { type FixedRange, type Range, parseRange } from './utils/range'
 
 export interface IntegerAsNumberOptions {
   range: FixedRange<number>
-  type: "Uint" | "Int"
+  type: 'Uint' | 'Int'
   size: 8 | 16 | 32
 }
 
@@ -96,7 +96,7 @@ export const integerAsNumber = (range: Range<number>) => {
 
   if (minimumValue == undefined || maximumValue == undefined) {
     throw new Error(
-      "When using JavaScript numbers, a minimum and maximum must be provided. If your range is unbounded, use integerAsBigint instead.",
+      'When using JavaScript numbers, a minimum and maximum must be provided. If your range is unbounded, use integerAsBigint instead.',
     )
   }
 
@@ -109,19 +109,19 @@ export const integerAsNumber = (range: Range<number>) => {
     if (maximumValue <= UINT8_MAX_NUMBER) {
       return new OerFixedIntegerNumber({
         ...fixedOptions,
-        type: "Uint",
+        type: 'Uint',
         size: 8,
       })
     } else if (maximumValue <= UINT16_MAX_NUMBER) {
       return new OerFixedIntegerNumber({
         ...fixedOptions,
-        type: "Uint",
+        type: 'Uint',
         size: 16,
       })
     } else if (maximumValue <= UINT32_MAX_NUMBER) {
       return new OerFixedIntegerNumber({
         ...fixedOptions,
-        type: "Uint",
+        type: 'Uint',
         size: 32,
       })
     }
@@ -129,7 +129,7 @@ export const integerAsNumber = (range: Range<number>) => {
     if (minimumValue <= INT8_MIN_NUMBER && maximumValue <= INT8_MAX_NUMBER) {
       return new OerFixedIntegerNumber({
         ...fixedOptions,
-        type: "Int",
+        type: 'Int',
         size: 8,
       })
     } else if (
@@ -138,7 +138,7 @@ export const integerAsNumber = (range: Range<number>) => {
     ) {
       return new OerFixedIntegerNumber({
         ...fixedOptions,
-        type: "Int",
+        type: 'Int',
         size: 16,
       })
     } else if (
@@ -147,7 +147,7 @@ export const integerAsNumber = (range: Range<number>) => {
     ) {
       return new OerFixedIntegerNumber({
         ...fixedOptions,
-        type: "Int",
+        type: 'Int',
         size: 32,
       })
     }

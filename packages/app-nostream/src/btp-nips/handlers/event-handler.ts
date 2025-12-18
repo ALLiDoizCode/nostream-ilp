@@ -5,14 +5,14 @@ import {
   InsufficientPaymentError,
   InvalidSignatureError,
 } from '../errors'
-import { EventDeduplicationCache } from '../event-deduplication.js'
-import { EventPropagationService } from '../event-propagation.js'
-import { PeerEventTracker } from '../peer-event-tracker.js'
+import { EventDeduplicationCache } from '../event-deduplication'
+import { EventPropagationService } from '../event-propagation'
+import { PeerEventTracker } from '../peer-event-tracker'
 import { getEventCost, validatePaymentAmount } from '../pricing'
-import { RateLimiter } from '../rate-limiter.js'
+import { RateLimiter } from '../rate-limiter'
 import { getEventCache } from '../storage/event-cache'
 import { getEventRepository } from '../storage/event-repository'
-import { SubscriptionManager } from '../subscription-manager.js'
+import { SubscriptionManager } from '../subscription-manager'
 import { NostrMessageType } from '../types'
 import { retryWithBackoff } from '../utils/retry'
 

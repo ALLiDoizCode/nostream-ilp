@@ -1,4 +1,4 @@
-import { isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
 import {
   type AnyOerType,
@@ -6,9 +6,9 @@ import {
   type InferSerialize,
   OerType,
   type Serializer,
-} from "./base-type"
-import { integerAsBigint } from "./integer-as-bigint"
-import type { ParseContext, SerializeContext } from "./utils/parse"
+} from './base-type'
+import { integerAsBigint } from './integer-as-bigint'
+import type { ParseContext, SerializeContext } from './utils/parse'
 
 export class OerSequenceOf<TShape extends AnyOerType> extends OerType<
   Infer<TShape>[],

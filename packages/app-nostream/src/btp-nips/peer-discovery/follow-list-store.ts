@@ -1,8 +1,8 @@
-import { getMasterDbClient, getReadReplicaDbClient } from '../../database/client.js'
-import { getCacheClient } from '../../cache/client.js'
-import { createLogger } from '../../factories/logger-factory.js'
+import { getMasterDbClient, getReadReplicaDbClient } from '../../database/client'
+import { getCacheClient } from '../../cache/client'
+import { createLogger } from '../../factories/logger-factory'
 
-import type { CacheClient } from '../../@types/cache.js'
+import type { CacheClient } from '../../@types/cache'
 import type { Knex } from 'knex'
 
 /**

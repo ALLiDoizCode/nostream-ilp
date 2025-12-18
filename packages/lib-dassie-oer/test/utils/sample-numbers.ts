@@ -1,4 +1,4 @@
-import { getLengthPrefixAsHex } from "./sample-length-prefix"
+import { getLengthPrefixAsHex } from './sample-length-prefix'
 
 const positiveSampleNumbers = [
   1n,
@@ -81,7 +81,7 @@ const getValueAsHex = (value: bigint, byteLength: number) => {
   return value < 0n ?
       // Calculate two's complement
       (2n ** bitLengthBigInt + value).toString(16)
-    : value.toString(16).padStart(byteLength * 2, "0")
+    : value.toString(16).padStart(byteLength * 2, '0')
 }
 
 export const getFixedLengthSamples = (signed: boolean, byteLength: number) => {

@@ -1,0 +1,254 @@
+name: N-Peer Integration Tests
+
+on:
+  pull_request:
+    branches: [main, epic-*]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 2 * * *' # Nightly at 2 AM UTC
+  workflow_dispatch:
+
+jobs:
+  tier1-smoke-tests:
+    name: Tier 1 - Smoke Tests (5 min)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Start services (PostgreSQL, Redis)
+        run: docker-compose up -d postgres redis
+        working-directory: ./
+
+      - name: Wait for services
+        run: |
+          timeout 60 bash -c 'until docker-compose ps | grep -q "healthy"; do sleep 2; done'
+        working-directory: ./
+
+      - name: Run Tier 1 smoke tests
+        run: pnpm test:n-peer:tier1
+        working-directory: packages/app-nostream
+        timeout-minutes: 5
+        env:
+          CI: true
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tier1-test-results
+          path: packages/app-nostream/test-results/
+
+      - name: Cleanup
+        if: always()
+        run: docker-compose down -v
+        working-directory: ./
+
+  tier2-comprehensive-tests:
+    name: Tier 2 - Comprehensive Tests (15 min)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Start services
+        run: docker-compose up -d
+        working-directory: ./
+
+      - name: Wait for services
+        run: |
+          timeout 120 bash -c 'until docker-compose ps | grep -q "healthy"; do sleep 2; done'
+        working-directory: ./
+
+      - name: Run Tier 2 comprehensive tests
+        run: pnpm test:n-peer:tier2
+        working-directory: packages/app-nostream
+        timeout-minutes: 15
+        env:
+          CI: true
+
+      - name: Run benchmarks
+        run: pnpm benchmark
+        working-directory: packages/app-nostream
+        continue-on-error: true
+
+      - name: Detect performance regression
+        id: regression
+        run: pnpm benchmark:compare
+        working-directory: packages/app-nostream
+        continue-on-error: true
+
+      - name: Post PR comment with results
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let report = '';
+
+            try {
+              report = fs.readFileSync('benchmark-report.md', 'utf8');
+            } catch (error) {
+              report = '⚠️ No benchmark report generated';
+            }
+
+            let regressionReport = '';
+            try {
+              regressionReport = fs.readFileSync('regression-report.md', 'utf8');
+            } catch (error) {
+              regressionReport = '';
+            }
+
+            const body = `## Benchmark Results\n\n${report}\n\n${regressionReport}`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Upload benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: |
+            benchmark-results.json
+            benchmark-report.md
+            benchmark-graphs.png
+            regression-report.md
+
+      - name: Fail if regression detected
+        if: steps.regression.outcome == 'failure'
+        run: |
+          echo "❌ Performance regression detected"
+          exit 1
+
+      - name: Cleanup
+        if: always()
+        run: docker-compose down -v
+        working-directory: ./
+
+  tier3-extended-tests:
+    name: Tier 3 - Extended Tests (60 min)
+    runs-on: ubuntu-latest-16-cores # Self-hosted runner with 16GB RAM
+    timeout-minutes: 90
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Start services
+        run: docker-compose up -d
+        working-directory: ./
+
+      - name: Run Tier 3 extended tests
+        run: pnpm test:n-peer:tier3
+        working-directory: packages/app-nostream
+        timeout-minutes: 60
+        env:
+          CI: true
+
+      - name: Run stress tests (100-node mesh)
+        run: pnpm test:n-peer:stress
+        working-directory: packages/app-nostream
+        timeout-minutes: 30
+        continue-on-error: true
+
+      - name: Generate performance trend report
+        run: pnpm benchmark:trends
+        working-directory: packages/app-nostream
+        continue-on-error: true
+
+      - name: Archive benchmark history
+        run: pnpm benchmark:archive
+        working-directory: packages/app-nostream
+
+      - name: Upload extended test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tier3-test-results
+          path: |
+            packages/app-nostream/test-results/
+            .benchmarks/history/
+
+      - name: Cleanup
+        if: always()
+        run: docker-compose down -v
+        working-directory: ./
+
+  # Status check that's required for PR merge
+  n-peer-status:
+    name: N-Peer Tests Status
+    runs-on: ubuntu-latest
+    needs: [tier1-smoke-tests, tier2-comprehensive-tests]
+    if: always()
+    steps:
+      - name: Check test results
+        run: |
+          if [[ "${{ needs.tier1-smoke-tests.result }}" != "success" ]]; then
+            echo "❌ Tier 1 smoke tests failed"
+            exit 1
+          fi
+
+          if [[ "${{ needs.tier2-comprehensive-tests.result }}" != "success" ]] && [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "❌ Tier 2 comprehensive tests failed"
+            exit 1
+          fi
+
+          echo "✓ All required tests passed"

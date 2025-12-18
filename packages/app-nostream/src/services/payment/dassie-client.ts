@@ -9,9 +9,9 @@ import {
   ConversionResult,
   PaymentClaimVerification,
   RoutingStats,
-} from '@/@types/dassie-router.stub'
+} from '../../@types/dassie-router.stub'
 
-import type { PaymentClaim } from '@/@types/payment-claim'
+import type { PaymentClaim } from '../../@types/payment-claim'
 
 /**
  * Dassie RPC Client for Nostream

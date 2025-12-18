@@ -1,8 +1,8 @@
-import { entrypoint } from "@dassie/meta-rollup-config"
+import { entrypoint } from '@dassie/meta-rollup-config'
 
 const config = [
-  ...entrypoint("index", {
-    external: ["@dassie/lib-type-utils"],
+  ...entrypoint('index', {
+    external: ['@dassie/lib-type-utils'],
   }),
 ]
 

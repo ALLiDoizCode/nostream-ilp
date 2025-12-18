@@ -1,3 +1,5 @@
+require('dotenv').config({ path: '../../.env' });
+
 module.exports = {
   client: 'pg',
   connection: process.env.DATABASE_URI ? process.env.DATABASE_URI : {

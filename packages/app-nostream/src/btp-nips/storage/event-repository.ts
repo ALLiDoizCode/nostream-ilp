@@ -1,9 +1,9 @@
 import { getMasterDbClient, getReadReplicaDbClient } from '../../database/client'
-import { EventCache, getEventCache } from './event-cache.js'
-import { getQueryMonitor, QueryMonitor } from './query-monitor.js'
+import { EventCache, getEventCache } from './event-cache'
+import { getQueryMonitor, QueryMonitor } from './query-monitor'
 import { createLogger } from '../../factories/logger-factory'
 
-import type { NostrEvent, NostrFilter } from '../types/index.js'
+import type { NostrEvent, NostrFilter } from '../types/index'
 import type { Knex } from 'knex'
 
 /**
@@ -454,6 +454,92 @@ export class EventRepository {
         throw error
       }
     }, 'queryEventsByFilters')
+  }
+
+  /**
+   * Search for ILP Node Announcements (Kind 32001) by pubkey prefix or metadata.
+   *
+   * Optimized for PERF-001: Uses PostgreSQL database queries instead of loading all
+   * announcements into memory.
+   *
+   * Supports three search modes:
+   * 1. Exact pubkey match: WHERE pubkey = 'exact_pubkey'
+   * 2. Prefix pubkey match: WHERE pubkey LIKE 'prefix%'
+   * 3. Fuzzy metadata search: WHERE content ILIKE '%search_term%'
+   *
+   * @param searchTerm - Search term (pubkey, prefix, or operator name/node ID)
+   * @param limit - Maximum number of results (default 100, max 1000)
+   * @param offset - Pagination offset (default 0)
+   * @returns Array of matching ILP Node Announcements
+   *
+   * @example
+   * ```typescript
+   * // Exact pubkey search
+   * const exact = await repository.searchILPNodeAnnouncements('abc123...def456', 20, 0);
+   *
+   * // Prefix search
+   * const prefix = await repository.searchILPNodeAnnouncements('abc123', 20, 0);
+   *
+   * // Fuzzy operator name search
+   * const fuzzy = await repository.searchILPNodeAnnouncements('Alice', 20, 0);
+   * ```
+   */
+  async searchILPNodeAnnouncements(
+    searchTerm: string,
+    limit: number = 100,
+    offset: number = 0
+  ): Promise<NostrEvent[]> {
+    return this.queryMonitor.wrapQuery(async () => {
+      try {
+        const trimmedTerm = searchTerm.trim()
+        const maxLimit = Math.min(1000, limit)
+
+        // Validate pubkey format (64-char hex)
+        const isFullPubkey = /^[0-9a-f]{64}$/i.test(trimmedTerm)
+        const isHexPrefix = /^[0-9a-f]+$/i.test(trimmedTerm)
+
+        let query = this.readDb('btp_nips_events')
+          .where('kind', 32001) // ILP Node Announcement kind
+          .where('is_deleted', false) // Exclude soft-deleted events
+
+        if (isFullPubkey) {
+          // Exact pubkey match
+          debug('Exact pubkey search: %s', trimmedTerm)
+          query = query.where('pubkey', trimmedTerm)
+        } else if (isHexPrefix) {
+          // Prefix pubkey match
+          debug('Prefix pubkey search: %s', trimmedTerm)
+          query = query.where('pubkey', 'like', `${trimmedTerm}%`)
+        } else {
+          // Fuzzy search on operator name or node ID in content field
+          // Uses PostgreSQL ILIKE for case-insensitive matching
+          debug('Fuzzy metadata search: %s', trimmedTerm)
+          query = query.whereRaw(
+            "content ILIKE ? OR content::jsonb->>'operatorName' ILIKE ? OR content::jsonb->>'nodeId' ILIKE ?",
+            [`%${trimmedTerm}%`, `%${trimmedTerm}%`, `%${trimmedTerm}%`]
+          )
+        }
+
+        // Apply pagination and ordering
+        query = query
+          .orderBy('created_at', 'desc')
+          .limit(maxLimit)
+          .offset(offset)
+
+        const rows = await query
+
+        debug(
+          'ILP announcement search returned %d results for term "%s"',
+          rows.length,
+          trimmedTerm
+        )
+
+        return rows.map((row) => this.rowToEvent(row))
+      } catch (error) {
+        debug('Failed to search ILP node announcements: %o', error)
+        throw error
+      }
+    }, 'searchILPNodeAnnouncements')
   }
 
   /**

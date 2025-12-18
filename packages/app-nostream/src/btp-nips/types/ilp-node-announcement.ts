@@ -1,4 +1,4 @@
-import type { NostrEvent } from './index.js'
+import type { NostrEvent } from './index'
 
 /**
  * ILP Node Announcement (Kind 32001)

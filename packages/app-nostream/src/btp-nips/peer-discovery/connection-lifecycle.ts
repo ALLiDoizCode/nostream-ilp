@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import { createLogger } from '../../factories/logger-factory.js'
+import { createLogger } from '../../factories/logger-factory'
 import { v4 as uuidv4 } from 'uuid'
 import {
   ChannelNeededEvent,
@@ -7,12 +7,12 @@ import {
   PeerConnection,
   PeerConnectionState,
   VALID_STATE_TRANSITIONS,
-} from '../types/peer-connection.js'
+} from '../types/peer-connection'
 
-import type { AddressResolver } from './address-resolver.js'
-import type { ConnectionStore } from './connection-store.js'
-import type { DassieClient } from '../../services/payment/dassie-client.js'
-import type { PaymentChannelManager } from './payment-channel-manager.js'
+import type { AddressResolver } from './address-resolver'
+import type { ConnectionStore } from './connection-store'
+import type { DassieClient } from '../../services/payment/dassie-client'
+import type { PaymentChannelManager } from './payment-channel-manager'
 
 /**
  * Connection Lifecycle Manager

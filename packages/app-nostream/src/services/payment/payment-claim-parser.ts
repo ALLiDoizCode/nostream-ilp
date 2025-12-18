@@ -1,4 +1,4 @@
-import { PaymentClaim, PaymentCurrency, SUPPORTED_CURRENCIES } from '@/@types/payment-claim'
+import { PaymentClaim, PaymentCurrency, SUPPORTED_CURRENCIES } from '../../@types/payment-claim'
 
 /**
  * Nostr event structure (NIP-01)

@@ -1,9 +1,9 @@
-import type { Tagged } from "type-fest"
+import type { Tagged } from 'type-fest'
 
-type UnsignedBigint = Tagged<bigint, "bigint >= 0">
+type UnsignedBigint = Tagged<bigint, 'bigint >= 0'>
 
 export const isUnsignedBigint = (value: unknown): value is UnsignedBigint =>
-  typeof value === "bigint" && value >= 0n
+  typeof value === 'bigint' && value >= 0n
 
 export const unsignedBigintByteLength = (sample: UnsignedBigint) => {
   let remainder: bigint = sample

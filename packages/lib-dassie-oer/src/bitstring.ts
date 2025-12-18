@@ -1,15 +1,15 @@
-import type { ReadonlyTuple } from "type-fest"
+import type { ReadonlyTuple } from 'type-fest'
 
-import { isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
-import { OerType } from "./base-type"
-import { ParseFailure, SerializeFailure } from "./utils/failures"
+import { OerType } from './base-type'
+import { ParseFailure, SerializeFailure } from './utils/failures'
 import {
   parseLengthPrefix,
   predictLengthPrefixLength,
   serializeLengthPrefix,
-} from "./utils/length-prefix"
-import type { BaseContext, ParseContext, SerializeContext } from "./utils/parse"
+} from './utils/length-prefix'
+import type { BaseContext, ParseContext, SerializeContext } from './utils/parse'
 
 type InferBitstringValue<T extends number> = ReadonlyTuple<boolean, T>
 
@@ -81,7 +81,7 @@ export class OerVariableBitstring<
 
     if (unusedBits > 7) {
       return new ParseFailure(
-        "unable to read bitstring - unused bits greater than 7",
+        'unable to read bitstring - unused bits greater than 7',
         uint8Array,
         offset + 1,
       )
@@ -138,7 +138,7 @@ export class OerFixedBitstring<TBitDefinition extends number> extends OerType<
 
     if (context.uint8Array.length - offset < byteLength) {
       return new ParseFailure(
-        "unable to read bitstring value - end of buffer",
+        'unable to read bitstring value - end of buffer',
         context.uint8Array,
         offset,
       )

@@ -1,5 +1,5 @@
-import { hexToUint8Array } from "../../src"
-import type { ParseContext, SerializeContext } from "../../src/utils/parse"
+import { hexToUint8Array } from '../../src'
+import type { ParseContext, SerializeContext } from '../../src/utils/parse'
 
 export const createTestParseContext = (hex: string): ParseContext => {
   const uint8Array = hexToUint8Array(hex)

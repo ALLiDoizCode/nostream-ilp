@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nostream-ILP Peer UI</title>
+  <link rel="stylesheet" href="/peer/peer.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="peer-header">
+      <h1>Peer Operator UI</h1>
+      <div class="status-bar">
+        <span id="peer-status" class="peer-status">
+          <span id="peer-count">0</span> peers connected
+        </span>
+        <span id="connection-status" class="connection-status">●</span>
+      </div>
+    </header>
+
+    <!-- Error/Success Messages -->
+    <div id="error-message" class="message error-message hidden"></div>
+    <div id="success-message" class="message success-message hidden"></div>
+
+    <!-- Main Grid -->
+    <div class="peer-grid">
+      <!-- Event Composer Section -->
+      <section class="card event-composer">
+        <h2>Event Composer</h2>
+
+        <!-- Kind Selector -->
+        <div class="form-group">
+          <label for="event-kind">Event Type</label>
+          <select id="event-kind" class="form-control">
+            <option value="1">Short Text Note (Kind 1)</option>
+            <option value="30023">Long-form Article (Kind 30023)</option>
+          </select>
+        </div>
+
+        <!-- Content Input -->
+        <div class="form-group">
+          <label for="event-content">Content</label>
+          <textarea
+            id="event-content"
+            class="form-control content-textarea"
+            placeholder="What's happening?"
+            rows="6"
+          ></textarea>
+          <div class="character-counter">
+            <span id="char-count">0</span> / <span id="char-limit">280</span>
+            <span id="char-warning" class="warning hidden">Character limit exceeded!</span>
+          </div>
+        </div>
+
+        <!-- Tags (Optional) -->
+        <div class="form-group">
+          <label for="event-tags">Tags (optional)</label>
+          <input
+            id="event-tags"
+            type="text"
+            class="form-control"
+            placeholder='e.g., #nostr #ilp (comma separated)'
+          />
+        </div>
+
+        <!-- Cost Display -->
+        <div class="cost-display">
+          <div class="cost-label">Publishing Cost:</div>
+          <div class="cost-value">
+            <span id="cost-msats" class="cost-primary">-- msats</span>
+            <span id="cost-usd" class="cost-secondary">(~$--.--)</span>
+          </div>
+          <button id="cost-breakdown-toggle" class="btn-link">Show breakdown</button>
+          <div id="cost-breakdown" class="cost-breakdown hidden">
+            <div class="breakdown-item">
+              <span>Relay Fee:</span>
+              <span id="breakdown-relay">-- msats</span>
+            </div>
+            <div class="breakdown-item">
+              <span>Size Fee:</span>
+              <span id="breakdown-size">-- msats</span>
+            </div>
+            <div class="breakdown-item">
+              <span>Arweave Storage:</span>
+              <span id="breakdown-arweave">-- msats</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preview Toggle -->
+        <div class="preview-toggle">
+          <button id="preview-btn" class="btn btn-secondary">Preview Event</button>
+        </div>
+
+        <!-- Preview Pane -->
+        <div id="event-preview" class="event-preview hidden">
+          <h3>Preview</h3>
+          <div class="preview-content">
+            <div class="preview-header">
+              <span class="preview-pubkey" id="preview-pubkey">npub...</span>
+              <span class="preview-timestamp" id="preview-timestamp">--</span>
+            </div>
+            <div class="preview-kind">Kind: <span id="preview-kind">--</span></div>
+            <div class="preview-body" id="preview-body">
+              <!-- Rendered content -->
+            </div>
+            <div class="preview-tags" id="preview-tags">
+              <!-- Tags -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Signing Section -->
+        <div class="signing-section">
+          <h3>Sign Event</h3>
+          <div id="nip07-available" class="signing-method hidden">
+            <p class="info-text">✅ NIP-07 extension detected</p>
+            <button id="sign-nip07-btn" class="btn">Sign with Browser Extension</button>
+          </div>
+          <div id="nip07-unavailable" class="signing-method hidden">
+            <p class="warning-text">⚠️ No NIP-07 extension detected. Manual signing required.</p>
+            <div class="form-group">
+              <label for="nsec-input">Private Key (nsec)</label>
+              <input
+                id="nsec-input"
+                type="password"
+                class="form-control"
+                placeholder="nsec1..."
+              />
+              <p class="danger-text">
+                ⚠️ SECURITY WARNING: Entering your private key in a web form is not recommended.
+                Please use a NIP-07 browser extension like <a href="https://github.com/fiatjaf/nos2x" target="_blank">nos2x</a> or
+                <a href="https://getalby.com/" target="_blank">Alby</a> for better security.
+              </p>
+            </div>
+            <button id="sign-manual-btn" class="btn">Sign with Private Key</button>
+          </div>
+          <div id="event-signed" class="event-signed hidden">
+            <p class="success-text">✅ Event signed successfully</p>
+            <div class="signed-event-info">
+              <div><strong>Event ID:</strong> <code id="signed-event-id">--</code></div>
+              <div><strong>Signature:</strong> <code id="signed-event-sig">--</code></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Publish Button -->
+        <div class="publish-section">
+          <button id="publish-btn" class="btn btn-primary btn-large" disabled>
+            <span id="publish-btn-text">Publish Event</span>
+            <span id="publish-spinner" class="spinner hidden"></span>
+          </button>
+          <p id="publish-disabled-reason" class="muted-text">Sign the event to enable publishing</p>
+        </div>
+      </section>
+
+      <!-- Event Feed Section -->
+      <section class="card event-feed-section">
+        <h2>Event Feed</h2>
+
+        <!-- Filter Controls -->
+        <div class="feed-controls">
+          <div class="filter-row">
+            <div class="form-group">
+              <label for="filter-peer">Filter by Peer</label>
+              <select id="filter-peer" class="form-control">
+                <option value="">All Peers</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Filter by Kind</label>
+              <div class="kind-checkboxes">
+                <label><input type="checkbox" value="1" checked> Short Notes</label>
+                <label><input type="checkbox" value="30023" checked> Articles</label>
+                <label><input type="checkbox" value="7" checked> Reactions</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="filter-since">Since Date</label>
+              <input type="datetime-local" id="filter-since" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label for="filter-until">Until Date</label>
+              <input type="datetime-local" id="filter-until" class="form-control">
+            </div>
+          </div>
+
+          <div class="filter-actions">
+            <button id="apply-filters-btn" class="btn btn-primary">Apply Filters</button>
+            <button id="clear-filters-btn" class="btn btn-secondary">Clear Filters</button>
+          </div>
+        </div>
+
+        <!-- Event List -->
+        <div id="event-list" class="event-list">
+          <!-- Events will be rendered here -->
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="event-loading" class="loading-indicator hidden">
+          <div class="spinner"></div>
+          <p>Loading events...</p>
+        </div>
+
+        <!-- Infinite Scroll Sentinel -->
+        <div id="scroll-sentinel" class="scroll-sentinel"></div>
+
+        <!-- No More Events -->
+        <div id="no-more-events" class="no-more-events hidden">
+          <p>No more events to load</p>
+        </div>
+      </section>
+
+      <!-- Subscription Manager Section (Story 9.3) -->
+      <section class="card subscription-manager">
+        <div class="section-header">
+          <h2>Subscription Manager</h2>
+          <div class="section-actions">
+            <button
+              id="add-subscription-btn"
+              class="btn btn-primary"
+              onclick="subscriptionManager.openAddSubscriptionModal()"
+              aria-label="Add new subscription"
+            >
+              ➕ Add Subscription
+            </button>
+          </div>
+        </div>
+
+        <div class="subscription-controls">
+          <span id="subscription-count" class="subscription-count">
+            0 active subscriptions
+          </span>
+          <span id="subscriptions-last-updated" class="muted-text">
+            Last updated: --
+          </span>
+        </div>
+
+        <!-- Subscription List -->
+        <div id="subscription-list" class="subscription-list">
+          <!-- Subscriptions will be rendered here -->
+        </div>
+      </section>
+
+      <!-- Channel Manager Section (Story 9.4) -->
+      <section class="card channel-manager">
+        <div class="section-header">
+          <h2>Payment Channels</h2>
+          <div class="section-actions">
+            <button
+              id="open-channel-btn"
+              class="btn btn-primary"
+              onclick="channelManager.openOpenChannelModal()"
+              aria-label="Open new payment channel"
+            >
+              ➕ Open Channel
+            </button>
+          </div>
+        </div>
+
+        <div class="channel-controls">
+          <span id="channel-count" class="channel-count">
+            0 open channels
+          </span>
+          <span id="channels-last-updated" class="muted-text">
+            Last updated: --
+          </span>
+        </div>
+
+        <!-- Channel List -->
+        <div id="channel-list" class="channel-list">
+          <!-- Channels will be rendered here -->
+        </div>
+      </section>
+
+      <!-- Economics Dashboard Section (Story 9.5) -->
+      <section class="card economics-dashboard">
+        <div class="section-header">
+          <h2>Economics Dashboard</h2>
+        </div>
+
+        <!-- Status Indicator -->
+        <div id="profitability-status" class="status-container">
+          <!-- Status indicator will be rendered here -->
+        </div>
+
+        <!-- Metrics Summary -->
+        <div class="metrics-summary">
+          <div class="metric-card">
+            <h3>Today</h3>
+            <div id="today-metrics" class="metrics-content">
+              <!-- Today's metrics will be rendered here -->
+            </div>
+          </div>
+          <div class="metric-card">
+            <h3>This Month</h3>
+            <div id="month-metrics" class="metrics-content">
+              <!-- This month's metrics will be rendered here -->
+            </div>
+          </div>
+          <div class="metric-card">
+            <h3>All Time</h3>
+            <div id="alltime-metrics" class="metrics-content">
+              <!-- All-time metrics will be rendered here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart Controls -->
+        <div class="chart-controls">
+          <label for="chart-period">Time Period:</label>
+          <select id="chart-period" class="form-control">
+            <option value="7d">Last 7 Days</option>
+            <option value="30d">Last 30 Days</option>
+            <option value="90d">Last 90 Days</option>
+          </select>
+        </div>
+
+        <!-- Charts Container -->
+        <div class="charts-container">
+          <div class="chart-wrapper">
+            <h4>Revenue & Expenses</h4>
+            <canvas id="revenue-expense-chart" aria-label="Revenue and expense chart"></canvas>
+          </div>
+          <div class="chart-wrapper">
+            <h4>Profitability</h4>
+            <canvas id="profitability-chart" aria-label="Profitability chart"></canvas>
+          </div>
+          <div class="chart-wrapper">
+            <h4>Revenue Breakdown</h4>
+            <canvas id="revenue-breakdown-chart" aria-label="Revenue breakdown chart" role="img"></canvas>
+          </div>
+          <div class="chart-wrapper">
+            <h4>Expense Breakdown</h4>
+            <canvas id="expense-breakdown-chart" aria-label="Expense breakdown chart" role="img"></canvas>
+          </div>
+        </div>
+
+        <!-- Balances Section -->
+        <div class="balances-section">
+          <h3>Balances</h3>
+          <div id="balances-display" class="balances-content">
+            <!-- Balances will be rendered here -->
+          </div>
+          <div class="days-remaining-container">
+            <h4>Days of Hosting Remaining</h4>
+            <div id="days-remaining-display">
+              <!-- Days remaining will be rendered here -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Renew Subscription Modal -->
+    <div id="renew-modal" class="modal-overlay" style="display: none;" role="dialog" aria-labelledby="renew-modal-title">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="renew-modal-title">Renew Subscription</h3>
+          <button class="modal-close" onclick="subscriptionManager.closeModal()" aria-label="Close modal">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-info">
+            <div><strong>Subscription ID:</strong> <code id="renew-sub-id">--</code></div>
+            <div><strong>Current Expires:</strong> <span id="renew-current-expiry">--</span></div>
+          </div>
+
+          <div class="form-group">
+            <label for="renew-ttl">New Time-to-Live (TTL)</label>
+            <select id="renew-ttl" class="form-control" onchange="subscriptionManager.calculateRenewalCost()">
+              <option value="3600">1 hour</option>
+              <option value="21600">6 hours</option>
+              <option value="86400">24 hours</option>
+              <option value="604800">7 days</option>
+            </select>
+          </div>
+
+          <div class="cost-display">
+            <div class="cost-label">Renewal Cost:</div>
+            <div class="cost-value">
+              <span id="renew-cost" class="cost-primary">5,000 msats</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="subscriptionManager.closeModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="subscriptionManager.renewSubscription()">Renew Subscription</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unsubscribe Modal -->
+    <div id="unsubscribe-modal" class="modal-overlay" style="display: none;" role="dialog" aria-labelledby="unsubscribe-modal-title">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="unsubscribe-modal-title">Confirm Unsubscribe</h3>
+          <button class="modal-close" onclick="subscriptionManager.closeModal()" aria-label="Close modal">×</button>
+        </div>
+        <div class="modal-body">
+          <p class="warning-text">⚠️ Are you sure you want to unsubscribe?</p>
+          <div class="modal-info">
+            <div><strong>Subscription ID:</strong> <code id="unsubscribe-sub-id">--</code></div>
+            <div><strong>Subscriber:</strong> <span id="unsubscribe-sub-subscriber">--</span></div>
+          </div>
+          <p class="muted-text">Note: No refund will be provided for remaining time.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="subscriptionManager.closeModal()">Cancel</button>
+          <button class="btn btn-danger" onclick="subscriptionManager.unsubscribe()">Confirm Unsubscribe</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Subscription Modal -->
+    <div id="add-subscription-modal" class="modal-overlay" style="display: none;" role="dialog" aria-labelledby="add-sub-modal-title">
+      <div class="modal-content modal-large">
+        <div class="modal-header">
+          <h3 id="add-sub-modal-title">Add New Subscription</h3>
+          <button class="modal-close" onclick="subscriptionManager.closeModal()" aria-label="Close modal">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="add-sub-subscriber">Subscriber ILP Address <span class="required">*</span></label>
+            <input
+              id="add-sub-subscriber"
+              type="text"
+              class="form-control"
+              placeholder="g.dassie.alice"
+              aria-required="true"
+            />
+            <small class="form-help">The ILP address of the peer to subscribe to</small>
+          </div>
+
+          <h4>Filter Options</h4>
+
+          <div class="form-group">
+            <label for="add-sub-authors">Authors (comma-separated pubkeys)</label>
+            <input
+              id="add-sub-authors"
+              type="text"
+              class="form-control"
+              placeholder="npub1..., npub2..."
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="add-sub-kinds">Event Kinds (comma-separated)</label>
+            <input
+              id="add-sub-kinds"
+              type="text"
+              class="form-control"
+              placeholder="1, 30023"
+              value="1"
+            />
+            <small class="form-help">Common: 1 (notes), 7 (reactions), 30023 (articles)</small>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="add-sub-since">Since Date</label>
+              <input id="add-sub-since" type="datetime-local" class="form-control" />
+            </div>
+
+            <div class="form-group">
+              <label for="add-sub-until">Until Date</label>
+              <input id="add-sub-until" type="datetime-local" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="add-sub-limit">Limit (max events)</label>
+            <input
+              id="add-sub-limit"
+              type="number"
+              class="form-control"
+              value="100"
+              min="1"
+              max="500"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="add-sub-ttl">Subscription Duration (TTL) <span class="required">*</span></label>
+            <select id="add-sub-ttl" class="form-control" onchange="subscriptionManager.calculateSubscriptionCost()" aria-required="true">
+              <option value="3600">1 hour</option>
+              <option value="21600">6 hours</option>
+              <option value="86400">24 hours</option>
+              <option value="604800">7 days</option>
+            </select>
+          </div>
+
+          <div class="cost-display">
+            <div class="cost-label">Estimated Cost:</div>
+            <div class="cost-value">
+              <span id="add-sub-cost" class="cost-primary">5,000 msats</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="subscriptionManager.closeModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="subscriptionManager.createSubscription()">Create Subscription</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Peer Discovery Section (Story 9.6) -->
+    <section class="card peer-discovery" id="peer-discovery-section">
+      <h2>Peer Discovery</h2>
+      <p class="section-description">Search for and connect to peers on the BTP-NIPs network</p>
+
+      <!-- Search Bar -->
+      <div class="search-bar"></div>
+
+      <!-- Search Results -->
+      <div class="search-results" role="region" aria-label="Peer search results">
+        <!-- Peer cards will be rendered here -->
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination"></div>
+    </section>
+
+    <!-- Peer Details Modal (Story 9.6) -->
+    <div id="peer-details-modal" class="modal-overlay" style="display: none;" role="dialog" aria-labelledby="peer-details-modal-title">
+      <div class="modal-content modal-large">
+        <div class="modal-header">
+          <h3 id="peer-details-modal-title">Peer Details</h3>
+          <button class="modal-close" onclick="peerDiscovery.closeModal()" aria-label="Close modal">×</button>
+        </div>
+        <div class="modal-body">
+          <!-- Peer details will be rendered here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Connect Peer Modal (Story 9.6) -->
+    <div id="connect-peer-modal" class="modal-overlay" style="display: none;" role="dialog" aria-labelledby="connect-peer-modal-title">
+      <div class="modal-content modal-large">
+        <div class="modal-header">
+          <h3 id="connect-peer-modal-title">Connect to Peer</h3>
+          <button class="modal-close" onclick="peerDiscovery.closeModal()" aria-label="Close modal">×</button>
+        </div>
+        <div class="modal-body">
+          <!-- Connect form will be rendered here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="peer-footer">
+      <p>Nostream-ILP Peer UI v1.0 | <span id="peer-connection-detail">Checking peer status...</span></p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script type="module" src="/peer/utils/chart-data-formatter.js"></script>
+  <script src="/peer/components/event-composer.js"></script>
+  <script src="/peer/components/event-feed.js"></script>
+  <script src="/peer/components/subscription-manager.js"></script>
+  <script src="/peer/components/channel-manager.js"></script>
+  <script type="module" src="/peer/components/economics-dashboard.js"></script>
+  <script src="/peer/components/peer-discovery.js"></script>
+  <script type="module" src="/peer/peer.js"></script>
+</body>
+</html>

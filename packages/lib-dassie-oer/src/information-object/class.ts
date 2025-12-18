@@ -1,6 +1,6 @@
-import type { AnyOerType } from "../base-type"
+import type { AnyOerType } from '../base-type'
 
-export const openType = Symbol("ASN.1 Open Type")
+export const openType = Symbol('ASN.1 Open Type')
 
 export type ClassDefinitionShape = Record<string, AnyOerType | typeof openType>
 

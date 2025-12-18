@@ -1,7 +1,7 @@
-import { getMasterDbClient, getReadReplicaDbClient } from '../../database/client.js'
-import { createLogger } from '../../factories/logger-factory.js'
+import { getMasterDbClient, getReadReplicaDbClient } from '../../database/client'
+import { createLogger } from '../../factories/logger-factory'
 
-import type { NostrFilter } from '../types/index.js'
+import type { NostrFilter } from '../types/index'
 import type { Knex } from 'knex'
 
 /**

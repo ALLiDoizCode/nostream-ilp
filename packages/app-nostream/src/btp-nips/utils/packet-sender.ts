@@ -1,9 +1,9 @@
-import { type BTPNIPsPacket, NostrMessageType } from '../types/index.js'
-import { createLogger } from '../../factories/logger-factory.js'
-import { serializeBTPNIPsPacket } from '../parser.js'
+import { type BTPNIPsPacket, NostrMessageType } from '../types/index'
+import { createLogger } from '../../factories/logger-factory'
+import { serializeBTPNIPsPacket } from '../parser'
 
-import type { StreamConnection } from '../subscription-manager.js'
-import type { NostrEvent } from '../types/index.js'
+import type { StreamConnection } from '../subscription-manager'
+import type { NostrEvent } from '../types/index'
 
 /**
  * Packet Sender Utility

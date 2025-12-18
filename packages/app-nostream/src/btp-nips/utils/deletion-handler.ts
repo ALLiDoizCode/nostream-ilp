@@ -1,9 +1,9 @@
-import { EventCache, getEventCache } from '../storage/event-cache.js'
-import { EventRepository, getEventRepository } from '../storage/event-repository.js'
+import { EventCache, getEventCache } from '../storage/event-cache'
+import { EventRepository, getEventRepository } from '../storage/event-repository'
 import { getMasterDbClient } from '../../database/client'
 import { createLogger } from '../../factories/logger-factory'
 
-import type { NostrEvent, NostrFilter } from '../types/index.js'
+import type { NostrEvent, NostrFilter } from '../types/index'
 import type { Knex } from 'knex'
 
 /**

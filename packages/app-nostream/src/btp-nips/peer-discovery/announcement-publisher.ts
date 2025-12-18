@@ -1,15 +1,15 @@
-import { EventRepository } from '../storage/event-repository.js'
-import { generateIlpAddress } from './ilp-address-generator.js'
-import { getPublicKey, signEvent } from '../crypto.js'
+import { EventRepository } from '../storage/event-repository'
+import { generateIlpAddress } from './ilp-address-generator'
+import { getPublicKey, signEvent } from '../crypto'
 import {
   ILP_NODE_D_TAG,
   ILP_NODE_KIND,
   ILPNodeTag,
-} from '../types/ilp-node-announcement.js'
+} from '../types/ilp-node-announcement'
 import {
   ILPNodeAnnouncement,
   ILPNodeMetadata,
-} from '../types/ilp-node-announcement.js'
+} from '../types/ilp-node-announcement'
 
 /**
  * ILP Node Announcement Publisher

@@ -1,5 +1,6 @@
 import { createSettings } from './settings-factory'
 import router from '../routes'
+import peerUiRouter from '../peer-ui/routes/peer-ui'
 import express from 'express'
 import helmet from 'helmet'
 
@@ -32,6 +33,8 @@ export const createWebApp = (): express.Application => {
     .use('/favicon.ico', express.static('./resources/favicon.ico'))
     .use('/css', express.static('./resources/css'))
     .use('/dashboard', express.static('./dist/dashboard/static'))
+    .use('/peer', express.static('./dist/peer-ui/static'))
+    .use('/peer', peerUiRouter)
     .use(router)
 
   return app

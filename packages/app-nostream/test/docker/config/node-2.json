@@ -1,0 +1,32 @@
+{
+  "nodeId": "2",
+  "ilpAddress": "g.dassie.node2",
+  "rpc": {
+    "port": 7770,
+    "host": "0.0.0.0",
+    "authToken": "test-token-node2"
+  },
+  "database": {
+    "host": "postgres",
+    "port": 5432,
+    "database": "dassie_node2",
+    "user": "test",
+    "password": "test"
+  },
+  "redis": {
+    "host": "redis",
+    "port": 6379
+  },
+  "settlement": {
+    "scheme": "mock",
+    "autoSettle": true,
+    "threshold": 10000,
+    "instant": true
+  },
+  "routing": {
+    "feePerHop": 10
+  },
+  "peers": {
+    "bootstrap": ["http://dassie-node-0:7768"]
+  }
+}

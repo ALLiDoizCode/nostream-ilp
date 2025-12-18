@@ -1,7 +1,7 @@
-import { hexToUint8Array } from "../../src/utils/hex"
+import { hexToUint8Array } from '../../src/utils/hex'
 
 export const serializedOk = (serializedData: string | Uint8Array) =>
-  typeof serializedData === "string" ?
+  typeof serializedData === 'string' ?
     hexToUint8Array(serializedData)
   : serializedData
 

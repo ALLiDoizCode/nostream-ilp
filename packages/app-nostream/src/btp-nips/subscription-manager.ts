@@ -1,9 +1,9 @@
 import { createLogger } from '../factories/logger-factory'
-import { SubscriptionIndex } from './subscription-index.js'
-import { eventMatchesFilter } from './utils/filter-matcher.js'
-import { sendClosedPacket } from './utils/packet-sender.js'
+import { SubscriptionIndex } from './subscription-index'
+import { eventMatchesFilter } from './utils/filter-matcher'
+import { sendClosedPacket } from './utils/packet-sender'
 
-import type { NostrEvent, NostrFilter } from './types/index.js'
+import type { NostrEvent, NostrFilter } from './types/index'
 
 /**
  * Subscription Manager Module

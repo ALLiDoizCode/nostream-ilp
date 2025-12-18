@@ -1,0 +1,52 @@
+# Docker Compose override for network simulation testing (Story 11.7)
+# Usage: docker-compose -f dassie-stack.yml -f dassie-stack-network-constraints.yml up
+#
+# This file adds:
+# - Network latency simulation (50ms base latency, 10ms jitter)
+# - Packet loss simulation (2%)
+# - CAP_NET_ADMIN capability for tc command
+#
+# Note: Requires iproute2 and su-exec packages in Dassie image
+
+version: '3.8'
+
+services:
+  dassie-node-0:
+    cap_add:
+      - NET_ADMIN
+    environment:
+      NETWORK_LATENCY: "50ms"
+      NETWORK_JITTER: "10ms"
+      NETWORK_PACKET_LOSS: "2%"
+
+  dassie-node-1:
+    cap_add:
+      - NET_ADMIN
+    environment:
+      NETWORK_LATENCY: "50ms"
+      NETWORK_JITTER: "10ms"
+      NETWORK_PACKET_LOSS: "2%"
+
+  dassie-node-2:
+    cap_add:
+      - NET_ADMIN
+    environment:
+      NETWORK_LATENCY: "100ms"
+      NETWORK_JITTER: "20ms"
+      NETWORK_PACKET_LOSS: "5%"
+
+  dassie-node-3:
+    cap_add:
+      - NET_ADMIN
+    environment:
+      NETWORK_LATENCY: "50ms"
+      NETWORK_JITTER: "10ms"
+      NETWORK_PACKET_LOSS: "2%"
+
+  dassie-node-4:
+    cap_add:
+      - NET_ADMIN
+    environment:
+      NETWORK_LATENCY: "50ms"
+      NETWORK_JITTER: "10ms"
+      NETWORK_PACKET_LOSS: "2%"

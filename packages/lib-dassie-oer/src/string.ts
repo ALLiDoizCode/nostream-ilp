@@ -1,23 +1,23 @@
-import { isFailure } from "@nostream-ilp/lib-dassie-type-utils"
+import { isFailure } from '@nostream-ilp/lib-dassie-type-utils'
 
-import { OerType } from "./base-type"
-import { octetString } from "./octet-string"
+import { OerType } from './base-type'
+import { octetString } from './octet-string'
 import {
   type Alphabet,
   alphabetToFilterArray,
   printable,
-} from "./utils/alphabet"
-import { ParseFailure, SerializeFailure } from "./utils/failures"
-import type { ParseContext } from "./utils/parse"
-import { type NormalizedRange, type Range, parseRange } from "./utils/range"
+} from './utils/alphabet'
+import { ParseFailure, SerializeFailure } from './utils/failures'
+import type { ParseContext } from './utils/parse'
+import { type NormalizedRange, type Range, parseRange } from './utils/range'
 
-export type EncodingType = "utf8" | "ascii"
+export type EncodingType = 'utf8' | 'ascii'
 
 const convertCharacterRangeToOctetStringRange = (
   characterRange: NormalizedRange<number>,
   encoding: EncodingType,
 ): NormalizedRange<number> =>
-  encoding === "utf8" ?
+  encoding === 'utf8' ?
     [
       characterRange[0],
       characterRange[1] == undefined ? undefined : characterRange[1] * 4,
@@ -62,7 +62,7 @@ export class OerString extends OerType<string> {
           return new ParseFailure(
             `Invalid character 0x${octetStringValue[index]!.toString(
               16,
-            ).padStart(2, "0")} in string`,
+            ).padStart(2, '0')} in string`,
             context.uint8Array,
             // We don't know in this context if it is a fixed length string or not or how long the length prefix is.
             // However, we do know where the failed character is in relation to the end of the string.
@@ -119,12 +119,12 @@ export class OerString extends OerType<string> {
 }
 
 export const utf8String = (length?: Range<number>) => {
-  return new OerString(parseRange(length), "utf8")
+  return new OerString(parseRange(length), 'utf8')
 }
 
 export const ia5String = (length?: Range<number>) => {
   const filterArray = Array.from<boolean>({ length: 128 }).fill(true)
-  return new OerString(parseRange(length), "ascii", filterArray)
+  return new OerString(parseRange(length), 'ascii', filterArray)
 }
 
 export const visibleString = (length?: Range<number>) => {
@@ -133,7 +133,7 @@ export const visibleString = (length?: Range<number>) => {
     0x20,
     0x7e,
   )
-  return new OerString(parseRange(length), "ascii", filterArray)
+  return new OerString(parseRange(length), 'ascii', filterArray)
 }
 
 export const numericString = (length?: Range<number>) => {
@@ -143,13 +143,13 @@ export const numericString = (length?: Range<number>) => {
     0x39,
   ) // 0-9
   filterArray[0x20] = true // SPACE
-  return new OerString(parseRange(length), "ascii", filterArray)
+  return new OerString(parseRange(length), 'ascii', filterArray)
 }
 
 export const printableString = (length?: Range<number>) => {
   return new OerString(
     parseRange(length),
-    "ascii",
+    'ascii',
     alphabetToFilterArray(printable),
   )
 }
